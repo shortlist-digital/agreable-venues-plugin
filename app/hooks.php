@@ -2,4 +2,8 @@
 
 /** @var  \Herbert\Framework\Application $container */
 
-use Herbert\Framework\Notifier;
+use AgreablePromoPlugin\Hooks\TimberLoaderPaths;
+
+if(class_exists('AgreablePromoPlugin\Hooks\TimberLoaderPaths')){
+  (new TimberLoaderPaths)->init();
+}

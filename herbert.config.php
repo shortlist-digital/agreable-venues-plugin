@@ -79,7 +79,7 @@ return [
      * when rendering a view in twig.
      */
     'views' => [
-        'AgreableVenuesPlugin' => __DIR__ . '/resources/views'
+        'template' => __DIR__ . '/resources/views'
     ],
 
     /**

@@ -15,6 +15,7 @@ $router->get([
   'uses' => function(){
     return 'Venues home';
   },
+  'uses' => __NAMESPACE__ . '\Controllers\RenderController@home'
 ]);
 
 // Single.
@@ -24,4 +25,5 @@ $router->get([
   'uses' => function(){
     return 'Venue single';
   },
+  'uses' => __NAMESPACE__ . '\Controllers\RenderController@single'
 ]);
