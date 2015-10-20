@@ -1,0 +1,24 @@
+{
+  "name": "shortlist-digital/agreable-venues-plugin",
+  "type": "wordpress-plugin",
+  "description": "Wordpress plugin for Shortlist Media.",
+  "license": "MIT",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/getherbert/framework"
+    }
+  ],
+  "require": {
+    "getherbert/framework": "dev-dev"
+  },
+  "minimum-stability": "dev",
+  "config": {
+    "preferred-install": "dist"
+  },
+  "autoload": {
+    "psr-4": {
+      "AgreableVenuesPlugin\\": "app/"
+    }
+  }
+}
