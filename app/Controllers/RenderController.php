@@ -1,6 +1,6 @@
 <?php namespace AgreableVenuesPlugin\Controllers;
 
-use AgreableVenuesPlugin \Helper;
+use AgreableVenuesPlugin\Helper;
 
 class RenderController {
 
@@ -13,9 +13,40 @@ class RenderController {
   }
 
   public function render(){
+
+    $js_string = @file_get_contents(Helper::path('/resources/assets/app.js'));
+    $webpack_port = null;
+    $environment = getenv('WP_ENV');
+
+    if ($environment === 'development') {
+      try {
+        $webpack_port = $this->getDevelopmentWebpackPort(Helper::path(''));
+      } catch(Exception $e) {
+        // If exception the developer hasn't run webpack so may not be
+        // 'developing' this particular plugin, force 'production'
+        $environment = 'production';
+      }
+    }
+
     $views = trailingslashit(Helper::get('views')['template']);
     $context = \Timber::get_context();
+
+    $context['environment'] = $environment;
+    // $context['common_css_path'] = Helper::asset('styles.css');
+    $context['js_string'] =  $js_string;
+    $context['webpack_port'] = $webpack_port;
+
 	  \Timber::render("{$views}template.twig", $context);
+  }
+
+  protected function getDevelopmentWebpackPort($plugin_root) {
+    $port_file = 'webpack-current-port.tmp';
+    $port_file_location = $plugin_root . '/' . $port_file;
+    if (!file_exists($port_file_location)) {
+      throw new Exception('Expected ' . $port_file . ' to be available.');
+    }
+
+    return file_get_contents($port_file_location);
   }
 
 }

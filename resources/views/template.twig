@@ -1,9 +1,29 @@
+{#
 {% extends "base.twig" %}
+#}
 
+<!doctype html>
+<html>
+<body>
 {% block content %}
+
+  {% if environment == "development" %}
+
+    <hr style="border: solid 1px red; ">
+    <script src="http://localhost:{{ webpack_port }}/static/app.js"></script>
+
+  {% else %}
+
+    <script>
+      {{js_string|raw}}
+    </script>
+
+  {% endif %}
 
   <div id="venues-plugin" class="venues_plugin">
     Venues
   </div>
 
 {% endblock %}
+</body>
+</html>
