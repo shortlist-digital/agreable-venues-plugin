@@ -34,7 +34,7 @@ class RenderController {
     $context['environment'] = $environment;
     // $context['common_css_path'] = Helper::asset('styles.css');
     $context['js_string'] =  $js_string;
-    $context['webpack_port'] = $webpack_port;
+    $context['webpack_plugin_port'] = $webpack_port;
 
 	  \Timber::render("{$views}template.twig", $context);
   }
