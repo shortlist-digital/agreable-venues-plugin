@@ -21,8 +21,8 @@ class Search extends Component {
     const current = searchTerm ? <p>Currently showing: {this.props.searchTerm}</p> : "";
 
     return (
-        <div className='search'>
-          <div className='toolbar-items'>
+        <div className='venues__search'>
+          <div>
             <input placeholder='SEARCH' onKeyPress={this.handleOnKeyPress} type='text' />
           </div>
           {current}

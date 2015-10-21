@@ -1,3 +1,6 @@
+require('es6-object-assign').polyfill()
+require('./stylus/main.styl')
+
 import DOMReady from 'detect-dom-ready'
 import ReactDOM from 'react-dom'
 import { ReduxRouter } from 'redux-router';
