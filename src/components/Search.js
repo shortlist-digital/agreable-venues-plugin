@@ -17,8 +17,10 @@ class Search extends Component {
   }
 
   render() {
-    const {searchTerm} = this.props
-    const current = searchTerm ? <p>Currently showing: {this.props.searchTerm}</p> : "";
+    const { searchTerm } = this.props
+    const current = searchTerm
+     ? <p>Currently showing: {this.props.searchTerm}</p>
+     : "";
 
     return (
         <div className='venues__search'>
