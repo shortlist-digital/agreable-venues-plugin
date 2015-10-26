@@ -51,6 +51,9 @@
     "react-redux": "^4.0.0",
     "history": "^1.12.5",
     "react-dom": "^0.14.0",
-    "react-leaflet": "^0.8.0"
+    "react-leaflet": "^0.8.0",
+    "redux-thunk": "^1.0.0",
+    "isomorphic-fetch": "^2.2.0",
+    "redux-logger": "^2.0.4"
   }
 }

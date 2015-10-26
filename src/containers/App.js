@@ -55,7 +55,7 @@ App.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    currentSearch: state.venues.searchTerm
+    currentSearch: state.app.searchTerm
   }
 }
 

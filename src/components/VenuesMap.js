@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import { Map, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
-import { updateMap } from '../actions'
+import { fetchVenuesIfNeeded } from '../actions'
 
 class VenuesMap extends Component {
 
@@ -12,13 +12,11 @@ class VenuesMap extends Component {
   handleMoveEnd(e) {
     const { dispatch } = this.props
     const map = this.refs.map.leafletElement
-    // const boundsObj = map.getBounds()
-    // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
-
-    dispatch(updateMap(map.getBounds()))
+    dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
   componentDidMount() {
+    const { dispatch } = this.props
     const map = this.refs.map.leafletElement
 
     // Manually remove top left zoom control because
@@ -31,6 +29,8 @@ class VenuesMap extends Component {
       position: 'bottomleft'
     })
     map.addControl(zoomControl)
+	// Initial get from Parse.
+    dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
   render() {

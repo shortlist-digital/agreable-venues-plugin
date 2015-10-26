@@ -1,13 +1,17 @@
-import { createStore, compose, combineReducers } from 'redux'
+import createLogger from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
+import { createStore, compose, combineReducers, applyMiddleware } from 'redux'
 import { routerStateReducer, reduxReactRouter } from 'redux-router'
 import { createHistory, useBasename } from 'history'
 import { devTools } from 'redux-devtools'
 
 import routes from '../routes'
-import venues from '../reducers'
+import { app, map, venues } from '../reducers'
 
 const reducer = combineReducers({
   router: routerStateReducer,
+  app,
+  map,
   venues
 })
 
@@ -15,6 +19,7 @@ const paths = window.location.pathname.split('/')
 const history = useBasename(createHistory)({basename:`/${paths[1]}`})
 
 const finalCreateStore = compose(
+  applyMiddleware(createLogger(), thunkMiddleware),
   reduxReactRouter({ routes, history }),
   devTools()
 )(createStore)
