@@ -2,7 +2,9 @@
  * Action types
  */
 export const SEARCH_LOCATION = 'SEARCH_LOCATION'
-export const MOVE_MAP = 'MOVE_MAP'
+
+export const UPDATE_MAP = 'UPDATE_MAP'
+
 export const SHOW_VENUE = 'SHOW_VENUE'
 
 /*
@@ -12,6 +14,13 @@ export function searchLocation(searchTerm) {
   return {
     type: SEARCH_LOCATION,
     searchTerm
+  };
+}
+
+export function updateMap(latLngList) {
+  return {
+    type: UPDATE_MAP,
+    latLngList
   };
 }
 
