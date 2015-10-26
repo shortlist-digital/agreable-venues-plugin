@@ -1,5 +1,9 @@
 import fetch from 'isomorphic-fetch'
 
+import { Parse } from 'parse';
+Parse.initialize('', '');
+
+
 /*
  * Action types
  */
@@ -38,11 +42,11 @@ function requestVenues(bounds) {
   }
 }
 
-function receiveVenues(bounds, json) {
+function receiveVenues(bounds, data) {
   return {
     type: RECEIVE_VENUES,
     bounds: bounds,
-    items: json,
+    items: data,
     receivedAt: Date.now()
   }
 }
@@ -60,16 +64,21 @@ function fetchVenues(bounds) {
     // Inform app state that we've started a request.
     dispatch(requestVenues())
 
-    return fetch('http://httpbin.org/delay/1')
-      .then(response => response.json())
-      .then(json => {
-        dispatch(receiveVenues(bounds, json))
-      })
-      .catch(function(ex) {
-        dispatch(requestVenuesError(bounds, json))
+    const swBounds = bounds.getSouthWest()
+    const neBounds = bounds.getNorthEast()
+    const query = new Parse.Query("Venue")
+    const sw = new Parse.GeoPoint(swBounds.lat, swBounds.lng)
+    const ne = new Parse.GeoPoint(neBounds.lat, neBounds.lng)
+    query.withinGeoBox("location", sw, ne)
+
+    return query.find()
+      .then(results => {
+        console.log(results)
+        dispatch(receiveVenues(bounds, results))
+      }, ex => {
+        dispatch(requestVenuesError(bounds))
         console.log('parsing failed', ex)
       })
-      // TODO: Catch errors.
   }
 }
 

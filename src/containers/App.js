@@ -35,7 +35,6 @@ class App extends Component {
       <div>
         <VenuesMap
           dispatch={dispatch}
-          startPosition={[51.572847, -0.106888]}
         />
         <Search
           searchTerm={currentSearch}

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import * as ActionTypes from '../actions';
 
-const initialMap = [0.1, 0.2];
-const initialVenues = {
-  isFetching: false,
-  items: []
+
+function convertParseObject(){
+
+
 }
 
 export function venues(state = {
@@ -19,14 +19,17 @@ export function venues(state = {
   case ActionTypes.RECEIVE_VENUES:
     return Object.assign({}, state, {
       isFetching: false,
-      items: action.items,
+      items: [
+        ...state.venues.items, {
+        // TODO: Add new objects here.#
+        // Consider using Immutable.js Maps
+      }],
       lastUpdated: action.receivedAt
     });
   case ActionTypes.REQUEST_VENUES_FAILURE:
     return Object.assign({}, state, {
       isFetching: false
     });
-
   default:
     return state;
   }

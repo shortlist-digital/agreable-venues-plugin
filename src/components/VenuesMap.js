@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React, { Component, PropTypes } from 'react'
 import { Map, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
 import { fetchVenuesIfNeeded } from '../actions'
 
@@ -12,6 +12,10 @@ class VenuesMap extends Component {
   handleMoveEnd(e) {
     const { dispatch } = this.props
     const map = this.refs.map.leafletElement
+	// TODO: Consider passing them as simple array rather than object
+	// that is incompatible with Parse GeoPoints. Can use spread syntax then.
+    // const boundsObj = map.getBounds()
+    // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
