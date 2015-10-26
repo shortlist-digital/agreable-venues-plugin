@@ -3,7 +3,7 @@ require('./stylus/main.styl')
 
 import DOMReady from 'detect-dom-ready'
 import ReactDOM from 'react-dom'
-import { ReduxRouter } from 'redux-router';
+import { ReduxRouter } from 'redux-router'
 import { Provider } from 'react-redux'
 import React, { Component } from 'react'
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react'
