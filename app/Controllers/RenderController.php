@@ -35,6 +35,15 @@ class RenderController {
     // $context['common_css_path'] = Helper::asset('styles.css');
     $context['js_string'] =  $js_string;
     $context['webpack_plugin_port'] = $webpack_port;
+    $context['parse'] = array(
+      'parse' => array(
+        'parse_app_id' => get_field('venues_parse_app_id', 'option'),
+        'parse_js_key' => get_field('venues_parse_js_key', 'option')
+      )
+    );
+
+    // $context['parse_app_id'] = get_field('venues_parse_app_id', 'option');
+    // $context['parse_js_key'] = get_field('venues_parse_js_key', 'option');
 
 	  \Timber::render("{$views}template.twig", $context);
   }

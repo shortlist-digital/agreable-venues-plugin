@@ -57,3 +57,21 @@ export function app(state = [], action){
 		return state;
   }
 }
+
+// This reducer is neccessary to handle any
+// params passed by window.__INITIAL_STATE__
+// as well as initializing parse.
+export function parse(state = {
+  parse_app_id: '',
+  parse_js_key: '',
+  isInitialized:false
+}, action){
+  switch (action.type) {
+  case ActionTypes.INITIALIZE_PARSE:
+		return Object.assign({}, state, {
+			isInitialized: true
+		})
+  default:
+    return state;
+  }
+}
