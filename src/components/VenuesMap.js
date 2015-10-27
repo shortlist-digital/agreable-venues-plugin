@@ -37,6 +37,20 @@ class VenuesMap extends Component {
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
+  renderMarker(venue){
+    const data = venue[1]
+    const l = data.location
+    return (
+      <Marker
+        key={venue[0]}
+        position={[l.latitude, l.longitude]}>
+        <Popup>
+          <span>{data.name}</span>
+        </Popup>
+      </Marker>
+    )
+  }
+
   render() {
     return (
       <Map
@@ -50,11 +64,7 @@ class VenuesMap extends Component {
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <Marker position={this.props.startPosition}>
-          <Popup>
-            <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
-          </Popup>
-        </Marker>
+        {Array.from(this.props.venues).map(this.renderMarker)}
       </Map>
     )
   }
@@ -63,6 +73,7 @@ class VenuesMap extends Component {
 VenuesMap.propTypes = {
   dispatch: PropTypes.func.isRequired,
   startPosition: PropTypes.array,
+  venues: PropTypes.object.isRequired
 }
 
 VenuesMap.defaultProps = {

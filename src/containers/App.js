@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   render() {
-    const { dispatch, searchLocationAction } = this.props
+    const { dispatch, searchLocationAction, venueItems } = this.props
     const links = [
       '/',
       '/a-test-venue',
@@ -36,6 +36,7 @@ class App extends Component {
         <h2 className="venues__count">{this.props.venueItems.size}</h2>
         <VenuesMap
           dispatch={dispatch}
+          venues={venueItems}
         />
         <Search
           {...this.props.search}
