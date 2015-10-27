@@ -79,6 +79,7 @@ function parse(state = {
     return state;
   }
 }
+
 const app = combineReducers({
   venues,
   map,

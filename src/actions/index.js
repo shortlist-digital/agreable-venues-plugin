@@ -101,7 +101,7 @@ export function fetchVenuesIfNeeded(bounds) {
   return (dispatch, getState) => {
 
     const state = getState()
-    const parse = state.parse
+    const parse = state.app.parse
 
     // If parse hasn't been initialized do so here.
     if(!parse.isInitialized){
