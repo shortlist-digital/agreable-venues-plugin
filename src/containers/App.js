@@ -51,7 +51,11 @@ class App extends Component {
 }
 
 App.propTypes = {
-}
+  pushState: PropTypes.func.isRequired,
+  children: PropTypes.node,
+  venueItems: PropTypes.object.isRequired,
+  search: PropTypes.object.isRequired,
+};
 
 function mapStateToProps(state) {
   return {

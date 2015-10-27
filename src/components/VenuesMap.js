@@ -4,16 +4,16 @@ import { fetchVenuesIfNeeded } from '../actions'
 
 class VenuesMap extends Component {
 
-	constructor(props) {
-		super(props)
+  constructor(props) {
+    super(props)
     this.handleMoveEnd = this.handleMoveEnd.bind(this)
-	}
+  }
 
   handleMoveEnd(e) {
     const { dispatch } = this.props
     const map = this.refs.map.leafletElement
-	// TODO: Consider passing them as simple array rather than object
-	// that is incompatible with Parse GeoPoints. Can use spread syntax then.
+  // TODO: Consider passing them as simple array rather than object
+  // that is incompatible with Parse GeoPoints. Can use spread syntax then.
     // const boundsObj = map.getBounds()
     // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
@@ -33,7 +33,7 @@ class VenuesMap extends Component {
       position: 'bottomleft'
     })
     map.addControl(zoomControl)
-	// Initial get from Parse.
+  // Initial get from Parse.
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
@@ -61,7 +61,8 @@ class VenuesMap extends Component {
 }
 
 VenuesMap.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  startPosition: PropTypes.array,
 }
 
 VenuesMap.defaultProps = {
