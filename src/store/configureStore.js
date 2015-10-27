@@ -6,14 +6,11 @@ import { createHistory, useBasename } from 'history'
 import { devTools } from 'redux-devtools'
 
 import routes from '../routes'
-import { parse, app, map, venues } from '../reducers'
+import app from '../reducers'
 
 const reducer = combineReducers({
-  parse,
   router: routerStateReducer,
-  app,
-  map,
-  venues
+  app
 })
 
 const paths = window.location.pathname.split('/')

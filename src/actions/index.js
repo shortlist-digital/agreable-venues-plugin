@@ -74,11 +74,10 @@ function fetchVenues(bounds) {
     const query = new Parse.Query("Venue")
     const sw = new Parse.GeoPoint(swBounds.lat, swBounds.lng)
     const ne = new Parse.GeoPoint(neBounds.lat, neBounds.lng)
-    query.withinGeoBox("location", sw, ne)
+    query.withinGeoBox("location", sw, ne).limit(5)
 
     return query.find()
       .then(results => {
-        console.log(results)
         dispatch(receiveVenues(bounds, results))
       }, ex => {
         dispatch(requestVenuesError(bounds))
