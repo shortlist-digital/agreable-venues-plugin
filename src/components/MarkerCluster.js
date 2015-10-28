@@ -1,0 +1,80 @@
+import ReactDOMServer from 'react-dom/server'
+import React, { Component, PropTypes } from 'react'
+import Leaflet from 'leaflet'
+import { MapLayer } from 'react-leaflet'
+import MarkerPopup from './MarkerPopup'
+
+require('leaflet.markercluster')
+
+class MarkerCluster extends MapLayer {
+
+  componentWillMount() {
+    super.componentWillMount()
+
+    this.leafletElement = Leaflet.markerClusterGroup()
+  }
+
+  // Called everytime this component receives new properties
+  componentWillReceiveProps(nextProps) {
+    super.componentWillReceiveProps(nextProps)
+
+    // If we have new venues to add.
+    if(nextProps.venues.size > this.props.venues.size){
+
+      // Filter out only new venues.
+      const newVenues = Array.from(nextProps.venues)
+        .filter((obj) => {
+          return !this.props.venues.has(obj[0])
+        })
+
+      const newMarkers = []
+      newVenues.forEach((obj) => {
+        // ES6 Map has been converted to Array: ['objectId', venueObj]
+        const objectId = obj[0]
+        const venue = obj[1]
+        // Store component as markup for rendering in convetional
+        // leaflet manner.
+        let markerPopup = ReactDOMServer.renderToStaticMarkup(
+          <MarkerPopup
+            caption={venue.name}
+          />
+        )
+
+        // Add marker.
+        const l = venue.location
+        const leafletMarker = Leaflet.marker([l.latitude, l.longitude])
+          .bindPopup(markerPopup, {
+            maxHeight: 350,
+            maxWidth: 250,
+            minWidth: 250
+          })
+
+        newMarkers.push(leafletMarker)
+      });
+
+      // Add all markers to cluster layer.
+      this.leafletElement.addLayers(newMarkers)
+
+    }
+
+  }
+
+  shouldComponentUpdate() {
+    return false
+  }
+
+  render() {
+    return null
+  }
+}
+
+MarkerCluster.propTypes = {
+  venues: PropTypes.object.isRequired
+};
+
+MarkerCluster.defaultProps = {
+  markers: {},
+  venues: PropTypes.object.isRequired
+};
+
+export default MarkerCluster;

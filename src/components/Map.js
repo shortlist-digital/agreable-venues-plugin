@@ -1,19 +1,20 @@
 import React, { Component, PropTypes } from 'react'
-import { Map, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
+import { Map as LeafletMap, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
 import { fetchVenuesIfNeeded } from '../actions'
+import MarkerCluster from './MarkerCluster'
 
-class VenuesMap extends Component {
+class Map extends Component {
 
-	constructor(props) {
-		super(props)
+  constructor(props) {
+    super(props)
     this.handleMoveEnd = this.handleMoveEnd.bind(this)
-	}
+  }
 
   handleMoveEnd(e) {
     const { dispatch } = this.props
     const map = this.refs.map.leafletElement
-	// TODO: Consider passing them as simple array rather than object
-	// that is incompatible with Parse GeoPoints. Can use spread syntax then.
+    // TODO: Consider passing them as simple array rather than object
+    // that is incompatible with Parse GeoPoints. Can use spread syntax then.
     // const boundsObj = map.getBounds()
     // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
@@ -33,39 +34,45 @@ class VenuesMap extends Component {
       position: 'bottomleft'
     })
     map.addControl(zoomControl)
-	// Initial get from Parse.
+    // Initial get from Parse.
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
   render() {
     return (
-      <Map
+      <LeafletMap
         ref="map"
-        zoomControl={"false"}
         className="venues__map"
         center={this.props.startPosition}
         onLeafletMoveend={this.handleMoveEnd}
-        zoom={15}>
+        zoom={this.props.zoom}>
         <TileLayer
-          url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+					maxZoom={this.props.maxZoom}
+					minZoom={this.props.minZoom}
+          url={this.props.tileURL}
+          attribution={this.props.attribution}
         />
-        <Marker position={this.props.startPosition}>
-          <Popup>
-            <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
-          </Popup>
-        </Marker>
-      </Map>
+				<MarkerCluster
+					venues={this.props.venues}>
+				</MarkerCluster>
+      </LeafletMap>
     )
   }
 }
 
-VenuesMap.propTypes = {
-  dispatch: PropTypes.func.isRequired
+Map.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  startPosition: PropTypes.array,
+  venues: PropTypes.object.isRequired
 }
 
-VenuesMap.defaultProps = {
-  startPosition: [51.505, -0.09]
+Map.defaultProps = {
+	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+	tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+  startPosition: [51.505, -0.09],
+	maxZoom: 16,
+	minZoom: 3,
+	zoom: 15
 }
 
-export default VenuesMap
+export default Map
