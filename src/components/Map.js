@@ -63,8 +63,7 @@ class Map extends Component {
 Map.propTypes = {
   dispatch: PropTypes.func.isRequired,
   startPosition: PropTypes.array,
-  venues: PropTypes.object.isRequired,
-	onLeafletMoveEnd : PropTypes.func.isRequired
+  venues: PropTypes.object.isRequired
 }
 
 Map.defaultProps = {
