@@ -77,6 +77,8 @@ function fetchVenues(bounds) {
     const ne = new Parse.GeoPoint(neBounds.lat, neBounds.lng)
     query.withinGeoBox("location", sw, ne).limit(1000)
 
+    // If we already have some venues then exclude them from
+    // query to Parse.
     if(items.size > 0){
       query.notContainedIn('objectId', Array.from(items.keys()))
     }
