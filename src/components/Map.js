@@ -20,6 +20,10 @@ class Map extends Component {
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
+  handlePopupOpen(e) {
+    console.log(e)
+  }
+
   componentDidMount() {
     const { dispatch } = this.props
     const map = this.refs.map.leafletElement
@@ -44,6 +48,7 @@ class Map extends Component {
         ref="map"
         className="venues__map"
         center={this.props.startPosition}
+        onLeafletPopupopen={this.handleClick}
         onLeafletMoveend={this.handleMoveEnd}
         zoom={this.props.zoom}>
         <TileLayer
