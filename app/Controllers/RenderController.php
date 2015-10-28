@@ -42,9 +42,6 @@ class RenderController {
       )
     );
 
-    // $context['parse_app_id'] = get_field('venues_parse_app_id', 'option');
-    // $context['parse_js_key'] = get_field('venues_parse_js_key', 'option');
-
 	  \Timber::render("{$views}template.twig", $context);
   }
 
