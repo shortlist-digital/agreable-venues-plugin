@@ -10,9 +10,9 @@ import Map from '../components/Map'
 
 class App extends Component {
 
-	constructor(props) {
-		super(props)
-	}
+  constructor(props) {
+    super(props)
+  }
 
   static propTypes = {
     children: PropTypes.node
