@@ -6,8 +6,7 @@ import { bindActionCreators } from 'redux'
 import { searchLocation } from '../actions'
 
 import Search from '../components/Search'
-import VenuesMap from '../components/VenuesMap'
-import { Map, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
+import Map from '../components/Map'
 
 class App extends Component {
 
@@ -34,7 +33,7 @@ class App extends Component {
     return (
       <div className="venues">
         <h2 className="venues__count">{this.props.venueItems.size}</h2>
-        <VenuesMap
+        <Map
           dispatch={dispatch}
           venues={venueItems}
         />

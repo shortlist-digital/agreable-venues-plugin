@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import { Map, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
+import { Map as LeafletMap, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
 import { fetchVenuesIfNeeded } from '../actions'
 
-class VenuesMap extends Component {
+class Map extends Component {
 
   constructor(props) {
     super(props)
@@ -12,8 +12,8 @@ class VenuesMap extends Component {
   handleMoveEnd(e) {
     const { dispatch } = this.props
     const map = this.refs.map.leafletElement
-  // TODO: Consider passing them as simple array rather than object
-  // that is incompatible with Parse GeoPoints. Can use spread syntax then.
+    // TODO: Consider passing them as simple array rather than object
+    // that is incompatible with Parse GeoPoints. Can use spread syntax then.
     // const boundsObj = map.getBounds()
     // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
@@ -33,7 +33,7 @@ class VenuesMap extends Component {
       position: 'bottomleft'
     })
     map.addControl(zoomControl)
-  // Initial get from Parse.
+    // Initial get from Parse.
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
@@ -53,7 +53,7 @@ class VenuesMap extends Component {
 
   render() {
     return (
-      <Map
+      <LeafletMap
         ref="map"
         zoomControl={"false"}
         className="venues__map"
@@ -65,19 +65,19 @@ class VenuesMap extends Component {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         {Array.from(this.props.venues).map(this.renderMarker)}
-      </Map>
+      </LeafletMap>
     )
   }
 }
 
-VenuesMap.propTypes = {
+Map.propTypes = {
   dispatch: PropTypes.func.isRequired,
   startPosition: PropTypes.array,
   venues: PropTypes.object.isRequired
 }
 
-VenuesMap.defaultProps = {
+Map.defaultProps = {
   startPosition: [51.505, -0.09]
 }
 
-export default VenuesMap
+export default Map
