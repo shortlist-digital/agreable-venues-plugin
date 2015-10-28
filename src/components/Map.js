@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Map as LeafletMap, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
 import { fetchVenuesIfNeeded } from '../actions'
+import MarkerCluster from './MarkerCluster'
 
 class Map extends Component {
 
@@ -37,34 +38,23 @@ class Map extends Component {
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
-  renderMarker(venue){
-    const data = venue[1]
-    const l = data.location
-    return (
-      <Marker
-        key={venue[0]}
-        position={[l.latitude, l.longitude]}>
-        <Popup>
-          <span>{data.name}</span>
-        </Popup>
-      </Marker>
-    )
-  }
-
   render() {
     return (
       <LeafletMap
         ref="map"
-        zoomControl={"false"}
         className="venues__map"
         center={this.props.startPosition}
         onLeafletMoveend={this.handleMoveEnd}
-        zoom={15}>
+        zoom={this.props.zoom}>
         <TileLayer
-          url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+					maxZoom={this.props.maxZoom}
+					minZoom={this.props.minZoom}
+          url={this.props.tileURL}
+          attribution={this.props.attribution}
         />
-        {Array.from(this.props.venues).map(this.renderMarker)}
+				<MarkerCluster
+					venues={this.props.venues}>
+				</MarkerCluster>
       </LeafletMap>
     )
   }
@@ -73,11 +63,17 @@ class Map extends Component {
 Map.propTypes = {
   dispatch: PropTypes.func.isRequired,
   startPosition: PropTypes.array,
-  venues: PropTypes.object.isRequired
+  venues: PropTypes.object.isRequired,
+	onLeafletMoveEnd : PropTypes.func.isRequired
 }
 
 Map.defaultProps = {
-  startPosition: [51.505, -0.09]
+	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+	tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+  startPosition: [51.505, -0.09],
+	maxZoom: 16,
+	minZoom: 3,
+	zoom: 15
 }
 
 export default Map
