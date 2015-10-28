@@ -14,13 +14,14 @@ class MarkerCluster extends MapLayer {
     this.leafletElement = Leaflet.markerClusterGroup()
   }
 
+	// Called everytime this component receives new properties
   componentWillReceiveProps(nextProps) {
     super.componentWillReceiveProps(nextProps)
 
-    // Add markers to cluster layer
+		// If we have new venues to add.
     if(nextProps.venues.size > this.props.venues.size){
 
-      let markers = Object.assign({}, this.props.markers)
+			// Filter out only new venues.
       const newVenues = Array.from(nextProps.venues)
         .filter((obj) => {
           return !this.props.venues.has(obj[0])
@@ -28,14 +29,18 @@ class MarkerCluster extends MapLayer {
 
       const newMarkers = []
       newVenues.forEach((obj) => {
+				// ES6 Map has been converted to Array: ['objectId', venueObj]
         const objectId = obj[0]
         const venue = obj[1]
+				// Store component as markup for rendering in convetional
+				// leaflet manner.
         let markerPopup = ReactDOMServer.renderToStaticMarkup(
 					<MarkerPopup
 						caption={venue.name}
 					/>
         )
 
+				// Add marker.
         const l = venue.location
         const leafletMarker = Leaflet.marker([l.latitude, l.longitude])
           .bindPopup(markerPopup, {
@@ -43,12 +48,11 @@ class MarkerCluster extends MapLayer {
             maxWidth: 250,
             minWidth: 250
           })
-          // .on('click', () => this.props.map.panTo([l.latitude, l.longitude]))
 
-        markers[objectId] = leafletMarker
         newMarkers.push(leafletMarker)
       });
 
+			// Add all markers to cluster layer.
       this.leafletElement.addLayers(newMarkers)
 
     }
