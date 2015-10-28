@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   render() {
-    const { dispatch, searchLocationAction, currentSearch } = this.props
+    const { dispatch, searchLocationAction } = this.props
     const links = [
       '/',
       '/a-test-venue',
@@ -32,12 +32,13 @@ class App extends Component {
     )
 
     return (
-      <div>
+      <div className="venues">
+        <h2 className="venues__count">{this.props.venueItems.size}</h2>
         <VenuesMap
           dispatch={dispatch}
         />
         <Search
-          searchTerm={currentSearch}
+          {...this.props.search}
           onSearch={value =>
             searchLocationAction(value)
           } />
@@ -54,12 +55,14 @@ App.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    currentSearch: state.app.searchTerm
+    search      : state.app.search,
+    map         : state.app.map,
+    venueItems  : state.app.venues.items
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
+  return  {
     searchLocationAction: bindActionCreators(searchLocation, dispatch),
     pushState,
     dispatch
