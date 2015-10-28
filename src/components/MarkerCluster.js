@@ -34,10 +34,14 @@ class MarkerCluster extends MapLayer {
         const venue = obj[1]
         // Store component as markup for rendering in convetional
         // leaflet manner.
-        let markerPopup = ReactDOMServer.renderToStaticMarkup(
+        let markerPopup = ReactDOMServer.renderToString(
           <MarkerPopup
-            caption={venue.name}
-          />
+            objectId={objectId}
+            name={venue.name}
+            image={(venue.images) ? venue.images[0] : null}
+            url={`${this.props.basename}/${venue.slug}`}
+            basename={this.props.basename}
+            slug={venue.slug} />
         )
 
         // Add marker.
@@ -54,9 +58,7 @@ class MarkerCluster extends MapLayer {
 
       // Add all markers to cluster layer.
       this.leafletElement.addLayers(newMarkers)
-
     }
-
   }
 
   shouldComponentUpdate() {
@@ -69,7 +71,8 @@ class MarkerCluster extends MapLayer {
 }
 
 MarkerCluster.propTypes = {
-  venues: PropTypes.object.isRequired
+  venues: PropTypes.object.isRequired,
+  basename: PropTypes.string.isRequired
 };
 
 MarkerCluster.defaultProps = {

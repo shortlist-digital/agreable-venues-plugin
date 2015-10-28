@@ -19,7 +19,6 @@ class App extends Component {
   }
 
   render() {
-    const { dispatch, searchLocationAction, venueItems } = this.props
     const links = [
       '/',
       '/a-test-venue',
@@ -34,17 +33,20 @@ class App extends Component {
       <div className="venues">
         <h2 className="venues__count">{this.props.venueItems.size}</h2>
         <Map
-          dispatch={dispatch}
-          venues={venueItems}
+          dispatch={this.props.dispatch}
+          venues={this.props.venueItems}
+          basename={this.props.basename}
         />
         <Search
           {...this.props.search}
           onSearch={value =>
-            searchLocationAction(value)
+            this.props.searchLocationAction(value)
           } />
         {this.props.children}
-        <h3>Test links</h3>
-        {links}
+        <div className="venues__links-test">
+          <h3>Test links</h3>
+          {links}
+        </div>
       </div>
     )
   }
@@ -61,7 +63,8 @@ function mapStateToProps(state) {
   return {
     search      : state.app.search,
     map         : state.app.map,
-    venueItems  : state.app.venues.items
+    venueItems  : state.app.venues.items,
+    basename    : state.router.location.basename
   }
 }
 

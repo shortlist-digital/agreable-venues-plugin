@@ -1,39 +1,58 @@
-import React from 'react';
+import React, {Component, PropTypes} from 'react'
+import { pushState } from 'redux-router'
 
-class MarkerPopup extends React.Component {
+class MarkerPopup extends Component {
   _getStyles() {
     return {
-      caption: {
+      clear: {
+        content: ' ',
+        clear: 'both',
+        display: 'table'
+      },
+      link: {
         wordWrap: 'break-word',
       },
       img: {
         display: 'block',
-        margin: 'auto',
+        float: 'right',
+        height: 150
       },
     };
   }
 
+  handleClick(e) {
+
+    console.log(pushState)
+    e.preventDefault()
+    pushState({}, this.props.url)
+
+    // dispatch(openVenue(this.props.objectId))
+    return false
+  }
+
   render() {
     const styles = this._getStyles();
+    const image = this.props.image
+      ? <img src={this.props.image.square.url} style={styles.img} />
+      : ''
 
     return (
       <div>
-        <a href={this.props.profileUrl} >
-          <img src={this.props.imgUrl} style={styles.img} />
-        </a>
-        <br/>
-        <div style={styles.caption}>{this.props.caption}</div>
+       <a onClick={this.handleClick}>
+        {this.props.name}
+       </a>
+        <span style={styles.clear} />
+        {image}
+        <span style={styles.clear} />
       </div>
     );
   }
 }
 
-/*
 MarkerPopup.propTypes = {
-  caption: React.PropTypes.string,
-  imgUrl: React.PropTypes.string,
-  profileUrl: React.PropTypes.string,
+  name: PropTypes.string,
+  image: PropTypes.object,
+  url: PropTypes.string,
 };
-*/
 
 export default MarkerPopup;

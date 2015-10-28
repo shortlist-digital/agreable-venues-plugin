@@ -47,14 +47,15 @@ class Map extends Component {
         onLeafletMoveend={this.handleMoveEnd}
         zoom={this.props.zoom}>
         <TileLayer
-					maxZoom={this.props.maxZoom}
-					minZoom={this.props.minZoom}
+          maxZoom={this.props.maxZoom}
+          minZoom={this.props.minZoom}
           url={this.props.tileURL}
           attribution={this.props.attribution}
         />
-				<MarkerCluster
-					venues={this.props.venues}>
-				</MarkerCluster>
+        <MarkerCluster
+          venues={this.props.venues}
+          basename={this.props.basename}>
+        </MarkerCluster>
       </LeafletMap>
     )
   }
@@ -63,16 +64,17 @@ class Map extends Component {
 Map.propTypes = {
   dispatch: PropTypes.func.isRequired,
   startPosition: PropTypes.array,
-  venues: PropTypes.object.isRequired
+  venues: PropTypes.object.isRequired,
+  basename: PropTypes.string.isRequired
 }
 
 Map.defaultProps = {
-	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-	tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+  tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
   startPosition: [51.505, -0.09],
-	maxZoom: 16,
-	minZoom: 3,
-	zoom: 15
+  maxZoom: 16,
+  minZoom: 3,
+  zoom: 15
 }
 
 export default Map
