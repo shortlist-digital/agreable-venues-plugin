@@ -6,9 +6,10 @@ import { createHistory, useBasename } from 'history'
 import { devTools } from 'redux-devtools'
 
 import routes from '../routes'
-import { app, map, venues } from '../reducers'
+import { parse, app, map, venues } from '../reducers'
 
 const reducer = combineReducers({
+  parse,
   router: routerStateReducer,
   app,
   map,
@@ -25,8 +26,9 @@ const finalCreateStore = compose(
 )(createStore)
 
 export default function configureStore() {
-
-  const store = finalCreateStore(reducer)
+  // Grab the state from a global injected on the server.
+  const initialState = window.__INITIAL_STATE__;
+  const store = finalCreateStore(reducer, initialState)
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers

@@ -1,8 +1,5 @@
 import fetch from 'isomorphic-fetch'
-
 import { Parse } from 'parse';
-Parse.initialize('', '');
-
 
 /*
  * Action types
@@ -15,6 +12,7 @@ export const UPDATE_MAP = 'UPDATE_MAP'
 export const REQUEST_VENUES = 'REQUEST_VENUES'
 export const RECEIVE_VENUES = 'RECEIVE_VENUES'
 export const REQUEST_VENUES_FAILURE = 'REQUEST_VENUES_FAILURE'
+export const INITIALIZE_PARSE = 'INITIALIZE_PARSE';
 
 export const SHOW_VENUE = 'SHOW_VENUE'
 
@@ -34,6 +32,13 @@ export function updateMap(bounds) {
     bounds
   }
 }
+
+function initializeParse() {
+  return {
+    type: INITIALIZE_PARSE
+  }
+}
+
 
 function requestVenues(bounds) {
   return {
@@ -95,7 +100,18 @@ function shouldFetchVenues(state, bounds) {
 
 export function fetchVenuesIfNeeded(bounds) {
   return (dispatch, getState) => {
-    if (shouldFetchVenues(getState(), bounds)) {
+
+    const state = getState()
+    const parse = state.parse
+
+    // If parse hasn't been initialized do so here.
+    if(!parse.isInitialized){
+      Parse.initialize(parse.parse_app_id, parse.parse_js_key);
+      dispatch(initializeParse())
+    }
+
+    // Check conditions under which we should fetch.
+    if (shouldFetchVenues(state, bounds)) {
       return dispatch(fetchVenues(bounds))
     }
   }
