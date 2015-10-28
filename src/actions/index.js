@@ -65,9 +65,10 @@ function requestVenuesFailure(bounds) {
 
 function fetchVenues(bounds) {
   // Using Thunk middleware.
-  return function(dispatch){
+  return function(dispatch, getState){
     // Inform app state that we've started a request.
     dispatch(requestVenues())
+    const items = getState().app.venues.items
 
     const swBounds = bounds.getSouthWest()
     const neBounds = bounds.getNorthEast()
@@ -75,6 +76,10 @@ function fetchVenues(bounds) {
     const sw = new Parse.GeoPoint(swBounds.lat, swBounds.lng)
     const ne = new Parse.GeoPoint(neBounds.lat, neBounds.lng)
     query.withinGeoBox("location", sw, ne).limit(1000)
+
+    if(items.size > 0){
+      query.notContainedIn('objectId', Array.from(items.keys()))
+    }
 
     return query.find()
       .then(results => {
