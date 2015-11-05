@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import { pushState } from 'redux-router'
+import { pushState, replaceState } from 'redux-router'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -36,6 +36,7 @@ class App extends Component {
           dispatch={this.props.dispatch}
           venues={this.props.venueItems}
           basename={this.props.basename}
+          pushState={this.props.pushState}
         />
         <Search
           {...this.props.search}
@@ -71,7 +72,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return  {
     searchLocationAction: bindActionCreators(searchLocation, dispatch),
-    pushState,
+    pushState: bindActionCreators(pushState,dispatch),
     dispatch
   }
 }
