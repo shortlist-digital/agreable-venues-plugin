@@ -25,11 +25,11 @@ function venues(state = {
       isFetching: false,
       items: new Map([...newVenues, ...currentVenues]),
       lastUpdated: action.receivedAt
-    });
+    })
   case ActionTypes.REQUEST_VENUES_FAILURE:
     return Object.assign({}, state, {
       isFetching: false
-    });
+    })
   default:
     return state;
   }
@@ -50,12 +50,24 @@ function map(state = {
 }
 
 function search(state = {
-  searchTerm : ''
+  searchTerm : '',
+  bounds : {northeast:{}, southwest:{}},
+  timer : -1
 }, action){
   switch (action.type) {
-  case ActionTypes.SEARCH_LOCATION:
+  case ActionTypes.SEARCH_LOCATION_REQUEST:
     return Object.assign({}, state, {
-      searchTerm: action.searchTerm
+      searchTerm: action.searchTerm,
+      timer: action.timer,
+      isDebouncing: true
+    })
+  case ActionTypes.SEARCH_LOCATION_UNBLOCK:
+    return Object.assign({}, state, {
+      isDebouncing: false
+    })
+  case ActionTypes.SEARCH_LOCATION_SUCCESS:
+    return Object.assign({}, state, {
+      bounds: action.geometry.viewport,
     })
   default:
     return state;

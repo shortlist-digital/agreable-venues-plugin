@@ -20,6 +20,21 @@ class Map extends Component {
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { searchBounds } = this.props
+    const map = this.refs.map.leafletElement
+
+    const ne = nextProps.searchBounds.northeast
+    const sw = nextProps.searchBounds.southwest
+
+    if(ne.lat && sw.lat && !Object.is(searchBounds, nextProps.searchBounds)){
+      map.fitBounds([
+          [ne.lat, ne.lng],
+          [sw.lat, sw.lng]
+      ])
+    }
+  }
+
   componentDidMount() {
     const { dispatch } = this.props
     const map = this.refs.map.leafletElement
@@ -64,11 +79,12 @@ class Map extends Component {
 }
 
 Map.propTypes = {
+  basename: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
   pushState: PropTypes.func.isRequired,
+  searchBounds: PropTypes.array,
   startPosition: PropTypes.array,
-  venues: PropTypes.object.isRequired,
-  basename: PropTypes.string.isRequired
+  venues: PropTypes.object.isRequired
 }
 
 Map.defaultProps = {
@@ -76,7 +92,7 @@ Map.defaultProps = {
   tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
   startPosition: [51.505, -0.09],
   maxZoom: 16,
-  minZoom: 3,
+  minZoom: 12,
   zoom: 15
 }
 

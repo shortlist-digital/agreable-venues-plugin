@@ -8,11 +8,9 @@ class Search extends Component {
   }
 
   handleOnKeyPress(e) {
-    if (e.charCode === 13) {
-      const value = e.currentTarget.value.trim();
-      if (value !== '') {
-        this.props.onSearch(value)
-      }
+    const value = e.currentTarget.value.trim();
+    if (value !== '') {
+      this.props.onSearch(value)
     }
   }
 
@@ -31,6 +29,9 @@ class Search extends Component {
         </div>
     );
   }
+}
+
+Search.defaultProps = {
 }
 
 export default Search;

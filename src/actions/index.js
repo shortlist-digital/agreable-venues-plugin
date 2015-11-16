@@ -4,10 +4,10 @@ import { Parse } from 'parse';
 /*
  * Action types
  */
-export const SEARCH_LOCATION = 'SEARCH_LOCATION'
-
-// FIXME: No longer used.
-export const UPDATE_MAP = 'UPDATE_MAP'
+export const SEARCH_LOCATION_REQUEST = 'SEARCH_LOCATION_REQUEST'
+export const SEARCH_LOCATION_SUCCESS = 'SEARCH_LOCATION_SUCCESS'
+// export const SEARCH_LOCATION_BLOCKED = 'SEARCH_LOCATION_DENIED'
+export const SEARCH_LOCATION_UNBLOCK = 'SEARCH_LOCATION_UNBLOCK'
 
 export const REQUEST_VENUES = 'REQUEST_VENUES'
 export const RECEIVE_VENUES = 'RECEIVE_VENUES'
@@ -19,19 +19,64 @@ export const SHOW_VENUE = 'SHOW_VENUE'
 /*
  * Action creators
  */
-export function searchLocation(searchTerm) {
-  return {
-    type: SEARCH_LOCATION,
-    searchTerm
+export function fetchLocationIfAllowed(searchTerm) {
+  return (dispatch, getState) => {
+
+    const state = getState()
+    const search = state.app.search
+
+    clearTimeout(search.timer)
+    const timer = setTimeout(() => {
+      dispatch(fetchLocation())
+    }, 1000)
+
+    return dispatch(requestLocation(searchTerm, timer))
   }
 }
 
-export function updateMap(bounds) {
+function requestLocation(searchTerm, timer) {
   return {
-    type: UPDATE_MAP,
-    bounds
+    type: SEARCH_LOCATION_REQUEST,
+    searchTerm,
+    timer
   }
 }
+
+function requestLocationUnblocked() {
+  return {
+    type: SEARCH_LOCATION_UNBLOCK
+  }
+}
+
+export function fetchLocation(){
+  return (dispatch, getState) => {
+
+    const searchTerm = getState().app.search.searchTerm
+    const apiUrl = "https://maps.googleapis.com/maps/api/geocode/json?address="
+    const url = `${apiUrl}${encodeURIComponent(searchTerm)}+UK`
+
+    fetch(url)
+      .then(function(response) {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        return response.json();
+      })
+      .then(function(data) {
+        if(data.results.length > 0){
+          dispatch(searchLocationSuccess(data.results[0].geometry));
+        }
+      })
+  }
+}
+
+function searchLocationSuccess(geometry){
+  return {
+    type: SEARCH_LOCATION_SUCCESS,
+    geometry
+  }
+}
+
 
 function initializeParse() {
   return {

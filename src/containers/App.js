@@ -3,7 +3,7 @@ import { pushState, replaceState } from 'redux-router'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { searchLocation } from '../actions'
+import { fetchLocationIfAllowed } from '../actions'
 
 import Search from '../components/Search'
 import Map from '../components/Map'
@@ -34,9 +34,10 @@ class App extends Component {
         <h2 className="venues__count">{this.props.venueItems.size}</h2>
         <Map
           dispatch={this.props.dispatch}
-          venues={this.props.venueItems}
           basename={this.props.basename}
           pushState={this.props.pushState}
+          searchBounds={this.props.search.bounds}
+          venues={this.props.venueItems}
         />
         <Search
           {...this.props.search}
@@ -71,8 +72,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return  {
-    searchLocationAction: bindActionCreators(searchLocation, dispatch),
-    pushState: bindActionCreators(pushState,dispatch),
+    searchLocationAction: bindActionCreators(fetchLocationIfAllowed, dispatch),
+    pushState: bindActionCreators(pushState, dispatch),
     dispatch
   }
 }
