@@ -8,6 +8,11 @@ require('leaflet.markercluster')
 
 class MarkerCluster extends MapLayer {
 
+  handleMarkerClick(objectId, venue) {
+    const { dispatch } = this.props
+    this.props.pushState({}, `/${venue.slug}`)
+  }
+
   componentWillMount() {
     super.componentWillMount()
 
@@ -52,9 +57,12 @@ class MarkerCluster extends MapLayer {
             maxWidth: 250,
             minWidth: 250
           })
+          .on('click', (e) => {
+            this.handleMarkerClick(...obj)
+          })
 
         newMarkers.push(leafletMarker)
-      });
+      })
 
       // Add all markers to cluster layer.
       this.leafletElement.addLayers(newMarkers)
@@ -71,6 +79,7 @@ class MarkerCluster extends MapLayer {
 }
 
 MarkerCluster.propTypes = {
+  pushState: PropTypes.func.isRequired,
   venues: PropTypes.object.isRequired,
   basename: PropTypes.string.isRequired
 };

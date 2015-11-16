@@ -20,10 +20,6 @@ class Map extends Component {
     dispatch(fetchVenuesIfNeeded(map.getBounds()))
   }
 
-  handlePopupOpen(e) {
-    console.log(e)
-  }
-
   componentDidMount() {
     const { dispatch } = this.props
     const map = this.refs.map.leafletElement
@@ -48,7 +44,6 @@ class Map extends Component {
         ref="map"
         className="venues__map"
         center={this.props.startPosition}
-        onLeafletPopupopen={this.handleClick}
         onLeafletMoveend={this.handleMoveEnd}
         zoom={this.props.zoom}>
         <TileLayer
@@ -59,6 +54,8 @@ class Map extends Component {
         />
         <MarkerCluster
           venues={this.props.venues}
+          dispatch={this.props.dispatch}
+          pushState={this.props.pushState}
           basename={this.props.basename}>
         </MarkerCluster>
       </LeafletMap>
@@ -68,6 +65,7 @@ class Map extends Component {
 
 Map.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  pushState: PropTypes.func.isRequired,
   startPosition: PropTypes.array,
   venues: PropTypes.object.isRequired,
   basename: PropTypes.string.isRequired

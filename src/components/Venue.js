@@ -7,7 +7,7 @@ class Venue extends Component {
 
   render() {
     return (
-      <div>
+      <div className='venues__venue'>
         <h2>Venue {this.props.params.name}</h2>
       </div>
     );
