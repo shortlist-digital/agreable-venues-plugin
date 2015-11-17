@@ -42,12 +42,6 @@ function requestLocation(searchTerm, timer) {
   }
 }
 
-function requestLocationUnblocked() {
-  return {
-    type: SEARCH_LOCATION_UNBLOCK
-  }
-}
-
 export function fetchLocation(){
   return (dispatch, getState) => {
 
