@@ -3,7 +3,8 @@ import { pushState, replaceState } from 'redux-router'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchLocationIfAllowed } from '../actions'
+
+import { requestLocationDebounce, requestLocationImmediate } from '../actions/search-location'
 
 import Search from '../components/Search'
 import Map from '../components/Map'
@@ -41,8 +42,11 @@ class App extends Component {
         />
         <Search
           {...this.props.search}
-          onSearch={value =>
+          onImmediateSearch={value =>
             this.props.searchLocationAction(value)
+          }
+          onDebounceSearch={value =>
+            this.props.searchLocationDebounceAction(value)
           } />
         {this.props.children}
         <div className="venues__links-test">
@@ -72,7 +76,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return  {
-    searchLocationAction: bindActionCreators(fetchLocationIfAllowed, dispatch),
+    searchLocationDebounceAction: bindActionCreators(requestLocationDebounce, dispatch),
+    searchLocationAction: bindActionCreators(requestLocationImmediate, dispatch),
     pushState: bindActionCreators(pushState, dispatch),
     dispatch
   }

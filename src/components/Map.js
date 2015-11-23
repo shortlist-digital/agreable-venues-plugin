@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Map as LeafletMap, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
-import { fetchVenuesIfNeeded } from '../actions'
+import { fetchVenuesIfNeeded } from '../actions/venues'
 import MarkerCluster from './MarkerCluster'
 
 class Map extends Component {

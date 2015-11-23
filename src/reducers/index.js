@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import * as ActionTypes from '../actions';
+import * as types from '../constants/ActionTypes';
 import { convertObjects } from '../utils/ParseUtils';
 
 // Reducer composition/splitting. Deligating responsiblity
@@ -10,11 +10,11 @@ function venues(state = {
   items : new Map(),
 }, action) {
   switch (action.type) {
-  case ActionTypes.REQUEST_VENUES:
+  case types.REQUEST_VENUES:
     return Object.assign({}, state, {
       isFetching: true,
     });
-  case ActionTypes.RECEIVE_VENUES:
+  case types.RECEIVE_VENUES:
     // Merging of new venues and existing venues into a ES6 Map()
     // Without `Array.from()` you cannot merge the old and new Maps
     // as per this: http://stackoverflow.com/a/32000937
@@ -26,7 +26,7 @@ function venues(state = {
       items: new Map([...newVenues, ...currentVenues]),
       lastUpdated: action.receivedAt
     })
-  case ActionTypes.REQUEST_VENUES_FAILURE:
+  case types.REQUEST_VENUES_FAILURE:
     return Object.assign({}, state, {
       isFetching: false
     })
@@ -40,7 +40,7 @@ function map(state = {
 }, action){
   switch (action.type) {
   // FIXME: No longer used.
-  case ActionTypes.UPDATE_MAP:
+  case types.UPDATE_MAP:
     return Object.assign({}, state, {
       activeBounds: action.bounds
     })
@@ -55,20 +55,22 @@ function search(state = {
   timer : -1
 }, action){
   switch (action.type) {
-  case ActionTypes.SEARCH_LOCATION_REQUEST:
+  case types.SEARCH_LOCATION_REQUEST:
     return Object.assign({}, state, {
       searchTerm: action.searchTerm,
       timer: action.timer,
       isDebouncing: true
     })
-  case ActionTypes.SEARCH_LOCATION_UNBLOCK:
-    return Object.assign({}, state, {
-      isDebouncing: false
-    })
-  case ActionTypes.SEARCH_LOCATION_SUCCESS:
+  case types.SEARCH_LOCATION_SUCCESS:
     return Object.assign({}, state, {
       bounds: action.geometry.viewport,
     })
+  /*
+  case types.SEARCH_LOCATION_UNBLOCK:
+    return Object.assign({}, state, {
+      isDebouncing: false
+    })
+  */
   default:
     return state;
   }
@@ -83,7 +85,7 @@ function parse(state = {
   isInitialized:false
 }, action){
   switch (action.type) {
-  case ActionTypes.INITIALIZE_PARSE:
+  case types.INITIALIZE_PARSE:
 		return Object.assign({}, state, {
 			isInitialized: true
 		})
