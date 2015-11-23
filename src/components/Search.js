@@ -20,7 +20,7 @@ class Search extends Component {
   }
 
   render() {
-    const { searchTerm } = this.props
+    const { searchTerm, isLocating, onGeolocate } = this.props
     const current = searchTerm
      ? <p>Currently showing: {this.props.searchTerm}</p>
      : "";
@@ -31,12 +31,14 @@ class Search extends Component {
             <input placeholder='SEARCH' onKeyUp={this.handleOnKeyUp} type='text' />
           </div>
           {current}
+          <button disabled={isLocating} onClick={onGeolocate} className='venues__search__locateme'>Find my location</button>
         </div>
     );
   }
 }
 
 Search.defaultProps = {
+  isLocating: false
 }
 
 export default Search;

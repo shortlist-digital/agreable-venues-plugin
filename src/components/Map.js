@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { Map as LeafletMap, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
-import { fetchVenuesIfNeeded } from '../actions/venues'
 import MarkerCluster from './MarkerCluster'
 
 class Map extends Component {
@@ -8,35 +7,54 @@ class Map extends Component {
   constructor(props) {
     super(props)
     this.handleMoveEnd = this.handleMoveEnd.bind(this)
+    this.handleLocationFound = this.handleLocationFound.bind(this)
+  }
+
+  handleLocationFound(e) {
+    const map = this.refs.map.leafletElement
+    // Remove event handler
+    map.off('locationfound', this.handleLocationFound)
+
+    console.log(this.props)
+    this.props.onGeolocateSuccess()
   }
 
   handleMoveEnd(e) {
-    const { dispatch } = this.props
+    const { onMoveEnd } = this.props
     const map = this.refs.map.leafletElement
     // TODO: Consider passing them as simple array rather than object
     // that is incompatible with Parse GeoPoints. Can use spread syntax then.
     // const boundsObj = map.getBounds()
     // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
-    dispatch(fetchVenuesIfNeeded(map.getBounds()))
+    onMoveEnd(map.getBounds())
   }
 
   componentWillReceiveProps(nextProps) {
-    const { searchBounds } = this.props
+    const { bounds, isLocating } = this.props
     const map = this.refs.map.leafletElement
 
-    const ne = nextProps.searchBounds.northeast
-    const sw = nextProps.searchBounds.southwest
+    const ne = nextProps.bounds.northeast
+    const sw = nextProps.bounds.southwest
 
-    if(ne.lat && sw.lat && !Object.is(searchBounds, nextProps.searchBounds)){
+    if(ne.lat && sw.lat && !Object.is(bounds, nextProps.bounds)){
       map.fitBounds([
           [ne.lat, ne.lng],
           [sw.lat, sw.lng]
       ])
     }
+
+    if(nextProps.isLocating == true && isLocating == false){
+
+      map.on('locationfound', this.handleLocationFound)
+      map.locate({
+        setView: true
+      })
+    }
+
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
+    const { onMoveEnd } = this.props
     const map = this.refs.map.leafletElement
 
     // Manually remove top left zoom control because
@@ -50,7 +68,7 @@ class Map extends Component {
     })
     map.addControl(zoomControl)
     // Initial get from Parse.
-    dispatch(fetchVenuesIfNeeded(map.getBounds()))
+    onMoveEnd(map.getBounds())
   }
 
   render() {
@@ -69,7 +87,6 @@ class Map extends Component {
         />
         <MarkerCluster
           venues={this.props.venues}
-          dispatch={this.props.dispatch}
           pushState={this.props.pushState}
           basename={this.props.basename}>
         </MarkerCluster>
@@ -80,9 +97,9 @@ class Map extends Component {
 
 Map.propTypes = {
   basename: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
   pushState: PropTypes.func.isRequired,
-  searchBounds: PropTypes.array,
+  isLocating: PropTypes.bool.isRequired,
+  bounds: PropTypes.object,
   startPosition: PropTypes.array,
   venues: PropTypes.object.isRequired
 }

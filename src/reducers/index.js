@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import * as types from '../constants/ActionTypes';
 import { convertObjects } from '../utils/ParseUtils';
+import * as types from '../constants/ActionTypes';
 
 // Reducer composition/splitting. Deligating responsiblity
 // for different parts of the state to individual funcs.
@@ -36,13 +36,21 @@ function venues(state = {
 }
 
 function map(state = {
-  activeBounds : []
+  isLocating : false,
+  bounds : {northeast:{}, southwest:{}}
 }, action){
   switch (action.type) {
-  // FIXME: No longer used.
-  case types.UPDATE_MAP:
+  case types.GEOLOCATE_REQUEST:
     return Object.assign({}, state, {
-      activeBounds: action.bounds
+      isLocating: true,
+    })
+  case types.GEOLOCATE_SUCCESS:
+    return Object.assign({}, state, {
+      isLocating: false,
+    })
+  case types.SEARCH_LOCATION_SUCCESS:
+    return Object.assign({}, state, {
+      bounds: action.geometry.viewport,
     })
   default:
     return state;
@@ -61,16 +69,6 @@ function search(state = {
       timer: action.timer,
       isDebouncing: true
     })
-  case types.SEARCH_LOCATION_SUCCESS:
-    return Object.assign({}, state, {
-      bounds: action.geometry.viewport,
-    })
-  /*
-  case types.SEARCH_LOCATION_UNBLOCK:
-    return Object.assign({}, state, {
-      isDebouncing: false
-    })
-  */
   default:
     return state;
   }
