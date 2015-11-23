@@ -4,13 +4,18 @@ class Search extends Component {
 
   constructor(props) {
     super(props);
-    this.handleOnKeyPress = this.handleOnKeyPress.bind(this);
+    this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
   }
 
-  handleOnKeyPress(e) {
-    const value = e.currentTarget.value.trim();
+  handleOnKeyUp(e) {
+    const value = e.currentTarget.value.trim()
+
     if (value !== '') {
-      this.props.onSearch(value)
+      this.props.onDebounceSearch(value)
+
+      if(e.charCode == '13'){
+        this.props.onImmediateSearch(value)
+      }
     }
   }
 
@@ -23,7 +28,7 @@ class Search extends Component {
     return (
         <div className='venues__search'>
           <div>
-            <input placeholder='SEARCH' onKeyPress={this.handleOnKeyPress} type='text' />
+            <input placeholder='SEARCH' onKeyUp={this.handleOnKeyUp} type='text' />
           </div>
           {current}
         </div>

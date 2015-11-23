@@ -1,94 +1,24 @@
 import fetch from 'isomorphic-fetch'
 import { Parse } from 'parse';
-
-/*
- * Action types
- */
-export const SEARCH_LOCATION_REQUEST = 'SEARCH_LOCATION_REQUEST'
-export const SEARCH_LOCATION_SUCCESS = 'SEARCH_LOCATION_SUCCESS'
-// export const SEARCH_LOCATION_BLOCKED = 'SEARCH_LOCATION_DENIED'
-export const SEARCH_LOCATION_UNBLOCK = 'SEARCH_LOCATION_UNBLOCK'
-
-export const REQUEST_VENUES = 'REQUEST_VENUES'
-export const RECEIVE_VENUES = 'RECEIVE_VENUES'
-export const REQUEST_VENUES_FAILURE = 'REQUEST_VENUES_FAILURE'
-export const INITIALIZE_PARSE = 'INITIALIZE_PARSE';
-
-export const SHOW_VENUE = 'SHOW_VENUE'
-
-/*
- * Action creators
- */
-export function fetchLocationIfAllowed(searchTerm) {
-  return (dispatch, getState) => {
-
-    const state = getState()
-    const search = state.app.search
-
-    clearTimeout(search.timer)
-    const timer = setTimeout(() => {
-      dispatch(fetchLocation())
-    }, 1000)
-
-    return dispatch(requestLocation(searchTerm, timer))
-  }
-}
-
-function requestLocation(searchTerm, timer) {
-  return {
-    type: SEARCH_LOCATION_REQUEST,
-    searchTerm,
-    timer
-  }
-}
-
-export function fetchLocation(){
-  return (dispatch, getState) => {
-
-    const searchTerm = getState().app.search.searchTerm
-    const apiUrl = "https://maps.googleapis.com/maps/api/geocode/json?address="
-    const url = `${apiUrl}${encodeURIComponent(searchTerm)}+UK`
-
-    fetch(url)
-      .then(function(response) {
-        if (response.status >= 400) {
-          throw new Error("Bad response from server");
-        }
-        return response.json();
-      })
-      .then(function(data) {
-        if(data.results.length > 0){
-          dispatch(searchLocationSuccess(data.results[0].geometry));
-        }
-      })
-  }
-}
-
-function searchLocationSuccess(geometry){
-  return {
-    type: SEARCH_LOCATION_SUCCESS,
-    geometry
-  }
-}
-
+import * as types from '../constants/ActionTypes';
 
 function initializeParse() {
   return {
-    type: INITIALIZE_PARSE
+    type: types.INITIALIZE_PARSE
   }
 }
 
 
 function requestVenues(bounds) {
   return {
-    type: REQUEST_VENUES,
+    type: types.REQUEST_VENUES,
     bounds
   }
 }
 
 function receiveVenues(bounds, data) {
   return {
-    type: RECEIVE_VENUES,
+    type: types.RECEIVE_VENUES,
     bounds: bounds,
     items: data,
     receivedAt: Date.now()
@@ -97,7 +27,7 @@ function receiveVenues(bounds, data) {
 
 function requestVenuesFailure(bounds) {
   return {
-    type: REQUEST_VENUES_FAILURE,
+    type: types.REQUEST_VENUES_FAILURE,
     bounds
   }
 }
