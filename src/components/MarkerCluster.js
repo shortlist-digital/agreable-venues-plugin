@@ -9,7 +9,6 @@ require('leaflet.markercluster')
 class MarkerCluster extends MapLayer {
 
   handleMarkerClick(objectId, venue) {
-    const { dispatch } = this.props
     this.props.pushState({}, `/${venue.slug}`)
   }
 
