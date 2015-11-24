@@ -68,15 +68,3 @@ function fetchLocationSuccess(geometry){
     geometry
   }
 }
-
-export function geolocate(){
-  return {
-    type: types.GEOLOCATE_REQUEST
-  }
-}
-
-export function geolocateSuccess(){
-  return {
-    type: types.GEOLOCATE_SUCCESS
-  }
-}
