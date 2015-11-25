@@ -11,3 +11,11 @@ export function geolocateSuccess(){
     type: types.GEOLOCATE_SUCCESS
   }
 }
+
+export function panToLocation(latLng){
+  return {
+    type: types.PAN_TO_LOCATION,
+    latLng
+  }
+}
+
