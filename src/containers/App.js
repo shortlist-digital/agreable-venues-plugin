@@ -14,15 +14,6 @@ class App extends Component {
   }
 
   render() {
-    const links = [
-      '/',
-      '/a-test-venue',
-      '/another-test-venue',
-    ].map((l,i) =>
-      <div key={i}>
-        <Link to={l}>{l}</Link>
-      </div>
-    )
 
     return (
       <div className="venues">
@@ -30,10 +21,6 @@ class App extends Component {
         <MapContainer />
         <SearchContainer />
         {this.props.children}
-        <div className="venues__links-test">
-          <h3>Test links</h3>
-          {links}
-        </div>
       </div>
     )
   }
