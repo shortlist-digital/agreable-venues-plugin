@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "getherbert/framework": "dev-dev"
+    "getherbert/framework": "~0.9"
   },
   "minimum-stability": "dev",
   "config": {
