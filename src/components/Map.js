@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { Map as LeafletMap, MapComponent, Marker, Popup, TileLayer } from 'react-leaflet'
 import MarkerCluster from './MarkerCluster'
 
+import * as config from '../constants/Config'
+
 class Map extends Component {
 
   constructor(props) {
@@ -15,7 +17,6 @@ class Map extends Component {
     // Remove event handler
     map.off('locationfound', this.handleLocationFound)
 
-    console.log(this.props)
     this.props.onGeolocateSuccess()
   }
 
@@ -36,6 +37,8 @@ class Map extends Component {
     const ne = nextProps.bounds.northeast
     const sw = nextProps.bounds.southwest
 
+    // Change bounds based on `bounds` property. Set after
+    // location search.
     if(ne.lat && sw.lat && !Object.is(bounds, nextProps.bounds)){
       map.fitBounds([
           [ne.lat, ne.lng],
@@ -43,18 +46,22 @@ class Map extends Component {
       ])
     }
 
+    // If geolocation activated.
     if(nextProps.isLocating == true && isLocating == false){
-
       map.on('locationfound', this.handleLocationFound)
       map.locate({
         setView: true
       })
     }
 
+    // If focusPoint is changed.
+    if(JSON.stringify(nextProps.focusLocation) !== JSON.stringify(this.props.focusLocation)){
+      map.setView(nextProps.focusLocation, config.MAP_MAX_ZOOM)
+    }
   }
 
   componentDidMount() {
-    const { onMoveEnd } = this.props
+    const { onMoveEnd, activeVenue } = this.props
     const map = this.refs.map.leafletElement
 
     // Manually remove top left zoom control because
@@ -67,8 +74,11 @@ class Map extends Component {
       position: 'bottomleft'
     })
     map.addControl(zoomControl)
-    // Initial get from Parse.
-    onMoveEnd(map.getBounds())
+
+    if(!activeVenue){
+      // Initial get from Parse.
+      onMoveEnd(map.getBounds())
+    }
   }
 
   render() {
@@ -87,8 +97,7 @@ class Map extends Component {
         />
         <MarkerCluster
           venues={this.props.venues}
-          pushState={this.props.pushState}
-          basename={this.props.basename}>
+          pushState={this.props.pushState}>
         </MarkerCluster>
       </LeafletMap>
     )
@@ -96,10 +105,10 @@ class Map extends Component {
 }
 
 Map.propTypes = {
-  basename: PropTypes.string.isRequired,
   pushState: PropTypes.func.isRequired,
   isLocating: PropTypes.bool.isRequired,
   bounds: PropTypes.object,
+  markerLatLng: PropTypes.array,
   startPosition: PropTypes.array,
   venues: PropTypes.object.isRequired
 }
@@ -108,9 +117,9 @@ Map.defaultProps = {
   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
   tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
   startPosition: [51.505, -0.09],
-  maxZoom: 16,
-  minZoom: 12,
-  zoom: 15
+  maxZoom: config.MAP_MAX_ZOOM,
+  minZoom: config.MAP_MIN_ZOOM,
+  zoom: config.MAP_INIT_ZOOM
 }
 
 export default Map

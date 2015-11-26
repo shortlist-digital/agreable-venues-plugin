@@ -23,7 +23,12 @@ const parseColumns = [
 function returnSimpleObject(parseObject){
   const obj = { }
   parseColumns.forEach(item => {
-    obj[item] = parseObject.get(item)
+    const val = parseObject.get(item)
+    if(item == 'location'){
+      obj[item] = [val.latitude, val.longitude]
+    } else {
+      obj[item] = val
+    }
   })
   return obj
 }
@@ -31,7 +36,7 @@ function returnSimpleObject(parseObject){
 export function convertObjects(parseObjects){
   const map = new Map()
   parseObjects.forEach(obj => {
-    map.set(obj.id, returnSimpleObject(obj))
+    map.set(obj.get('slug'), returnSimpleObject(obj))
   })
   return map;
 }

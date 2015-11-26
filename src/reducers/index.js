@@ -8,8 +8,13 @@ import * as types from '../constants/ActionTypes';
 function venues(state = {
   isFetching : false,
   items : new Map(),
+  active : {}
 }, action) {
   switch (action.type) {
+  case types.SET_ACTIVE_VENUE:
+    return Object.assign({}, state, {
+      active : action.venue
+    });
   case types.REQUEST_VENUES:
     return Object.assign({}, state, {
       isFetching: true,
@@ -37,9 +42,14 @@ function venues(state = {
 
 function map(state = {
   isLocating : false,
-  bounds : {northeast:{}, southwest:{}}
+  bounds : {northeast:{}, southwest:{}},
+  focusLocation : [],
 }, action){
   switch (action.type) {
+  case types.PAN_TO_LOCATION:
+    return Object.assign({}, state, {
+      focusLocation : action.latLng
+    });
   case types.GEOLOCATE_REQUEST:
     return Object.assign({}, state, {
       isLocating: true,

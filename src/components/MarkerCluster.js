@@ -43,14 +43,12 @@ class MarkerCluster extends MapLayer {
             objectId={objectId}
             name={venue.name}
             image={(venue.images) ? venue.images[0] : null}
-            url={`${this.props.basename}/${venue.slug}`}
-            basename={this.props.basename}
             slug={venue.slug} />
         )
 
         // Add marker.
         const l = venue.location
-        const leafletMarker = Leaflet.marker([l.latitude, l.longitude])
+        const leafletMarker = Leaflet.marker(l)
           .bindPopup(markerPopup, {
             maxHeight: 350,
             maxWidth: 250,
@@ -80,7 +78,6 @@ class MarkerCluster extends MapLayer {
 MarkerCluster.propTypes = {
   pushState: PropTypes.func.isRequired,
   venues: PropTypes.object.isRequired,
-  basename: PropTypes.string.isRequired
 };
 
 MarkerCluster.defaultProps = {

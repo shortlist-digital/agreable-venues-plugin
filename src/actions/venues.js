@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch'
 import { Parse } from 'parse';
 import * as types from '../constants/ActionTypes';
+import { panToLocation } from '../actions/map';
 
 function initializeParse() {
   return {
@@ -8,18 +9,15 @@ function initializeParse() {
   }
 }
 
-
-function requestVenues(bounds) {
+function requestVenues() {
   return {
-    type: types.REQUEST_VENUES,
-    bounds
+    type: types.REQUEST_VENUES
   }
 }
 
-function receiveVenues(bounds, data) {
+function receiveVenues(data) {
   return {
     type: types.RECEIVE_VENUES,
-    bounds: bounds,
     items: data,
     receivedAt: Date.now()
   }
@@ -33,7 +31,6 @@ function requestVenuesFailure(bounds) {
 }
 
 function fetchVenues(bounds) {
-  // Using Thunk middleware.
   return function(dispatch, getState){
     // Inform app state that we've started a request.
     dispatch(requestVenues())
@@ -54,7 +51,7 @@ function fetchVenues(bounds) {
 
     return query.find()
       .then(results => {
-        dispatch(receiveVenues(bounds, results))
+        dispatch(receiveVenues(results))
       }, ex => {
         dispatch(requestVenuesError(bounds))
         console.log('parsing failed', ex)
@@ -62,7 +59,7 @@ function fetchVenues(bounds) {
   }
 }
 
-function shouldFetchVenues(state, bounds) {
+function shouldFetchVenues(state) {
   const venues = state.venues
   if (!venues) {
     return true
@@ -73,21 +70,76 @@ function shouldFetchVenues(state, bounds) {
   return true
 }
 
+function initialiseParse(parse, dispatch){
+  // If parse hasn't been initialized do so here.
+  if(!parse.isInitialized){
+    Parse.initialize(parse.parse_app_id, parse.parse_js_key);
+    dispatch(initializeParse())
+  }
+}
+
 export function fetchVenuesIfNeeded(bounds) {
   return (dispatch, getState) => {
 
     const state = getState()
     const parse = state.app.parse
 
-    // If parse hasn't been initialized do so here.
-    if(!parse.isInitialized){
-      Parse.initialize(parse.parse_app_id, parse.parse_js_key);
-      dispatch(initializeParse())
-    }
+    // Conditionally initialise parse.
+    initialiseParse(parse, dispatch)
 
     // Check conditions under which we should fetch.
     if (shouldFetchVenues(state, bounds)) {
       return dispatch(fetchVenues(bounds))
+    }
+  }
+}
+
+function fetchSingleVenue(name){
+  return function(dispatch, getState){
+    console.log('fetchSingleVenue')
+    // Inform app state that we've started a request.
+    dispatch(requestVenues())
+
+    const query = new Parse.Query("Venue")
+    query.equalTo("slug", name);
+
+    return query.find()
+      .then(results => {
+        dispatch(receiveVenues(results))
+        dispatch(requestSingleVenue(name))
+      }, ex => {
+        dispatch(requestVenuesError(bounds))
+        console.log('parsing failed', ex)
+      })
+
+  }
+}
+
+function setVenueActive(venue){
+  return {
+    type: types.SET_ACTIVE_VENUE,
+    venue
+  }
+}
+
+export function requestSingleVenue(name) {
+  return (dispatch, getState) => {
+
+    console.log('requestSingleVenue', name)
+    const state = getState()
+    const items = state.app.venues.items
+    const parse = state.app.parse
+    const activeVenue = {}
+
+    // Conditionally initialise parse.
+    initialiseParse(parse, dispatch)
+
+    if(items.has(name)){
+      let activeVenue = items.get(name)
+      dispatch(setVenueActive(activeVenue))
+      dispatch(panToLocation(activeVenue.location))
+    } else {
+      dispatch(fetchSingleVenue(name))
     }
   }
 }
