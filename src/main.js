@@ -18,9 +18,6 @@ class Root extends Component {
         <Provider store={store}>
           <ReduxRouter />
         </Provider>
-        <DebugPanel top right bottom>
-          <DevTools store={store} monitor={LogMonitor} />
-        </DebugPanel>
       </div>
     )
   }
@@ -29,3 +26,11 @@ class Root extends Component {
 DOMReady(function() {
   ReactDOM.render(<Root />, document.getElementById('venues-plugin'))
 })
+
+if (process.env.NODE_ENV !== 'production') {
+  // Use require because imports can't be conditional.
+  // In production, you should ensure process.env.NODE_ENV
+  // is envified so that Uglify can eliminate this
+  // module and its dependencies as dead code.
+  require('./createDevToolsWindow')(store);
+}
