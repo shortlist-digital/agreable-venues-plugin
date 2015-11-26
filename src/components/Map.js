@@ -56,7 +56,7 @@ class Map extends Component {
 
     // If focusPoint is changed.
     if(JSON.stringify(nextProps.focusLocation) !== JSON.stringify(this.props.focusLocation)){
-      map.setView(nextProps.focusLocation, config.MAP_MAX_ZOOM)
+      this.setViewOffset(nextProps.focusLocation, map)
     }
   }
 
@@ -80,7 +80,19 @@ class Map extends Component {
       fetchMarkers(map.getBounds())
     }
 
-    // map.on('click',
+    map.on('click', () => {
+      this.props.pushState({}, '/')
+    })
+  }
+
+  setViewOffset(latLng, map){
+
+    const overlayWidth = 360
+    const targetPoint = map.project(latLng, config.MAP_MAX_ZOOM)
+                           .add([overlayWidth / 2, 0]);
+    const targetLatLng = map.unproject(targetPoint, config.MAP_MAX_ZOOM);
+
+    map.setView(targetLatLng, config.MAP_MAX_ZOOM)
   }
 
   render() {
