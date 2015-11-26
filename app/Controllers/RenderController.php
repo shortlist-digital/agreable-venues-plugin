@@ -52,7 +52,7 @@ class RenderController {
     $port_file = 'webpack-current-port.tmp';
     $port_file_location = $plugin_root . '/' . $port_file;
     if (!file_exists($port_file_location)) {
-      throw new Exception('Expected ' . $port_file . ' to be available.');
+      throw new \Exception('Expected ' . $port_file . ' to be available.');
     }
 
     return file_get_contents($port_file_location);

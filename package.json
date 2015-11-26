@@ -19,7 +19,7 @@
   "devDependencies": {
     "babel": "*",
     "babel-core": "^5.8.24",
-    "babel-loader": "*",
+    "babel-loader": "^5.3.3",
     "css-loader": "~0.9.1",
     "extract-text-webpack-plugin": "^0.8.2",
     "get-port": "^1.0.0",
