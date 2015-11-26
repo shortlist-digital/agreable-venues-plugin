@@ -21,13 +21,13 @@ class Map extends Component {
   }
 
   handleMoveEnd(e) {
-    const { onMoveEnd } = this.props
+    const { fetchMarkers } = this.props
     const map = this.refs.map.leafletElement
     // TODO: Consider passing them as simple array rather than object
     // that is incompatible with Parse GeoPoints. Can use spread syntax then.
     // const boundsObj = map.getBounds()
     // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
-    onMoveEnd(map.getBounds())
+    fetchMarkers(map.getBounds())
   }
 
   componentWillReceiveProps(nextProps) {
@@ -61,7 +61,7 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    const { onMoveEnd, activeVenue } = this.props
+    const { fetchMarkers, activeVenue } = this.props
     const map = this.refs.map.leafletElement
 
     // Manually remove top left zoom control because
@@ -77,8 +77,10 @@ class Map extends Component {
 
     if(!activeVenue){
       // Initial get from Parse.
-      onMoveEnd(map.getBounds())
+      fetchMarkers(map.getBounds())
     }
+
+    // map.on('click',
   }
 
   render() {
