@@ -1,0 +1,25 @@
+@import 'allure-breakpoints'
+
+.venue-overlay
+  background white
+  box-sizing border-box
+  height calc(100vh - 40px)
+  left 50%
+  max-width 320px
+  overflow: scroll;
+  overflow-x: hidden;
+  padding 20px
+  position absolute
+  top 20px
+  transform translateX(-50%)
+  width 100%
+  z-index 50
+
+@media ipadsAndUp
+  .venue-overlay
+    right 20px
+    left auto
+    transform none
+
+.venue-overlay__img img
+  max-width 100%

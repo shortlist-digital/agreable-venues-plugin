@@ -21,13 +21,13 @@ class Map extends Component {
   }
 
   handleMoveEnd(e) {
-    const { onMoveEnd } = this.props
+    const { fetchMarkers } = this.props
     const map = this.refs.map.leafletElement
     // TODO: Consider passing them as simple array rather than object
     // that is incompatible with Parse GeoPoints. Can use spread syntax then.
     // const boundsObj = map.getBounds()
     // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
-    onMoveEnd(map.getBounds())
+    fetchMarkers(map.getBounds())
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,12 +56,12 @@ class Map extends Component {
 
     // If focusPoint is changed.
     if(JSON.stringify(nextProps.focusLocation) !== JSON.stringify(this.props.focusLocation)){
-      map.setView(nextProps.focusLocation, config.MAP_MAX_ZOOM)
+      this.setViewOffset(nextProps.focusLocation, map)
     }
   }
 
   componentDidMount() {
-    const { onMoveEnd, activeVenue } = this.props
+    const { fetchMarkers, activeVenue } = this.props
     const map = this.refs.map.leafletElement
 
     // Manually remove top left zoom control because
@@ -77,8 +77,22 @@ class Map extends Component {
 
     if(!activeVenue){
       // Initial get from Parse.
-      onMoveEnd(map.getBounds())
+      fetchMarkers(map.getBounds())
     }
+
+    map.on('click', () => {
+      this.props.pushState({}, '/')
+    })
+  }
+
+  setViewOffset(latLng, map){
+
+    const overlayWidth = 360
+    const targetPoint = map.project(latLng, config.MAP_MAX_ZOOM)
+                           .add([overlayWidth / 2, 0]);
+    const targetLatLng = map.unproject(targetPoint, config.MAP_MAX_ZOOM);
+
+    map.setView(targetLatLng, config.MAP_MAX_ZOOM)
   }
 
   render() {
