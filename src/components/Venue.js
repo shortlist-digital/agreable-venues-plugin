@@ -67,6 +67,12 @@ class Venue extends Component {
   }
 
   renderSocial(){
+    if(!this.props.instagram &&
+      !this.props.facebook &&
+      !this.props.twitter){
+        return null
+    }
+
     return (
       <div className="venue-social">
         {(this.props.instagram) ?
