@@ -96,7 +96,6 @@ export function fetchVenuesIfNeeded(bounds) {
 
 function fetchSingleVenue(name){
   return function(dispatch, getState){
-    console.log('fetchSingleVenue')
     // Inform app state that we've started a request.
     dispatch(requestVenues())
 
@@ -105,6 +104,7 @@ function fetchSingleVenue(name){
 
     return query.find()
       .then(results => {
+        console.info(results)
         dispatch(receiveVenues(results))
         dispatch(requestSingleVenue(name))
       }, ex => {
@@ -125,7 +125,6 @@ function setVenueActive(venue){
 export function requestSingleVenue(name) {
   return (dispatch, getState) => {
 
-    console.log('requestSingleVenue', name)
     const state = getState()
     const items = state.app.venues.items
     const parse = state.app.parse
