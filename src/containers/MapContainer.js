@@ -3,8 +3,8 @@ import { pushState } from 'redux-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import * as mapActions from '../actions/map'
-import * as venuesActions from '../actions/venues'
+import { geolocateSuccess } from '../actions/map'
+import { fetchVenuesIfNeeded } from '../actions/venues'
 
 import Map from '../components/Map'
 
@@ -37,8 +37,11 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  const allActions = Object.assign({}, mapActions, venuesActions, { pushState } );
-  return bindActionCreators(allActions, dispatch)
+  return bindActionCreators({
+    geolocateSuccess,
+    fetchVenuesIfNeeded,
+    pushState
+  }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapContainer)

@@ -2,7 +2,12 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import * as actionCreators from '../actions/search-location'
+import {
+  requestLocationImmediate,
+  requestLocationDebounce
+} from '../actions/search-location'
+import { geolocate } from '../actions/map'
+
 import Search from '../components/Search'
 
 class SearchContainer extends Component {
@@ -36,7 +41,11 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(actionCreators, dispatch)
+  return bindActionCreators({
+    requestLocationImmediate,
+    requestLocationDebounce,
+    geolocate
+  }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchContainer)
