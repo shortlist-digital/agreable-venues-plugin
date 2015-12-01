@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 import { Parse } from 'parse';
 import * as types from '../constants/ActionTypes';
 import { panToLocation } from '../actions/map';
+import { getVenueQuery } from '../utils/ParseUtils';
 
 function initializeParse() {
   return {
@@ -34,11 +35,14 @@ function fetchVenues(bounds) {
   return function(dispatch, getState){
     // Inform app state that we've started a request.
     dispatch(requestVenues())
-    const items = getState().app.venues.items
+    const state = getState()
+    const items = state.app.venues.items
+    const parse = state.app.parse
 
     const swBounds = bounds.getSouthWest()
     const neBounds = bounds.getNorthEast()
-    const query = new Parse.Query("Venue")
+
+    const query = getVenueQuery(parse)
     const sw = new Parse.GeoPoint(swBounds.lat, swBounds.lng)
     const ne = new Parse.GeoPoint(neBounds.lat, neBounds.lng)
     query.withinGeoBox("location", sw, ne).limit(1000)
@@ -99,12 +103,12 @@ function fetchSingleVenue(name){
     // Inform app state that we've started a request.
     dispatch(requestVenues())
 
-    const query = new Parse.Query("Venue")
+    const parse = getState().app.parse
+    const query = getVenueQuery(parse)
     query.equalTo("slug", name);
 
     return query.find()
       .then(results => {
-        console.info(results)
         dispatch(receiveVenues(results))
         dispatch(requestSingleVenue(name))
       }, ex => {

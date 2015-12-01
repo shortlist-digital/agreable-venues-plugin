@@ -1,3 +1,5 @@
+import { Parse } from 'parse';
+
 const parseColumns = [
   'name',
   'address',
@@ -17,8 +19,38 @@ const parseColumns = [
   'sell',
   'slug',
   'tags',
-  'venue_type'
+  'VenueTypes',
+  'Brands',
+  'Tags'
 ];
+
+export function getVenueQuery(parse){
+
+  const q = new Parse.Query("Venue")
+  q.include("Brands")
+  q.include("VenueTypes")
+  q.include("Tags")
+
+  if(parse.brands.length){
+    const brandQuery = new Parse.Query("Brand")
+    brandQuery.containedIn("slug", parse.brands)
+    q.matchesQuery("Brands", brandQuery)
+  }
+
+  if(parse.venue_types.length){
+    const typeQuery = new Parse.Query("VenueType")
+    typeQuery.containedIn("slug", parse.venue_types)
+    q.matchesQuery("Brands", typeQuery)
+  }
+
+  if(parse.tags.length){
+    const tagQuery = new Parse.Query("Tag")
+    tagQuery.containedIn("slug", parse.tags)
+    q.matchesQuery("Brands", tagQuery)
+  }
+
+  return q
+}
 
 function returnSimpleObject(parseObject){
   const obj = { }

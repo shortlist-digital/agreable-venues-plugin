@@ -40,7 +40,10 @@ class RenderController {
         'parse' => array(
           'parse_app_id' => get_field('venues_parse_app_id', 'option'),
           'parse_js_key' => get_field('venues_parse_js_key', 'option'),
-          'isInitialized' => false
+          'isInitialized' => false,
+          'brands' => array("emerald-street"),
+          'venue_types' => array(),
+          'tags' => array()
         )
       )
     );

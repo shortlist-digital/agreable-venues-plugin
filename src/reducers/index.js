@@ -14,7 +14,10 @@ import { search } from './search'
 function parse(state = {
   parse_app_id: '',
   parse_js_key: '',
-  isInitialized:false
+  isInitialized:false,
+  brands: [],
+  venue_types: [],
+  tags: [],
 }, action){
   switch (action.type) {
   case types.INITIALIZE_PARSE:
