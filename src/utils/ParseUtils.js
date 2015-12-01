@@ -3,7 +3,6 @@ import { Parse } from 'parse';
 const parseColumns = [
   'name',
   'address',
-  'brand',
   'ephemeral',
   'opening_date',
   'closing_date',
@@ -18,7 +17,6 @@ const parseColumns = [
   'review',
   'sell',
   'slug',
-  'tags',
   'VenueTypes',
   'Brands',
   'Tags'

@@ -9,12 +9,8 @@ class Venue extends Component {
   }
 
   renderVenueTypes(){
-    const venue_types = this.props.venue_type
-    // Array.from & Array.map are not working on objects.
-    // Perhaps an issue with transpiling on Babel 5.
-    const types = Object.keys(venue_types).map(i => venue_types[i])
-
-    if(!types.length){
+    const types = this.props.VenueTypes
+    if(!types){
       return null
     }
 
@@ -112,13 +108,9 @@ class Venue extends Component {
     )
   }
 
-  renderTags(tags){
-    const venue_tags = this.props.tags
-    // Array.from & Array.map are not working on objects.
-    // Perhaps an issue with transpiling on Babel 5.
-    tags = Object.keys(venue_tags).map(i => venue_tags[i])
-
-    if(!tags.length){
+  renderTags(){
+    const tags = this.props.Tags
+    if(!tags){
       return null
     }
 
@@ -155,7 +147,7 @@ class Venue extends Component {
 Venue.propTypes = {
   name: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,
-  venue_type: PropTypes.object,
+  VenueTypes: PropTypes.array,
   images: PropTypes.object.isRequired,
   review: PropTypes.string.isRequired,
   website: PropTypes.string,
@@ -163,7 +155,7 @@ Venue.propTypes = {
   facebook: PropTypes.string,
   twitter: PropTypes.string,
   price: PropTypes.string,
-  tags: PropTypes.object
+  Tags: PropTypes.array
 }
 
 export default Venue;
