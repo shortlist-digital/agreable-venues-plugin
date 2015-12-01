@@ -4,6 +4,10 @@ const classNames = require('classnames')
 
 class Venue extends Component {
 
+  rawTitle(){
+    return { __html: this.props.name };
+  }
+
   renderVenueTypes(){
     const venue_types = this.props.venue_type
     // Array.from & Array.map are not working on objects.
@@ -50,7 +54,7 @@ class Venue extends Component {
     )
   }
 
-  rawMarkup(){
+  rawReview(){
     return { __html: this.props.review };
   }
 
@@ -133,12 +137,12 @@ class Venue extends Component {
     return (
       <div className='venue-overlay'>
         <header>
-          <h1>{this.props.name}</h1>
+          <h1 dangerouslySetInnerHTML={this.rawTitle()} />
           <h2>{this.props.address}</h2>
           {this.renderVenueTypes()}
         </header>
         {this.renderImage()}
-        <p dangerouslySetInnerHTML={this.rawMarkup()} />
+        <p dangerouslySetInnerHTML={this.rawReview()} />
         {this.renderWebsite()}
         {this.renderSocial()}
         {this.renderPrice()}
