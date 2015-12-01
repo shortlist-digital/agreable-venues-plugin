@@ -40,13 +40,13 @@ export function getVenueQuery(parse){
   if(parse.venue_types.length){
     const typeQuery = new Parse.Query("VenueType")
     typeQuery.containedIn("slug", parse.venue_types)
-    q.matchesQuery("Brands", typeQuery)
+    q.matchesQuery("VenueTypes", typeQuery)
   }
 
   if(parse.tags.length){
     const tagQuery = new Parse.Query("Tag")
     tagQuery.containedIn("slug", parse.tags)
-    q.matchesQuery("Brands", tagQuery)
+    q.matchesQuery("Tags", tagQuery)
   }
 
   return q
@@ -56,7 +56,11 @@ function returnSimpleObject(parseObject){
   const obj = { }
   parseColumns.forEach(item => {
     const val = parseObject.get(item)
-    if(item == 'location'){
+    if(val && ['Brands', 'VenueTypes', 'Tags'].indexOf(item) > -1){
+      obj[item] = Array.from(val, (obj) => {
+        return { slug : obj.get('slug'), name : obj.get('name') }
+      })
+    } else if(item == 'location'){
       obj[item] = [val.latitude, val.longitude]
     } else {
       obj[item] = val
