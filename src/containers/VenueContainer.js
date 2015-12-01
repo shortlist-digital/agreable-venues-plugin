@@ -28,6 +28,8 @@ class VenueContainer extends Component {
       return null
     }
 
+    const { venue } = this.props
+
     return (
       <Venue
         {...this.props.params}
@@ -35,8 +37,8 @@ class VenueContainer extends Component {
         />
     )
   }
-
 }
+
 
 function mapStateToProps(state) {
   return {
