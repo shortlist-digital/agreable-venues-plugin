@@ -99,6 +99,7 @@ class Map extends Component {
     return (
       <LeafletMap
         ref="map"
+        attributionControl={false}
         className="venues__map"
         center={this.props.startPosition}
         onLeafletMoveend={this.handleMoveEnd}
@@ -106,8 +107,9 @@ class Map extends Component {
         <TileLayer
           maxZoom={this.props.maxZoom}
           minZoom={this.props.minZoom}
-          url={this.props.tileURL}
-          attribution={this.props.attribution}
+          url={this.props.tileUrl}
+          token={this.props.token}
+          mapId={this.props.mapId}
         />
         <MarkerCluster
           venues={this.props.venues}
@@ -124,12 +126,13 @@ Map.propTypes = {
   bounds: PropTypes.object,
   markerLatLng: PropTypes.array,
   startPosition: PropTypes.array,
-  venues: PropTypes.object.isRequired
+  venues: PropTypes.object.isRequired,
+  tileUrl : PropTypes.string.isRequired,
+  token : PropTypes.string,
+  mapId : PropTypes.string
 }
 
 Map.defaultProps = {
-  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-  tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
   startPosition: [51.505, -0.09],
   maxZoom: config.MAP_MAX_ZOOM,
   minZoom: config.MAP_MIN_ZOOM,
