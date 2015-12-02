@@ -1,10 +1,19 @@
 import * as types from '../constants/ActionTypes';
 
-export function map(state = {
+const initialState = {
   isLocating : false,
   bounds : {northeast:{}, southwest:{}},
   focusLocation : [],
-}, action){
+  tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+}
+
+export function map(state = initialState, action){
+
+  // https://github.com/rackt/redux/issues/433
+  if (!state.hydrated) {
+    state = {...initialState, ...state, hydrated: true}
+  }
+
   switch (action.type) {
   case types.PAN_TO_LOCATION:
     return Object.assign({}, state, {
