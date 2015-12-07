@@ -14,9 +14,12 @@ class App extends Component {
   }
 
   render() {
+    const divStyle = {
+      height: '100%'
+    }
 
     return (
-      <div className="venues">
+      <div style={divStyle} className="venues">
         <h2 className="venues__count">{this.props.venues.size}</h2>
         <MapContainer />
         <SearchContainer />

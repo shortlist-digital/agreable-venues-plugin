@@ -13,8 +13,11 @@ const store = configureStore()
 
 class Root extends Component {
   render() {
+    const rootStyle = {
+      height: '100%'
+    }
     return (
-      <div>
+      <div style={rootStyle} >
         <Provider store={store}>
           <ReduxRouter />
         </Provider>
