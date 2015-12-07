@@ -14,6 +14,7 @@ class RenderController {
 
   public function render(){
 
+    $css_string = @file_get_contents(Helper::path('/resources/assets/styles.css'));
     $js_string = @file_get_contents(Helper::path('/resources/assets/app.js'));
     $webpack_port = null;
     $environment = getenv('WP_ENV');
@@ -34,6 +35,7 @@ class RenderController {
     $context['environment'] = $environment;
     // $context['common_css_path'] = Helper::asset('styles.css');
     $context['js_string'] =  $js_string;
+    $context['css_string'] =  $css_string;
     $context['webpack_plugin_port'] = $webpack_port;
     $context['initial_state'] = array(
       'app' => array(
