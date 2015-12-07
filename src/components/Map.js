@@ -70,11 +70,6 @@ class Map extends Component {
     const firstZoomControl = map._controlContainer.firstChild
     firstZoomControl.parentNode.removeChild(firstZoomControl)
 
-    const zoomControl = L.control.zoom({
-      position: 'bottomleft'
-    })
-    map.addControl(zoomControl)
-
     if(!activeVenue){
       // Initial get from Parse.
       fetchMarkers(map.getBounds())

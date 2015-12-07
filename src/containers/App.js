@@ -20,7 +20,6 @@ class App extends Component {
 
     return (
       <div style={divStyle} className="venues">
-        <h2 className="venues__count">{this.props.venues.size}</h2>
         <MapContainer />
         <SearchContainer />
         {this.props.children}
