@@ -1,0 +1,37 @@
+@import 'nib'
+@import 'allure-breakpoints'
+
+.venues-search
+  background white
+  bottom 10px
+  box-shadow 3px 9px 25px -8px #000
+  padding 10px
+  position absolute
+  text-align center
+  width 100%
+  z-index 10
+
+  @media smallTabletsAndUp
+    bottom initial
+    width 340px
+    top 20px
+    left 20px
+
+.venues-search input[type="text"]
+  text-align left
+  padding 5px 5px 5px 10px
+  width 100%
+  font-size 20px
+
+.venues-search__icon
+  float left
+  width 24px
+  overflow hidden
+  position absolute
+  top 16px
+  right 16px
+
+.venues-search__icon svg
+  max-width 24px
+  max-height 24px
+  fill #333
