@@ -28,7 +28,8 @@
 {#
 # Herbert issue rending wp-admin bar.
 https://github.com/getherbert/herbert/issues/32#issuecomment-119422917
+Setting on a variable so Twig doesn't render the returned response of true/1.
 #}
-{{ function('_wp_admin_bar_init') }}
+{% set tmp = function('_wp_admin_bar_init') %}
 
 {% endblock %}
