@@ -3,7 +3,7 @@
 .venues-overlay
   background white
   box-sizing border-box
-  height calc(100vh - 40px)
+  height 85%
   left 50%
   max-width 320px
   overflow: scroll;
@@ -13,7 +13,22 @@
   top 20px
   transform translateX(-50%)
   width 100%
-  z-index 50
+  z-index 10
+
+  h1
+    font-size 32px
+    line-height 1
+    margin 20px auto
+    text-align center
+
+  h2
+    font-size 18px
+    text-align center
+    margin 20px auto
+    line-height 1.5
+
+  p
+    font-size 16px
 
 @media ipadsAndUp
   .venues-overlay
@@ -21,5 +36,8 @@
     left auto
     transform none
 
-.venues-overlay__img img
-  max-width 100%
+.venues-overlay__img
+  margin-bottom 16px
+  img
+    max-width 100%
+
