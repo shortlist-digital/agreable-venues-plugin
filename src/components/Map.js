@@ -108,8 +108,8 @@ class Map extends Component {
           maxZoom={this.props.maxZoom}
           minZoom={this.props.minZoom}
           url={this.props.tileUrl}
-          token={this.props.token}
-          mapId={this.props.mapId}
+          token={this.props.mapboxToken}
+          mapId={this.props.mapboxMapId}
         />
         <MarkerCluster
           venues={this.props.venues}
@@ -128,8 +128,8 @@ Map.propTypes = {
   startPosition: PropTypes.array,
   venues: PropTypes.object.isRequired,
   tileUrl : PropTypes.string.isRequired,
-  token : PropTypes.string,
-  mapId : PropTypes.string
+  mapboxToken : PropTypes.string,
+  mapboxMapId : PropTypes.string
 }
 
 Map.defaultProps = {

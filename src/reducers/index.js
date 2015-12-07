@@ -8,17 +8,22 @@ import { venues } from './venues'
 import { map } from './map'
 import { search } from './search'
 
-// This reducer is neccessary to handle any
-// params passed by window.__INITIAL_STATE__
-// as well as initializing parse.
-function parse(state = {
+const initialState = {
   parse_app_id: '',
   parse_js_key: '',
   isInitialized:false,
   brands: [],
   venue_types: [],
   tags: [],
-}, action){
+}
+
+function parse(state = initialState, action){
+
+  // https://github.com/rackt/redux/issues/433
+  if (!state.hydrated) {
+    state = {...initialState, ...state, hydrated: true}
+  }
+
   switch (action.type) {
   case types.INITIALIZE_PARSE:
 		return Object.assign({}, state, {

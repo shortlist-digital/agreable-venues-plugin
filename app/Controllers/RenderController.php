@@ -38,12 +38,14 @@ class RenderController {
     $context['initial_state'] = array(
       'app' => array(
         'parse' => array(
-          'parse_app_id' => get_field('venues_parse_app_id', 'option'),
-          'parse_js_key' => get_field('venues_parse_js_key', 'option'),
-          'isInitialized' => false,
-          'brands' => array("emerald-street"),
-          'venue_types' => array(),
-          'tags' => array()
+          'parse_app_id'  => get_field('venues_parse_app_id', 'option'),
+          'parse_js_key'  => get_field('venues_parse_js_key', 'option'),
+          'brands'        => array("emerald-street"),
+        ),
+        'map' => array(
+          'mapboxToken' => get_field('venues_map_mapbox_token', 'option'),
+          'mapboxMapId' => get_field('venues_map_mapbox_mapid', 'option'),
+          'tileUrl'     => get_field('venues_map_tiles_url', 'option'),
         )
       )
     );

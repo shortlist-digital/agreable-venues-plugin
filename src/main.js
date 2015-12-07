@@ -24,7 +24,7 @@ class Root extends Component {
 }
 
 DOMReady(function() {
-  ReactDOM.render(<Root />, document.getElementById('venues-plugin'))
+  ReactDOM.render(<Root />, document.getElementById('agreable-venues'))
 })
 
 if (process.env.NODE_ENV !== 'production') {

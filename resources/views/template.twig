@@ -1,17 +1,12 @@
-{#
 {% extends "base.twig" %}
-#}
 
-<!doctype html>
-<html>
-<body>
 {% block content %}
 
   {% if environment == "development" %}
 
     <hr style="border: solid 1px red; ">
     <script type="text/javascript">
-      window.__INITIAL_STATE__ = {{initial_state|json_encode}};
+      window.__INITIAL_STATE__ = {{initial_state|json_encode(constant('JSON_PRETTY_PRINT'))}};
     </script>
 
     <script src="http://localhost:{{ webpack_plugin_port }}/static/app.js"></script>
@@ -24,10 +19,16 @@
 
   {% endif %}
 
-  <div id="venues-plugin" class="venues_plugin">
-    Venues
+  <div id="agreable-venues" class="agreable-venues">
+    <h2 class="agreable-venues__time-message">
+      Please turn on javascript to enter this promotion
+    </h2>
   </div>
 
+{#
+# Herbert issue rending wp-admin bar.
+https://github.com/getherbert/herbert/issues/32#issuecomment-119422917
+#}
+{{ function('_wp_admin_bar_init') }}
+
 {% endblock %}
-</body>
-</html>
