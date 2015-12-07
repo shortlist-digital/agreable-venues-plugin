@@ -104,7 +104,7 @@ register_field_group(array (
       'prefix' => '',
       'type' => 'text',
       'instructions' => '',
-      'required' => 1,
+      'required' => 0,
       'conditional_logic' => 0,
       'wrapper' => array (
         'width' => '',
@@ -126,7 +126,7 @@ register_field_group(array (
       'prefix' => '',
       'type' => 'text',
       'instructions' => '',
-      'required' => 1,
+      'required' => 0,
       'conditional_logic' => 0,
       'wrapper' => array (
         'width' => '',
