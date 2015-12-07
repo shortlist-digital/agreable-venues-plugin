@@ -31,7 +31,7 @@ class Venue extends Component {
     }
 
     return (
-      <div className="venue-overlay__img">
+      <div className="venues-overlay__img">
         <img src={this.props.images[0].landscape.url} title={this.props.name} />
       </div>
     )
@@ -127,7 +127,7 @@ class Venue extends Component {
 
   render() {
     return (
-      <div className='venue-overlay'>
+      <div className='venues-overlay'>
         <header>
           <h1 dangerouslySetInnerHTML={this.rawTitle()} />
           <h2>{this.props.address}</h2>
