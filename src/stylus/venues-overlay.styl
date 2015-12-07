@@ -24,8 +24,13 @@
   h2
     font-size 18px
     text-align center
-    margin 20px auto
+    margin 0 0 16px
     line-height 1.5
+
+  h3
+    font-size 16px
+    margin 0 0 16px
+    text-align center
 
   p
     font-size 16px
@@ -41,3 +46,54 @@
   img
     max-width 100%
 
+.venues-overlay__types
+  text-align center
+
+.venues-overlay__types__type
+  display inline-block
+  font-size 16px
+
+.venues-overlay__types__type:after
+  content "\2022"
+  padding 0 5px
+  font-size 0.75em
+  vertical-align middle
+  position relative
+  top -3px
+
+.venues-overlay__types__type:last-child:after
+  content ""
+
+.venues-overlay__tags
+  margin-bottom 16px
+
+.venues-overlay__tags__tag
+  background black
+  border-radius 3px
+  display inline-block
+  color white
+  font-size 12px
+  margin-right 5px
+  padding 3px
+
+.venues-overlay__website
+  text-align center
+
+.venues-overlay__website a
+  font-size 14px
+
+.venue-price
+  text-align center
+  margin-bottom 16px
+  font-size 30px
+  font-weight bold
+
+.venue-price__item
+  margin-right 5px
+  opacity 0.25
+
+.venue-price__item--active
+  opacity 1
+
+.venues-overlay__social__item svg
+  max-width 50px
