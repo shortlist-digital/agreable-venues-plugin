@@ -2,11 +2,11 @@
 
 {% block content %}
 
-  {% if environment == "development" %}
+  <script type="text/javascript">
+    window.__INITIAL_STATE__ = {{initial_state|json_encode(constant('JSON_PRETTY_PRINT'))}};
+  </script>
 
-    <script type="text/javascript">
-      window.__INITIAL_STATE__ = {{initial_state|json_encode(constant('JSON_PRETTY_PRINT'))}};
-    </script>
+  {% if environment == "development" %}
 
     <script src="http://localhost:{{ webpack_plugin_port }}/static/app.js"></script>
 
@@ -15,6 +15,10 @@
     <script>
       {{js_string|raw}}
     </script>
+
+    <style>
+      {{css_string|raw}}
+    </style>
 
   {% endif %}
 
