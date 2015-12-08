@@ -47,6 +47,8 @@ export function getVenueQuery(parse){
     q.matchesQuery("Tags", tagQuery)
   }
 
+  q.equalTo("status", "publish");
+
   return q
 }
 
