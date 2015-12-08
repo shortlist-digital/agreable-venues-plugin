@@ -37,12 +37,16 @@ class RenderController {
     $context['js_string'] =  $js_string;
     $context['css_string'] =  $css_string;
     $context['webpack_plugin_port'] = $webpack_port;
+    $brand_str = strtolower(get_field('venues_brand'));
+    $brands = ! empty($brand_str) ?
+      array_map('trim', explode(',', $brand_str)) :
+      array();
     $context['initial_state'] = array(
       'app' => array(
         'parse' => array(
           'parse_app_id'  => get_field('venues_parse_app_id', 'option'),
           'parse_js_key'  => get_field('venues_parse_js_key', 'option'),
-          'brands'        => array("emerald-street"),
+          'brands'        => $brands
         ),
         'map' => array(
           'mapboxToken' => get_field('venues_map_mapbox_token', 'option'),
