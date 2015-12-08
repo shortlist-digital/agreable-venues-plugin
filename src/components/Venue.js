@@ -164,4 +164,8 @@ Venue.propTypes = {
   Tags: PropTypes.array
 }
 
+Venue.defaultProps = {
+  images: {}
+}
+
 export default Venue;
