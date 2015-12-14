@@ -50,7 +50,7 @@ function fetchVenues(bounds) {
     // If we already have some venues then exclude them from
     // query to Parse.
     if(items.size > 0){
-      query.notContainedIn('objectId', Array.from(items.keys()))
+      query.notContainedIn('slug', Array.from(items.keys()))
     }
 
     return query.find()
