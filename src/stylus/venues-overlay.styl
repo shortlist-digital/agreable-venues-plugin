@@ -1,19 +1,12 @@
 @import 'allure-breakpoints'
+@import 'mixins'
 
 .venues-overlay
   background white
-  box-sizing border-box
-  height 85%
-  left 50%
-  max-width 320px
   overflow: scroll;
   overflow-x: hidden;
   padding 20px
-  position absolute
-  top 20px
-  transform translateX(-50%)
-  width 100%
-  z-index 10
+  overlayViewportHeight(95vh)
 
   h1
     font-size 32px
@@ -34,12 +27,6 @@
 
   p
     font-size 16px
-
-@media ipadsAndUp
-  .venues-overlay
-    right 20px
-    left auto
-    transform none
 
 .venues-overlay__img
   margin-bottom 16px

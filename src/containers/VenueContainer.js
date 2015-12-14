@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import { pushState } from 'redux-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -34,6 +35,7 @@ class VenueContainer extends Component {
       <Venue
         {...this.props.params}
         {...this.props.venue}
+        pushState={this.props.pushState}
         />
     )
   }
@@ -47,7 +49,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({requestSingleVenue}, dispatch)
+  return bindActionCreators({requestSingleVenue, pushState}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(VenueContainer)

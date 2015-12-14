@@ -1,0 +1,8 @@
+overlayViewportHeight(vh)
+
+  height "calc(%s - 44px)" % vh
+  .admin-bar &
+    height "calc(%s - 44px - 46px)" % vh
+    @media wpAdminDesktop
+      height "calc(%s - 44px - 32px)" % vh
+
