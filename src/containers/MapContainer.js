@@ -18,6 +18,7 @@ class MapContainer extends Component {
     return (
       <Map
         {...this.props.map}
+        pathname={this.props.pathname}
         onGeolocateSuccess={this.props.geolocateSuccess}
         fetchMarkers={this.props.fetchVenuesIfNeeded}
         pushState={this.props.pushState}
@@ -32,7 +33,8 @@ function mapStateToProps(state) {
   return {
     map           : state.app.map,
     venues        : state.app.venues.items,
-    activeVenue   : state.router.params.name
+    activeVenue   : state.router.params.name,
+    pathname : state.router.location.pathname
   }
 }
 
