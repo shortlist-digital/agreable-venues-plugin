@@ -36,7 +36,8 @@ class SearchContainer extends Component {
 function mapStateToProps(state) {
   return {
     search      : state.app.search,
-    map         : state.app.map
+    map         : state.app.map,
+    venueActive : state.app.venues.active
   }
 }
 
