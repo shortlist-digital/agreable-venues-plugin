@@ -1,41 +1,14 @@
 @import 'leaflet/leaflet'
 @import 'leaflet/leaflet.cluster'
 
-@import 'venues'
+@import 'venues-overlay-container'
 @import 'venues-overlay'
 @import 'venues-search'
-@import 'mixins'
+@import 'venues-map'
 
-
-.venues-overlay-container
-  box-sizing border-box
-  position absolute
-  left 50%
-  max-width 320px
-  top 20px
-  transform translateX(-50%)
-  width 100%
-  z-index 10
-  overlayViewportHeight(95vh)
-
-@media ipadsAndUp
-  .venues-overlay-container
-    left auto
-    right 20px
-    transform none
-
-.venues-overlay-container__close
-  background white
-  border-radius 15px
-  box-shadow 1px 1px 10px rgba(0, 0, 0, 0.2)
-  font-size 21px
-  height 30px
-  position absolute
-  left 5px
-  top 5px
-  text-align center
-  width 30px
-  z-index 20
+.venues
+  position relative
+  clearfix()
 
 .leaflet-marker-icon:not(.marker-cluster)
   box-shadow 0 8px 6px -6px #000

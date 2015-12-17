@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
+const classNames = require('classnames')
+
 class Search extends Component {
 
   constructor(props) {
@@ -26,8 +28,13 @@ class Search extends Component {
   render() {
     const { searchTerm, isLocating, onGeolocate } = this.props
 
+    const searchClasses = classNames({
+      'venues-search': true,
+      'venues-search--hide-sml': this.props.hasVenueRoute
+    })
+
     return (
-        <div className='venues-search'>
+        <div className={searchClasses}>
           <form onSubmit={this.handleSubmit}>
             <input placeholder='Enter a location' ref="locationInput" onKeyUp={this.handleOnKeyUp} type='text' />
             <div className="venues-search__icon">
