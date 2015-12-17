@@ -17,9 +17,11 @@ class SearchContainer extends Component {
   }
 
   render() {
+
     return (
       <Search
         {...this.props.search}
+        hasVenueRoute={!!this.props.venueRoute}
         isLocating={this.props.map.isLocating}
         onGeolocate={this.props.geolocate}
         onImmediateSearch={value =>
@@ -37,7 +39,7 @@ function mapStateToProps(state) {
   return {
     search      : state.app.search,
     map         : state.app.map,
-    venueActive : state.app.venues.active
+    venueRoute  : state.router.params.name
   }
 }
 
