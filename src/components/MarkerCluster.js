@@ -2,72 +2,69 @@ import ReactDOMServer from 'react-dom/server'
 import React, { Component, PropTypes } from 'react'
 import Leaflet from 'leaflet'
 import { MapLayer } from 'react-leaflet'
-import MarkerPopup from './MarkerPopup'
 
 require('leaflet.markercluster')
 
 class MarkerCluster extends MapLayer {
 
+  constructor(props){
+    super(props)
+  }
+
   handleMarkerClick(objectId, venue) {
-    this.props.pushState({}, `/${venue.slug}`)
+    if(`/${venue.slug}` != this.props.pathname){
+      this.props.pushState({}, `/${venue.slug}`)
+    }
   }
 
   componentWillMount() {
     super.componentWillMount()
-
     this.leafletElement = Leaflet.markerClusterGroup()
   }
 
-  // Called everytime this component receives new properties
-  componentWillReceiveProps(nextProps) {
-    super.componentWillReceiveProps(nextProps)
-
-    // If we have new venues to add.
-    if(nextProps.venues.size > this.props.venues.size){
-
-      // Filter out only new venues.
-      const newVenues = Array.from(nextProps.venues)
-        .filter((obj) => {
-          return !this.props.venues.has(obj[0])
-        })
-
-      const newMarkers = []
-      newVenues.forEach((obj) => {
-        // ES6 Map has been converted to Array: ['objectId', venueObj]
-        const objectId = obj[0]
-        const venue = obj[1]
-        // Store component as markup for rendering in convetional
-        // leaflet manner.
-        let markerPopup = ReactDOMServer.renderToString(
-          <MarkerPopup
-            objectId={objectId}
-            name={venue.name}
-            image={(venue.images) ? venue.images[0] : null}
-            slug={venue.slug} />
-        )
-
-        // Add marker.
-        const l = venue.location
-        const leafletMarker = Leaflet.marker(l)
-          .bindPopup(markerPopup, {
-            maxHeight: 350,
-            maxWidth: 250,
-            minWidth: 250
-          })
-          .on('click', (e) => {
-            this.handleMarkerClick(...obj)
-          })
-
-        newMarkers.push(leafletMarker)
-      })
-
-      // Add all markers to cluster layer.
-      this.leafletElement.addLayers(newMarkers)
-    }
+  shouldComponentUpdate(nextProps) {
+    // Only update if we have more venues in memory.
+    return nextProps.venues.size > this.props.venues.size
   }
 
-  shouldComponentUpdate() {
-    return false
+  componentWillUpdate(nextProps) {
+    super.componentWillReceiveProps(nextProps)
+
+    // Filter out only new venues.
+    const newVenues = Array.from(nextProps.venues)
+      .filter((obj) => {
+        return !this.props.venues.has(obj[0])
+      })
+
+    const newMarkers = []
+    newVenues.forEach((obj) => {
+      // ES6 Map has been converted to Array: ['objectId', venueObj]
+      const venue = obj[1]
+
+      const options = {}
+      if(venue.images && Object.keys(venue.images).length){
+        // Custom icon.
+        options.icon = Leaflet.icon({
+          classname: "icon-marker",
+          iconAnchor: [0, 0],
+          iconSize: [60, 60],
+          iconUrl: venue.images[0].thumbnail.url,
+          popupAnchor: [40, 0]
+        })
+      }
+
+      // Add marker.
+      const l = venue.location
+      const leafletMarker = Leaflet.marker(l, options)
+        .on('click', (e) => {
+          this.handleMarkerClick(...obj)
+        })
+
+      newMarkers.push(leafletMarker)
+    })
+
+    // Add all markers to cluster layer.
+    this.leafletElement.addLayers(newMarkers)
   }
 
   render() {
@@ -76,6 +73,7 @@ class MarkerCluster extends MapLayer {
 }
 
 MarkerCluster.propTypes = {
+  pathname: PropTypes.string.isRequired,
   pushState: PropTypes.func.isRequired,
   venues: PropTypes.object.isRequired,
 };

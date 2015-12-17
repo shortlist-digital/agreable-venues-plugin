@@ -58,6 +58,14 @@ class Map extends Component {
     if(JSON.stringify(nextProps.focusLocation) !== JSON.stringify(this.props.focusLocation)){
       this.setViewOffset(nextProps.focusLocation, map)
     }
+
+    // If pathname has changed to '/' (root) then click
+    // map to remove any popups
+    if(nextProps.pathname == '/' &&
+      nextProps.pathname != this.props.pathname){
+        // 'preclick' event closes all open popups.
+        this.refs.map.leafletElement.fire('preclick')
+    }
   }
 
   componentDidMount() {
@@ -88,7 +96,6 @@ class Map extends Component {
     const targetPoint = map.project(latLng, config.MAP_MAX_ZOOM)
                            .add([overlayWidth / 2, 0]);
     const targetLatLng = map.unproject(targetPoint, config.MAP_MAX_ZOOM);
-
     map.setView(targetLatLng, config.MAP_MAX_ZOOM)
   }
 
@@ -109,6 +116,7 @@ class Map extends Component {
           mapId={this.props.mapboxMapId}
         />
         <MarkerCluster
+          pathname={this.props.pathname}
           venues={this.props.venues}
           pushState={this.props.pushState}>
         </MarkerCluster>
@@ -118,6 +126,7 @@ class Map extends Component {
 }
 
 Map.propTypes = {
+  pathname: PropTypes.string.isRequired,
   pushState: PropTypes.func.isRequired,
   isLocating: PropTypes.bool.isRequired,
   bounds: PropTypes.object,
