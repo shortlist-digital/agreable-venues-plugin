@@ -7,7 +7,11 @@ export function venues(state = {
   active : {}
 }, action) {
   switch (action.type) {
-  case types.SET_ACTIVE_VENUE:
+  case types.SET_VENUE_INACTIVE:
+    return Object.assign({}, state, {
+      active : {}
+    });
+  case types.SET_VENUE_ACTIVE:
     return Object.assign({}, state, {
       active : action.venue
     });

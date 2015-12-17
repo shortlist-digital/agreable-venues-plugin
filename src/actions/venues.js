@@ -121,7 +121,7 @@ function fetchSingleVenue(name){
 
 function setVenueActive(venue){
   return {
-    type: types.SET_ACTIVE_VENUE,
+    type: types.SET_VENUE_ACTIVE,
     venue
   }
 }
@@ -146,3 +146,10 @@ export function requestSingleVenue(name) {
     }
   }
 }
+
+export function setVenueInactive(){
+  return {
+    type: types.SET_VENUE_INACTIVE
+  }
+}
+

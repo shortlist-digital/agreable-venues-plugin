@@ -69,7 +69,7 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    const { fetchMarkers, activeVenue } = this.props
+    const { fetchMarkers, hasVenueRoute } = this.props
     const map = this.refs.map.leafletElement
 
     // Manually remove top left zoom control because
@@ -78,13 +78,15 @@ class Map extends Component {
     const firstZoomControl = map._controlContainer.firstChild
     firstZoomControl.parentNode.removeChild(firstZoomControl)
 
-    if(!activeVenue){
+    if(!hasVenueRoute){
       // Initial get from Parse.
       fetchMarkers(map.getBounds())
     }
 
     map.on('click', () => {
       this.props.pushState({}, '/')
+      // Updates state through reducer.
+      this.props.setVenueInactive()
     })
   }
 

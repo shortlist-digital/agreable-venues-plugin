@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import { geolocateSuccess } from '../actions/map'
-import { fetchVenuesIfNeeded } from '../actions/venues'
+import { fetchVenuesIfNeeded, setVenueInactive } from '../actions/venues'
 
 import Map from '../components/Map'
 
@@ -23,7 +23,8 @@ class MapContainer extends Component {
         fetchMarkers={this.props.fetchVenuesIfNeeded}
         pushState={this.props.pushState}
         venues={this.props.venues}
-        activeVenue={!!this.props.activeVenue}
+        setVenueInactive={this.props.setVenueInactive}
+        hasVenueRoute={!!this.props.venueRoute}
       />
     )
   }
@@ -33,8 +34,8 @@ function mapStateToProps(state) {
   return {
     map           : state.app.map,
     venues        : state.app.venues.items,
-    activeVenue   : state.router.params.name,
-    pathname : state.router.location.pathname
+    venueRoute    : state.router.params.name,
+    pathname      : state.router.location.pathname
   }
 }
 
@@ -42,6 +43,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     geolocateSuccess,
     fetchVenuesIfNeeded,
+    setVenueInactive,
     pushState
   }, dispatch)
 }
