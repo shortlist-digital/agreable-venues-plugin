@@ -58,6 +58,9 @@ class RenderController {
       array();
     $context['initial_state'] = array(
       'app' => array(
+        'copy' => array(
+          'sitename' => get_bloginfo('name')
+        ),
         'parse' => array(
           'parse_app_id'  => get_field('venues_parse_app_id', 'option'),
           'parse_js_key'  => get_field('venues_parse_js_key', 'option'),
