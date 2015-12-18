@@ -56,8 +56,6 @@ class Venue extends Component {
   }
 
   renderSocialItem(channel, url){
-    console.info(channel)
-    console.info(this.svgs[channel])
     const socialClasses = classNames(
       'venues-overlay__social__item',
       'venues-overlay__social__item--' + channel
@@ -187,7 +185,7 @@ class Venue extends Component {
             <hr/>
           </div>
           <VenueShare
-            {...this.props.copy}
+            {...this.props.site}
             name={this.props.name}
             review={this.props.review}
             image={Object.keys(this.props.images).length

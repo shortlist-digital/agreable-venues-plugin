@@ -35,7 +35,7 @@ class VenueContainer extends Component {
       <Venue
         {...this.props.params}
         {...this.props.venue}
-        copy={this.props.copy}
+        site={this.props.site}
         pushState={this.props.pushState}
         />
     )

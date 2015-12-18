@@ -13,7 +13,7 @@ const initialState = {
   sitename : ''
 }
 
-function copy(state = initialState, action){
+function site(state = initialState, action){
   // https://github.com/rackt/redux/issues/433
   if (!state.hydrated) {
     state = {...initialState, ...state, hydrated: true}
@@ -29,7 +29,7 @@ const app = combineReducers({
   map,
   search,
   parse,
-  copy
+  site
 })
 
 export default app

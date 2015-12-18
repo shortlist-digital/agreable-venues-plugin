@@ -27,7 +27,7 @@ class RenderController {
     $this->render();
   }
 
-  public function render($venue){
+  public function render($venue=null){
 
     $css_string = @file_get_contents(Helper::path('/resources/assets/styles.css'));
     $js_string = @file_get_contents(Helper::path('/resources/assets/app.js'));
@@ -58,8 +58,9 @@ class RenderController {
       array();
     $context['initial_state'] = array(
       'app' => array(
-        'copy' => array(
-          'sitename' => get_bloginfo('name')
+        'site' => array(
+          'sitename'  => get_bloginfo('name'),
+          'env'       => $environment
         ),
         'parse' => array(
           'parse_app_id'  => get_field('venues_parse_app_id', 'option'),
