@@ -10,7 +10,8 @@
     }
   ],
   "require": {
-    "getherbert/framework": "~0.9"
+    "getherbert/framework": "~0.9",
+    "parse/php-sdk": "^1.1@dev"
   },
   "minimum-stability": "dev",
   "config": {

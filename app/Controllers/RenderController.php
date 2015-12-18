@@ -1,18 +1,33 @@
 <?php namespace AgreableVenuesPlugin\Controllers;
 
 use AgreableVenuesPlugin\Helper;
+use Parse\ParseClient;
+use Parse\ParseQuery;
 
 class RenderController {
 
-  public function single($slug){
+  function __construct() {
+    $app_id = get_field('venues_parse_app_id', 'option');
+    $rest_key = get_field('venues_parse_rest_key', 'option');
+    $master_key = get_field('venues_parse_master_key', 'option');
+
+    ParseClient::initialize( $app_id, $rest_key, $master_key );
+  }
+
+  public function single($application, $slug){
+    $query = new ParseQuery("Venue");
+    $query->equalTo("slug", $slug);
+    $results = $query->find();
+    $venue = $results[0];
+
+    $this->render($venue);
+  }
+
+  public function home(){
     $this->render();
   }
 
-  public function home($slug){
-    $this->render();
-  }
-
-  public function render(){
+  public function render($venue){
 
     $css_string = @file_get_contents(Helper::path('/resources/assets/styles.css'));
     $js_string = @file_get_contents(Helper::path('/resources/assets/app.js'));
@@ -21,7 +36,7 @@ class RenderController {
 
     if ($environment === 'development') {
       try {
-        $webpack_port = $this->getDevelopmentWebpackPort(Helper::path(''));
+        $webpack_port = $this->get_webpack_port(Helper::path(''));
       } catch(Exception $e) {
         // If exception the developer hasn't run webpack so may not be
         // 'developing' this particular plugin, force 'production'
@@ -56,10 +71,46 @@ class RenderController {
       )
     );
 
+    if(isset($venue)){
+      // If on single venue page we set all meta data accordingly.
+      $context['wp_title'] = $venue->get('name');
+      $context['post'] = $this->get_post_meta_data($venue);
+    }
+
 	  \Timber::render("{$views}template.twig", $context);
   }
 
-  protected function getDevelopmentWebpackPort($plugin_root) {
+  protected function get_post_meta_data($venue){
+
+    $post = array();
+
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $domain =  $_SERVER['HTTP_HOST'];
+    if(getenv('WP_ENV') === 'development'){
+      $domain = str_replace('local', 'staging', $domain);
+    }
+
+    $route_base = get_field("venues_map_slug", 'option') ?: 'map';
+    $route_base = preg_replace("/[^A-Za-z0-9-_ ]/", '', $route_base);
+    $slug = $venue->get('slug');
+    $title = $venue->get('name');
+    $review = strip_tags($venue->get('review'));
+    $images = $venue->get('images');
+
+    $post = array(
+      'share_description' => $review,
+      'sell' => substr($review, 0, 155),
+      'share_title' => $title,
+      'url' => "$protocol$domain/$route_base/$slug"
+    );
+
+    if(!empty($images)){
+      $post['share_image'] = $images[0]['landscape']['url'];
+    }
+    return $post;
+  }
+
+  protected function get_webpack_port($plugin_root) {
     $port_file = 'webpack-current-port.tmp';
     $port_file_location = $plugin_root . '/' . $port_file;
     if (!file_exists($port_file_location)) {
