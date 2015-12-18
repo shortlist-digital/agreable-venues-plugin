@@ -158,12 +158,12 @@ class Venue extends Component {
           {this.renderPrice()}
           {this.renderWebsite()}
           {this.renderSocial()}
-					<VenueShare
-           name={this.props.name}
-           review={this.props.review}
-           image={Object.keys(this.props.images).length
-             ? this.props.images[0] : null }
-           />
+          <VenueShare
+            {...this.props.copy}
+            name={this.props.name}
+            review={this.props.review}
+            image={Object.keys(this.props.images).length
+              ? this.props.images[0] : null } />
         </div>
       </div>
     );
@@ -182,7 +182,8 @@ Venue.propTypes = {
   facebook: PropTypes.string,
   twitter: PropTypes.string,
   price: PropTypes.string,
-  Tags: PropTypes.array
+  Tags: PropTypes.array,
+  copy: PropTypes.object,
 }
 
 Venue.defaultProps = {

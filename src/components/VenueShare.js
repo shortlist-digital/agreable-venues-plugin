@@ -12,20 +12,26 @@ class VenueShare extends Component {
 
   constructor(props){
     super(props)
-    this.handleFacebook = this.handleFacebook.bind(this);
     facebookSetup()
+    this.handleFacebook = this.handleFacebook.bind(this);
+    this.handleTwitter = this.handleTwitter.bind(this);
+  }
+
+  tweetText(){
+    return encodeURIComponent(`Take a look at ${this.props.name} on the ${this.props.sitename} Map.`)
+  }
+
+  handleTwitter(e){
+    e.preventDefault()
+    var url = `https://twitter.com/intent/tweet?text=${this.tweetText()}&url=${window.location.href}`
+    window.open(url, '', 'height=300,width=600')
   }
 
   handleFacebook(e) {
-    console.info(this.props)
-    console.info(this.props.review.replace(/<\/?[^>]+(>|$)/g, ""))
     e.preventDefault()
     FB.ui({
       method: 'share',
-      href: 'http://emeraldstreet.lab.shortlistmedia.co.uk/map/oxo-tower-bar',
-      title: this.props.name,
-      description: this.props.review.replace(/<\/?[^>]+(>|$)/g, ""),
-      image: this.props.image.landscape.url
+      href: window.location.href.replace('local', 'staging'),
     }, function(response){})
   }
 
@@ -39,7 +45,7 @@ class VenueShare extends Component {
             <a onClick={this.handleFacebook} href={`https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`}>{this.svgs['facebook']}</a>
           </li>
           <li className="venues-share__network venues-share__network--twitter">
-            <a href={`https://twitter.com/intent/tweet?url=${currentUrl}`}>{this.svgs['twitter']}</a>
+            <a onClick={this.handleTwitter} href={`https://twitter.com/intent/tweet?url=${currentUrl}`}>{this.svgs['twitter']}</a>
           </li>
         </ul>
       </div>
@@ -48,6 +54,9 @@ class VenueShare extends Component {
 }
 
 VenueShare.propTypes = {
+  name: PropTypes.string.isRequired,
+  review: PropTypes.string.isRequired,
+  sitename: PropTypes.string.isRequired,
 }
 
 VenueShare.defaultProps = {

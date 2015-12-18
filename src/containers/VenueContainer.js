@@ -35,6 +35,7 @@ class VenueContainer extends Component {
       <Venue
         {...this.props.params}
         {...this.props.venue}
+        copy={this.props.copy}
         pushState={this.props.pushState}
         />
     )
@@ -44,7 +45,8 @@ class VenueContainer extends Component {
 
 function mapStateToProps(state) {
   return {
-    venue : state.app.venues.active
+    venue : state.app.venues.active,
+    copy  : state.app.copy
   }
 }
 
