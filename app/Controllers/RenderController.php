@@ -101,7 +101,7 @@ class RenderController {
       'share_description' => $review,
       'sell' => substr($review, 0, 155),
       'share_title' => $title . ' - ' . get_bloginfo('name').' Venues',
-      'url' => "$protocol$domain/$route_base/$slug"
+      'permalink' => "$protocol$domain/$route_base/$slug"
     );
 
     if(!empty($images)){
