@@ -1,4 +1,3 @@
-import ReactDOMServer from 'react-dom/server'
 import React, { Component, PropTypes } from 'react'
 import Leaflet from 'leaflet'
 import { MapLayer } from 'react-leaflet'
@@ -40,15 +39,14 @@ class MarkerCluster extends MapLayer {
     newVenues.forEach((obj) => {
       // ES6 Map has been converted to Array: ['objectId', venueObj]
       const venue = obj[1]
-
       const options = {}
       if(venue.images && Object.keys(venue.images).length){
         // Custom icon.
-        options.icon = Leaflet.icon({
-          classname: "icon-marker",
+        options.icon = Leaflet.divIcon({
+          html : `<img src="${venue.images[0].thumbnail.url}" />`,
+          className: "venues-marker",
           iconAnchor: [0, 0],
           iconSize: [60, 60],
-          iconUrl: venue.images[0].thumbnail.url,
           popupAnchor: [40, 0]
         })
       }

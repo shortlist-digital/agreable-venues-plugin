@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
+import VenueShare from './VenueShare'
+
 const classNames = require('classnames')
 
 class Venue extends Component {
@@ -156,6 +158,12 @@ class Venue extends Component {
           {this.renderPrice()}
           {this.renderWebsite()}
           {this.renderSocial()}
+					<VenueShare
+           name={this.props.name}
+           review={this.props.review}
+           image={Object.keys(this.props.images).length
+             ? this.props.images[0] : null }
+           />
         </div>
       </div>
     );
