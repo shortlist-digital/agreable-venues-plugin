@@ -73,7 +73,7 @@ class RenderController {
 
     if(isset($venue)){
       // If on single venue page we set all meta data accordingly.
-      $context['wp_title'] = $venue->get('name');
+      $context['wp_title'] = htmlentities($venue->get('name'));
       $context['post'] = $this->get_post_meta_data($venue);
     }
 
@@ -99,8 +99,8 @@ class RenderController {
 
     $post = array(
       'share_description' => $review,
-      'sell' => substr($review, 0, 155),
-      'share_title' => $title . ' - ' . get_bloginfo('name').' Venues',
+      'sell' => htmlentities(substr($review, 0, 155)),
+      'share_title' => htmlentities($title) . ' - ' . get_bloginfo('name').' Venues',
       'permalink' => "$protocol$domain/$route_base/$slug"
     );
 
