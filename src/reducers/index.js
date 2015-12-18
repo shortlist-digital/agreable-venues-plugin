@@ -7,38 +7,29 @@ import * as types from '../constants/ActionTypes';
 import { venues } from './venues'
 import { map } from './map'
 import { search } from './search'
+import { parse } from './parse'
 
 const initialState = {
-  parse_app_id: '',
-  parse_js_key: '',
-  isInitialized:false,
-  brands: [],
-  venue_types: [],
-  tags: [],
+  sitename : ''
 }
 
-function parse(state = initialState, action){
-
+function copy(state = initialState, action){
   // https://github.com/rackt/redux/issues/433
   if (!state.hydrated) {
     state = {...initialState, ...state, hydrated: true}
   }
 
-  switch (action.type) {
-  case types.INITIALIZE_PARSE:
-		return Object.assign({}, state, {
-			isInitialized: true
-		})
-  default:
-    return state;
-  }
+  // No action filters here. Probably never will be. These
+  // are essentially constants rendered into the page on the server.
+  return state
 }
 
 const app = combineReducers({
   venues,
   map,
   search,
-  parse
-});
+  parse,
+  copy
+})
 
-export default app;
+export default app
