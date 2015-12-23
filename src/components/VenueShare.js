@@ -14,7 +14,11 @@ class VenueShare extends Component {
   }
 
   tweetText(){
-    return encodeURIComponent(`Take a look at ${this.props.name} on the ${this.props.sitename} Map.`)
+    let name = this.props.name
+    // Using html element to encode url
+    const el = document.createElement('p')
+    el.innerHTML = name
+    return encodeURIComponent(`Take a look at ${el.textContent} on the ${this.props.sitename} Map.`)
   }
 
   handleTwitter(e){

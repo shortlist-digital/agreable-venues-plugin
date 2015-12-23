@@ -46,7 +46,7 @@ class VenueContainer extends Component {
 function mapStateToProps(state) {
   return {
     venue : state.app.venues.active,
-    copy  : state.app.copy
+    site  : state.app.site
   }
 }
 
