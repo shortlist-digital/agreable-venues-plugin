@@ -26,10 +26,9 @@ module.exports = function(port) {
       }],
       loaders: [
         { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader?paths[]=./src/styles&paths[]=./node_modules'},
-        { test: /\.svg$/, exclude:'node_modules', loader: 'raw-loader' },
         { test: /\.json$/, loader: 'json-loader' },
         { test: /\.woff$|.eot$|.svg$|.ttf$|.png$|.gif$|.jpg$|.jpeg$/, loader: "url" },
-        { test: /src\/.*\.jsx?$/, loaders: ['react-hot', 'babel-loader?stage=0&loose=all'], exclude: '/node_modules/',  include: path.join(__dirname, "src") }
+        { test: /\.jsx?$/, loaders: ['react-hot', 'babel-loader?stage=0&loose=all'], exclude: '/node_modules/', include: [path.join(__dirname, "src"), path.join(__dirname, 'node_modules/svg-inline-react')] }
       ]
     },
 

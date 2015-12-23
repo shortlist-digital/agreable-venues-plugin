@@ -1,0 +1,12 @@
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 512 512">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <path d="M365.3,234.1h-24.7c1.8,7,2.9,14.3,2.9,21.9,0,48.3-39.2,87.5-87.5,87.5s-87.5-39.2-87.5-87.5c0-7.6,1.1-14.9,2.9-21.9h-24.7v120.3c0,6,4.9,10.9,10.9,10.9h196.8c6,0,10.9-4.9,10.9-10.9v-120.3zm0-76.5c0-6-4.9-10.9-10.9-10.9h-32.8c-6,0-10.9,4.9-10.9,10.9v32.8c0,6,4.9,10.9,10.9,10.9h32.8c6,0,10.9-4.9,10.9-10.9v-32.8zm-109.3,43.7c-30.2,0-54.7,24.5-54.7,54.7s24.5,54.7,54.7,54.7,54.7-24.5,54.7-54.7-24.5-54.7-54.7-54.7m109.3,196.8h-218.6c-18.1,0-32.8-14.7-32.8-32.8v-218.6c0-18.1,14.7-32.8,32.8-32.8h218.7c18.1,0,32.8,14.7,32.8,32.8v218.7c-0.1,18-14.7,32.7-32.9,32.7"/>
+</svg>
