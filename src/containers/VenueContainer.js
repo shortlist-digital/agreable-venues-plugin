@@ -29,6 +29,11 @@ class VenueContainer extends Component {
       return null
     }
 
+    // Blur focus on textfield if it's currently active.
+    if(document.activeElement.type === 'text'){
+      document.activeElement.blur()
+    }
+
     const { venue } = this.props
 
     return (

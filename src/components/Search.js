@@ -23,6 +23,11 @@ class Search extends Component {
     if (value !== '') {
       this.props.onDebounceSearch(value)
     }
+
+    // Blur focus on textfield if enter is pressed.
+    if(e.keyCode == '13'){
+      document.activeElement.blur()
+    }
   }
 
   render() {
