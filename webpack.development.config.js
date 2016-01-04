@@ -34,7 +34,10 @@ module.exports = function(port) {
 
     plugins: [
       new ExtractTextPlugin('styles.css'),
-      new webpack.HotModuleReplacementPlugin()
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.DefinePlugin({
+        __PRODUCTION__: 'false'
+      })
     ],
 
     resolve: {
