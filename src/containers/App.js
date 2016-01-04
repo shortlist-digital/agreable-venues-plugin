@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import 'babel-polyfill'
 
 // Components.
 import SearchContainer from '../containers/SearchContainer'
