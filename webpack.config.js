@@ -1,3 +1,4 @@
+var webpack = require('webpack')
 var nib = require('nib')
 var path = require('path')
 var ExtractTextPlugin = require("extract-text-webpack-plugin")
@@ -22,7 +23,10 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('styles.css')
+    new ExtractTextPlugin('styles.css'),
+    new webpack.DefinePlugin({
+      __PRODUCTION__: 'true'
+    })
   ],
 
   resolve: {

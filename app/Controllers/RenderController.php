@@ -47,7 +47,7 @@ class RenderController {
     $views = trailingslashit(Helper::get('views')['template']);
     $context = \Timber::get_context();
 
-    $context['environment'] = $environment;
+    $context['env'] = $environment;
     // $context['common_css_path'] = Helper::asset('styles.css');
     $context['js_string'] =  $js_string;
     $context['css_string'] =  $css_string;

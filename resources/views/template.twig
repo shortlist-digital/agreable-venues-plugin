@@ -6,7 +6,7 @@
     window.__INITIAL_STATE__ = {{initial_state|json_encode(constant('JSON_PRETTY_PRINT'))}};
   </script>
 
-  {% if environment == "development" %}
+  {% if env == "development" %}
 
     <script src="http://localhost:{{ webpack_plugin_port }}/static/app.js"></script>
 
