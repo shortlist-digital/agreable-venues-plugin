@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
+import InlineSVG from 'svg-inline-react/lib';
+const classNames = require('classnames')
 
 import VenueShare from './VenueShare'
-import svg from '../constants/Svgs'
-
-const classNames = require('classnames')
 
 class Venue extends Component {
 
@@ -73,7 +72,7 @@ class Venue extends Component {
 
     return (
       <span className={socialClasses}>
-        {svgs(channel)}
+        <InlineSVG src={require(`!svg-inline!../svgs/${channel}.svg`)} />
         {link}
       </span>
     )

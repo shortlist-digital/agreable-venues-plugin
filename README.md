@@ -18,3 +18,15 @@ Assumes presence of:
 * Redux for JS state.
 * webpack for build
 
+
+### Inline SVGs
+
+Using [svg-inline-loader](https://github.com/sairion/svg-inline-loader) and [svg-inline-react](https://github.com/sairion/svg-inline-react).  
+
+Implementation example:  
+
+```
+<InlineSVG src={require('!svg-inline!../../icons/facebook.svg')} />
+```
+
+The prefixed bang (`!`) is necessary. [Explained here](https://github.com/sairion/svg-inline-loader/issues/15).

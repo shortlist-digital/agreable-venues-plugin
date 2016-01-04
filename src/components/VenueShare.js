@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import facebookSetup from '../utils/FacebookSetup'
-import svg from '../constants/Svgs'
+import InlineSVG from 'svg-inline-react/lib';
 
 const classNames = require('classnames')
 
@@ -42,10 +42,14 @@ class VenueShare extends Component {
         <h2>Share your love for this venue:</h2>
         <ul>
           <li className="venues-share__network venues-share__network--facebook">
-            <a onClick={this.handleFacebook} href={`https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`}>{svgs('facebook')}</a>
+            <a onClick={this.handleFacebook} href={`https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`}>
+              <InlineSVG src={require('!svg-inline!../svgs/facebook.svg')} />
+            </a>
           </li>
           <li className="venues-share__network venues-share__network--twitter">
-            <a onClick={this.handleTwitter} href={`https://twitter.com/intent/tweet?url=${currentUrl}`}>{svgs('twitter')}</a>
+            <a onClick={this.handleTwitter} href={`https://twitter.com/intent/tweet?url=${currentUrl}`}>
+              <InlineSVG src={require('!svg-inline!../svgs/twitter.svg')} />
+            </a>
           </li>
         </ul>
       </div>
