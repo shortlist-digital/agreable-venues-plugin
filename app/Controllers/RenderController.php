@@ -37,7 +37,7 @@ class RenderController {
     if ($environment === 'development') {
       try {
         $webpack_port = $this->get_webpack_port(Helper::path(''));
-      } catch(Exception $e) {
+      } catch(\Exception $e) {
         // If exception the developer hasn't run webpack so may not be
         // 'developing' this particular plugin, force 'production'
         $environment = 'production';
@@ -118,7 +118,7 @@ class RenderController {
     $port_file = 'webpack-current-port.tmp';
     $port_file_location = $plugin_root . '/' . $port_file;
     if (!file_exists($port_file_location)) {
-      throw new \Exception('Expected ' . $port_file . ' to be available.');
+      throw new \Exception('Expected ' . $port_file . ' to be available. You may need to fire up webpack in this plugin.');
     }
 
     return file_get_contents($port_file_location);
