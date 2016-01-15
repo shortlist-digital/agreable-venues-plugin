@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import InlineSVG from 'svg-inline-react/lib';
 
 const classNames = require('classnames')
 
@@ -43,13 +44,12 @@ class Search extends Component {
           <form onSubmit={this.handleSubmit}>
             <input placeholder='Enter a location' ref="locationInput" onKeyUp={this.handleOnKeyUp} type='text' />
             <div className="venues-search__icon">
-              <svg version="1.1" width="512" height="512" viewBox="0 0 512 512">
-                <path d="M496.131 435.698l-121.276-103.147c-12.537-11.283-25.945-16.463-36.776-15.963 28.628-33.534 45.921-77.039 45.921-124.588 0-106.039-85.961-192-192-192s-192 85.961-192 192 85.961 192 192 192c47.549 0 91.054-17.293 124.588-45.922-0.5 10.831 4.68 24.239 15.963 36.776l103.147 121.276c17.661 19.623 46.511 21.277 64.11 3.678s15.946-46.449-3.677-64.11zM192 320c-70.692 0-128-57.308-128-128s57.308-128 128-128 128 57.308 128 128-57.307 128-128 128z"></path>
-              </svg>
+              <InlineSVG src={require(`!svg-inline!../svgs/search.svg`)} />
             </div>
           </form>
-          <small>
-            <a disabled={isLocating} onClick={onGeolocate} className='venues-search__locateme'>Find my location</a>
+          <small className='venues-search__locateme'>
+            <InlineSVG src={require(`!svg-inline!../svgs/locate_me.svg`)} />
+            <a disabled={isLocating} onClick={onGeolocate}>Find my location</a>
           </small>
         </div>
     );

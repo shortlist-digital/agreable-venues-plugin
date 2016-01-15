@@ -47,6 +47,7 @@ class RenderController {
     $views = trailingslashit(Helper::get('views')['template']);
     $context = \Timber::get_context();
 
+    $context['body_class'] = $context['body_class'] . ' agreable-venues-plugin';
     $context['env'] = $environment;
     // $context['common_css_path'] = Helper::asset('styles.css');
     $context['js_string'] =  $js_string;
