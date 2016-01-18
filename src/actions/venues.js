@@ -91,6 +91,10 @@ export function fetchVenuesIfNeeded(bounds) {
     // Conditionally initialise parse.
     initialiseParse(parse, dispatch)
 
+    if (!canUseParse()) {
+      return dispatch(setBrowserIncompatible())
+    }
+
     // Check conditions under which we should fetch.
     if (shouldFetchVenues(state, bounds)) {
       return dispatch(fetchVenues(bounds))
@@ -150,6 +154,18 @@ export function requestSingleVenue(name) {
 export function setVenueInactive(){
   return {
     type: types.SET_VENUE_INACTIVE
+  }
+}
+
+function canUseParse(){
+  var msie = document.documentMode;
+  return ! msie
+    || msie > 9
+}
+
+export function setBrowserIncompatible(){
+  return {
+    type: types.SET_BROWSER_INCOMPATIBLE
   }
 }
 
