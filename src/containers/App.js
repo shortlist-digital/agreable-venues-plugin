@@ -14,6 +14,15 @@ class App extends Component {
     super(props)
   }
 
+  renderOutdated() {
+
+    return  this.props.isBrowserIncompatible ?
+        <div className="venues__outdated">
+          I'm afraid your browser will not work with our map. Please <a href="http://windows.microsoft.com/en-gb/internet-explorer/download-ie">update your browser</a> and visit us again.
+        </div> : null
+
+  }
+
   render() {
     const divStyle = {
       height: '100%'
@@ -24,6 +33,7 @@ class App extends Component {
         <MapContainer />
         <SearchContainer />
         {this.props.children}
+        {this.renderOutdated()}
       </div>
     )
   }
@@ -36,7 +46,8 @@ App.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    venues : state.app.venues.items
+    venues : state.app.venues.items,
+    isBrowserIncompatible : state.app.venues.isBrowserIncompatible
   }
 }
 

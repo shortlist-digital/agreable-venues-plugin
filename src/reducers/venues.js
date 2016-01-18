@@ -2,11 +2,16 @@ import * as types from '../constants/ActionTypes';
 import { convertObjects } from '../utils/ParseUtils';
 
 export function venues(state = {
+  isBrowserIncompatible : false,
   isFetching : false,
   items : new Map(),
   active : {}
 }, action) {
   switch (action.type) {
+  case types.SET_BROWSER_INCOMPATIBLE:
+    return Object.assign({}, state, {
+      isBrowserIncompatible : true
+    });
   case types.SET_VENUE_INACTIVE:
     return Object.assign({}, state, {
       active : {}
