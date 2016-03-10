@@ -170,13 +170,7 @@ class Venue extends Component {
           <p dangerouslySetInnerHTML={this.rawReview()} />
           {this.renderPrice()}
           {this.renderTags()}
-          <div className="venues-overlay__divider">
-            <hr/>
-          </div>
           {this.renderSocial()}
-          <div className="venues-overlay__divider">
-            <hr/>
-          </div>
           <VenueShare
             {...this.props.site}
             name={this.props.name}
