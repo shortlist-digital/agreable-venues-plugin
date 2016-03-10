@@ -147,6 +147,7 @@ class Venue extends Component {
 
     return (
       <div className="venues-overlay__tags">
+        <h2>Tags:</h2>
         {tags.map((item, i) => {
           return (
             <span key={`tag-${item.slug}`} className="venues-overlay__tags__tag">{item.name}</span>
@@ -164,7 +165,6 @@ class Venue extends Component {
           <header>
             <h1 dangerouslySetInnerHTML={this.rawTitle()} />
             {this.renderVenueTypes()}
-            <h3>{this.props.address}</h3>
           </header>
           {this.renderImage()}
           <p dangerouslySetInnerHTML={this.rawReview()} />
