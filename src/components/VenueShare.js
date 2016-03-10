@@ -39,8 +39,8 @@ class VenueShare extends Component {
     const currentUrl = window.location;
     return (
       <div className="venues-share">
-        <h2>Share your love for this venue:</h2>
-        <ul>
+        <h2>Share this venue:</h2>
+        <ul className="venues-share__network-wrapper">
           <li className="venues-share__network venues-share__network--facebook">
             <a onClick={this.handleFacebook} href={`https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`}>
               <InlineSVG src={require('!svg-inline!../svgs/facebook.svg')} />
