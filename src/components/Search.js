@@ -41,16 +41,20 @@ class Search extends Component {
 
     return (
         <div className={searchClasses}>
-          <form onSubmit={this.handleSubmit}>
-            <input placeholder='Enter a location' ref="locationInput" onKeyUp={this.handleOnKeyUp} type='text' />
-            <div className="venues-search__icon">
-              <InlineSVG src={require(`!svg-inline!../svgs/search.svg`)} />
-            </div>
-          </form>
-          <small className='venues-search__locateme'>
-            <InlineSVG src={require(`!svg-inline!../svgs/locate_me.svg`)} />
-            <a disabled={isLocating} onClick={onGeolocate}>Find my location</a>
-          </small>
+          <div className="venues-search__location-wrapper">
+            <form onSubmit={this.handleSubmit}>
+              <input placeholder='Enter a location' ref="locationInput" onKeyUp={this.handleOnKeyUp} type='text' />
+              <div className="venues-search__icon">
+                <InlineSVG src={require(`!svg-inline!../svgs/search.svg`)} />
+              </div>
+            </form>
+           </div>
+           <div className="venues-search__locateme-wrapper">
+            <small className='venues-search__locateme'>
+              <InlineSVG src={require(`!svg-inline!../svgs/locate_me.svg`)} />
+              <a disabled={isLocating} onClick={onGeolocate}>Find my location</a>
+            </small>
+           </div>
         </div>
     );
   }
