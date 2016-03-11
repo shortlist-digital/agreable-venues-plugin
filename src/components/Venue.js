@@ -104,6 +104,7 @@ class Venue extends Component {
 
     return (
       <div className="venues-overlay__social">
+        <h2>About this venue:</h2>
         {(this.props.website) ?
           this.renderSocialItem('website', this.props.website):null }
         {(this.props.instagram) ?
