@@ -109,8 +109,6 @@ class Map extends Component {
   }
 
   render() {
-    console.log(this.props.tileUrl);
-
     return (
       <LeafletMap
         ref="map"
