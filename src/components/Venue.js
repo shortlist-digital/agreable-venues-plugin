@@ -161,7 +161,10 @@ class Venue extends Component {
   render() {
     return (
       <div className='venues-overlay-container'>
-        <a onClick={this.handleClose} className='venues-overlay-container__close'>✖</a>
+        <a onClick={this.handleClose} className='venues-overlay-container__close'>
+          <span className="venues-overlay-container__close__icon">✖</span>
+          <span className="venues-overlay-container__close__label">Back to map</span>
+        </a>
         <div className='venues-overlay'>
           <header>
             <h1 dangerouslySetInnerHTML={this.rawTitle()} />
