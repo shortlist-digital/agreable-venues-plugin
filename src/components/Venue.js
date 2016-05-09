@@ -158,12 +158,24 @@ class Venue extends Component {
     )
   }
 
+  renderPhoneLink() {
+    return (
+      <a className="venues-overlay__phone-number" href={`tel:${this.props.phone_number}`}><InlineSVG src={require(`!svg-inline!../svgs/phone.svg`)} /></a>
+    )
+  }
+
   render() {
     return (
       <div className='venues-overlay-container'>
-        <a onClick={this.handleClose} className='venues-overlay-container__close'>✖</a>
+        <a onClick={this.handleClose} className='venues-overlay-container__close'>
+          <span className="venues-overlay-container__close__icon">
+            <InlineSVG src={require(`!svg-inline!../svgs/close.svg`)} />
+          </span>
+          <span className="venues-overlay-container__close__label">Back to map</span>
+        </a>
         <div className='venues-overlay'>
           <header>
+            {(this.props.phone_number) ? this.renderPhoneLink() : null}
             <h1 dangerouslySetInnerHTML={this.rawTitle()} />
             {this.renderVenueTypes()}
           </header>

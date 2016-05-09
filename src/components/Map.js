@@ -76,11 +76,16 @@ class Map extends Component {
     const { fetchMarkers, hasVenueRoute } = this.props
     const map = this.refs.map.leafletElement
 
-    // Manually remove top left zoom control because
-    // constructor param (zoomControl:false) is not working
-    // through react component as far as I can see.
-    const firstZoomControl = map._controlContainer.firstChild
-    firstZoomControl.parentNode.removeChild(firstZoomControl)
+    // // Manually remove top left zoom control because
+    // // constructor param (zoomControl:false) is not working
+    // // through react component as far as I can see.
+    // const firstZoomControl = map._controlContainer.firstChild
+    // firstZoomControl.parentNode.removeChild(firstZoomControl)
+
+    // // Manually move zoom control to bottom right
+    // // as L.Control.Zoom isn't working.
+    // const zoomControl = map._controlContainer.firstChild
+    // zoomControl.setAttribute('class', 'leaflet-bottom leaflet-right')
 
     if(!hasVenueRoute){
       // Initial get from Parse.

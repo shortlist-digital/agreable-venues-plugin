@@ -46,7 +46,7 @@ class MarkerCluster extends MapLayer {
           html : `<img src="${venue.images[0].thumbnail.url}" />`,
           className: "venues-marker",
           iconAnchor: [0, 0],
-          iconSize: [60, 60],
+          iconSize: [80, 80],
           popupAnchor: [40, 0]
         })
       }
