@@ -31,6 +31,27 @@ function requestVenuesFailure(bounds) {
   }
 }
 
+function requestClosestVenues() {
+  return {
+    type: types.REQUEST_CLOSEST_VENUES
+  }
+}
+
+function receiveClosestVenues(data) {
+  return {
+    type: types.RECEIVE_CLOSEST_VENUES,
+    items: data,
+    receivedAt: Date.now()
+  }
+}
+
+function requestClosestVenuesFailure(center) {
+  return {
+    type: types.REQUEST_CLOSEST_VENUES_FAILURE,
+    center
+  }
+}
+
 function fetchVenues(bounds) {
   return function(dispatch, getState){
     // Inform app state that we've started a request.
@@ -143,11 +164,43 @@ export function requestSingleVenue(name) {
 
     if(items.has(name)){
       let activeVenue = items.get(name)
-      dispatch(setVenueActive(activeVenue))
-      dispatch(panToLocation(activeVenue.location))
+      dispatch(fetchClosestVenues(activeVenue.location, activeVenue));
     } else {
       dispatch(fetchSingleVenue(name))
     }
+  }
+}
+
+export function fetchClosestVenues(mapCenter, activeVenue = false) {
+  return function(dispatch, getState) {
+    // Inform app state that we've started a request.
+    dispatch(requestClosestVenues())
+    const state = getState()
+    const parse = state.app.parse
+
+    const query = getVenueQuery(parse)
+    const mapCentre = new Parse.GeoPoint(mapCenter[0], mapCenter[1])
+
+    query.withinMiles("location", mapCentre, 1).limit(5)
+
+    // the it's a single search
+    if (activeVenue) {
+      // remove the active venue from the search
+      query.notEqualTo('slug', activeVenue.slug)
+    }
+
+    return query.find()
+      .then(results => {
+        dispatch(receiveClosestVenues(results))
+        // the it's a single search
+        if (activeVenue) {
+          dispatch(setVenueActive(activeVenue))
+          dispatch(panToLocation(activeVenue.location))
+        }
+      }, ex => {
+        dispatch(requestClosestVenuesError(mapCenter))
+        console.log('parsing failed', ex)
+      })
   }
 }
 

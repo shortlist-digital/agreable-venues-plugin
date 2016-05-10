@@ -42,6 +42,8 @@ class VenueContainer extends Component {
         {...this.props.venue}
         site={this.props.site}
         pushState={this.props.pushState}
+        venueLocation={this.props.venue.location}
+        closestVenues={this.props.closestVenues}
         />
     )
   }
@@ -50,13 +52,17 @@ class VenueContainer extends Component {
 
 function mapStateToProps(state) {
   return {
-    venue : state.app.venues.active,
-    site  : state.app.site
+    closestVenues : state.app.venues.closest,
+    venue         : state.app.venues.active,
+    site          : state.app.site
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({requestSingleVenue, pushState}, dispatch)
+  return bindActionCreators({
+    requestSingleVenue,
+    pushState
+  }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(VenueContainer)
