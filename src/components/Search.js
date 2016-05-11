@@ -41,7 +41,10 @@ class Search extends Component {
       'venues-search--hide-sml': this.props.hasVenueRoute
     })
 
-    console.log(closestVenues)
+    let value = ''
+    if (this.refs.locationInput) {
+      value = this.refs.locationInput.value.trim()
+    }
 
     return (
         <div className={searchClasses}>
@@ -59,7 +62,8 @@ class Search extends Component {
               <a disabled={isLocating} onClick={onGeolocate}>Find my location</a>
             </small>
            </div>
-           <ClosestVenues venues={this.props.closestVenues} pushState={this.props.pushState} displayNumber={10} />
+           {value && !this.props.isLocating ?
+              <ClosestVenues venues={this.props.closestVenues} pushState={this.props.pushState} displayNumber={10} /> : null }
         </div>
     );
   }

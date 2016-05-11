@@ -82,20 +82,16 @@ function fetchVenues(bounds) {
     const ne = new Parse.GeoPoint(neBounds.lat, neBounds.lng)
     query.withinGeoBox("location", sw, ne).limit(1000)
 
-    console.log(query)
-
     // If we already have some venues then exclude them from
     // query to Parse.
     if(items.size > 0){
       query.notContainedIn('slug', Array.from(items.keys()))
     }
 
-    const searchTerm = state.app.search.searchTerm;
-
     return query.find()
       .then(results => {
         // if there is a search
-        if (searchTerm !== '') {
+        if (state.app.search.searchTerm !== '') {
           dispatch(fetchClosestVenues(state.app.map.center, results))
         } else {
           dispatch(receiveVenues(results))
@@ -196,7 +192,6 @@ export function requestSingleVenue(name) {
 }
 
 export function fetchClosestVenues(mapCenter, venues, type = 'search') {
-  console.log('fetchClosestVenues', type);
   return function(dispatch, getState) {
     // Inform app state that we've started a request.
     dispatch(requestClosestVenues())
@@ -227,6 +222,14 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
         }
       }, ex => {
         dispatch(requestClosestVenuesError(mapCenter))
+
+        if (type === 'venue-overlay') {
+          dispatch(setVenueActive(venues))
+          dispatch(panToLocation(venues.location))
+        } else {
+          dispatch(receiveVenues(venues))
+        }
+
         console.log('parsing failed', ex)
       })
   }
