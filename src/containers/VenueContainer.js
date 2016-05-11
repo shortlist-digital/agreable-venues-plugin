@@ -51,6 +51,7 @@ class VenueContainer extends Component {
 
 
 function mapStateToProps(state) {
+  console.log(state.app.venues)
   return {
     closestVenues : state.app.venues.closest,
     venue         : state.app.venues.active,

@@ -135,7 +135,8 @@
   line-height 30px
   -webkit-mask-image -webkit-gradient(linear, 90% top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
 
-.venues-overlay__closest
+.venues-closest
+  background white
   padding 20px
   @media smallDesktopsAndUp
     padding 40px 60px
@@ -160,3 +161,19 @@
     text-align left
     @media smallDesktopsAndUp
       padding-top 10px
+
+  .venues-search &
+    padding 20px
+    @media ipadsAndUp
+      height 75vh
+      overflow scroll
+    li
+      padding-bottom 10px
+      + li
+        border-top 1px solid #ccc
+        margin 0
+        padding-top 10px
+    h2
+      display none
+    h3
+      font-size 1rem

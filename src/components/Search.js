@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import InlineSVG from 'svg-inline-react/lib';
 
+import ClosestVenues from './ClosestVenues'
+
 const classNames = require('classnames')
 
 class Search extends Component {
@@ -32,12 +34,14 @@ class Search extends Component {
   }
 
   render() {
-    const { searchTerm, isLocating, onGeolocate } = this.props
+    const { searchTerm, isLocating, onGeolocate, closestVenues } = this.props
 
     const searchClasses = classNames({
       'venues-search': true,
       'venues-search--hide-sml': this.props.hasVenueRoute
     })
+
+    console.log(closestVenues)
 
     return (
         <div className={searchClasses}>
@@ -55,6 +59,7 @@ class Search extends Component {
               <a disabled={isLocating} onClick={onGeolocate}>Find my location</a>
             </small>
            </div>
+           <ClosestVenues venues={this.props.closestVenues} pushState={this.props.pushState} displayNumber={10} />
         </div>
     );
   }
