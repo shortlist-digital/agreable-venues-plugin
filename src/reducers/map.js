@@ -3,6 +3,7 @@ import * as types from '../constants/ActionTypes';
 const initialState = {
   isLocating : false,
   bounds : {northeast:{}, southwest:{}},
+  center : [],
   focusLocation : [],
   tileURL: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
 }
@@ -30,6 +31,7 @@ export function map(state = initialState, action){
   case types.SEARCH_LOCATION_SUCCESS:
     return Object.assign({}, state, {
       bounds: action.geometry.viewport,
+      center: [action.geometry.location.lat, action.geometry.location.lng],
     })
   default:
     return state;

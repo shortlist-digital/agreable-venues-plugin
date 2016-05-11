@@ -9,6 +9,13 @@
   padding 20px
   fullViewportHeight(95vh)
 
+  .venues-overlay-container--is-loading &
+    background-image url(images/loading-ripple.gif)
+    background-position: center center
+    background-repeat no-repeat
+    *
+      display none
+
   h1
     font-size 32px
     line-height 35px
@@ -134,3 +141,48 @@
   width 100%
   line-height 30px
   -webkit-mask-image -webkit-gradient(linear, 90% top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
+
+.venues-closest
+  background white
+  padding 20px
+  @media smallDesktopsAndUp
+    padding 40px 60px
+  ul
+    list-style none
+    margin 0
+    padding 0
+  li
+    clear both
+    + li
+      margin-top 20px
+  a
+    display block
+    overflow hidden
+  img
+    float left
+    height auto
+    margin 0 15px 0 0
+    width 110px
+  h3
+    padding-top 5px
+    text-align left
+    @media smallDesktopsAndUp
+      padding-top 10px
+
+  .venues-search &
+    display none
+    padding 20px
+    @media ipadsAndUp
+      display block
+      height 75vh
+      overflow scroll
+    li
+      padding-bottom 10px
+      + li
+        border-top 1px solid #ccc
+        margin 0
+        padding-top 10px
+    h2
+      display none
+    h3
+      font-size 1rem

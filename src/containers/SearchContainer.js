@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
+import { pushState } from 'redux-router'
 import { bindActionCreators } from 'redux'
 
 import {
@@ -21,6 +22,7 @@ class SearchContainer extends Component {
     return (
       <Search
         {...this.props.search}
+        closestVenues={this.props.closestVenues}
         hasVenueRoute={!!this.props.venueRoute}
         isLocating={this.props.map.isLocating}
         onGeolocate={this.props.geolocate}
@@ -29,7 +31,9 @@ class SearchContainer extends Component {
         }
         onDebounceSearch={value =>
           this.props.requestLocationDebounce(value)
-        } />
+        }
+        pushState={this.props.pushState}
+      />
     )
   }
 
@@ -37,9 +41,10 @@ class SearchContainer extends Component {
 
 function mapStateToProps(state) {
   return {
-    search      : state.app.search,
-    map         : state.app.map,
-    venueRoute  : state.router.params.name
+    closestVenues : state.app.venues.closestSearch,
+    search        : state.app.search,
+    map           : state.app.map,
+    venueRoute    : state.router.params.name
   }
 }
 
@@ -47,7 +52,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     requestLocationImmediate,
     requestLocationDebounce,
-    geolocate
+    geolocate,
+    pushState
   }, dispatch)
 }
 

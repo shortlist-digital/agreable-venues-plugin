@@ -14,16 +14,19 @@ class VenueContainer extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    if(this.props.params.name != this.props.venue.slug){
+    if (this.props.params.name != this.props.venue.slug) {
       this.props.requestSingleVenue(this.props.params.name)
     }
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.props.requestSingleVenue(this.props.params.name)
   }
 
   render() {
+    // if the venue is being fetched
+    const isLoading = this.props.params.name != this.props.venue.slug
+
     // If venue is empty for example on first load with venue slug.
     if(Object.keys(this.props.venue).length === 0){
       return null
@@ -42,6 +45,8 @@ class VenueContainer extends Component {
         {...this.props.venue}
         site={this.props.site}
         pushState={this.props.pushState}
+        closestVenues={this.props.closestVenues}
+        isLoading={isLoading}
         />
     )
   }
@@ -50,13 +55,17 @@ class VenueContainer extends Component {
 
 function mapStateToProps(state) {
   return {
-    venue : state.app.venues.active,
-    site  : state.app.site
+    closestVenues : state.app.venues.closest,
+    venue         : state.app.venues.active,
+    site          : state.app.site
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({requestSingleVenue, pushState}, dispatch)
+  return bindActionCreators({
+    requestSingleVenue,
+    pushState
+  }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(VenueContainer)

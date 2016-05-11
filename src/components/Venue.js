@@ -1,14 +1,22 @@
 import React, {Component, PropTypes} from 'react';
+import { connect } from 'react-redux'
 import InlineSVG from 'svg-inline-react/lib';
 const classNames = require('classnames')
 
 import VenueShare from './VenueShare'
+import ClosestVenues from './ClosestVenues'
 
 class Venue extends Component {
 
   constructor(props){
     super(props)
     this.handleClose = this.handleClose.bind(this);
+  }
+
+  componentDidUpdate() {
+    // move the window to the top
+    let overlay = document.querySelector('.venues-overlay')
+    overlay.scrollTop = 0;
   }
 
   handleClose(e){
@@ -43,7 +51,7 @@ class Venue extends Component {
 
     return (
       <div className="venues-overlay__img">
-        <img src={this.props.images[0].square.url} title={this.props.name} />
+        <img src={this.props.images[0].landscape.url} title={this.props.name} />
       </div>
     )
   }
@@ -165,8 +173,13 @@ class Venue extends Component {
   }
 
   render() {
+    const venueClasses = classNames({
+      'venues-overlay-container': true,
+      'venues-overlay-container--is-loading': this.props.isLoading
+    })
+
     return (
-      <div className='venues-overlay-container'>
+      <div className={venueClasses}>
         <a onClick={this.handleClose} className='venues-overlay-container__close'>
           <span className="venues-overlay-container__close__icon">
             <InlineSVG src={require(`!svg-inline!../svgs/close.svg`)} />
@@ -190,6 +203,7 @@ class Venue extends Component {
             review={this.props.review}
             image={Object.keys(this.props.images).length
               ? this.props.images[0] : null } />
+          <ClosestVenues venues={this.props.closestVenues} pushState={this.props.pushState} />
         </div>
       </div>
     );

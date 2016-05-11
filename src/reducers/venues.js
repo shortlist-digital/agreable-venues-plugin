@@ -5,7 +5,9 @@ export function venues(state = {
   isBrowserIncompatible : false,
   isFetching : false,
   items : new Map(),
-  active : {}
+  active : {},
+  closest : new Map(),
+  closestSearch : new Map()
 }, action) {
   switch (action.type) {
   case types.SET_BROWSER_INCOMPATIBLE:
@@ -40,6 +42,28 @@ export function venues(state = {
     return Object.assign({}, state, {
       isFetching: false
     })
+  case types.REQUEST_CLOSEST_VENUES:
+    return Object.assign({}, state, {
+      isFetching: true,
+    });
+  case types.RECEIVE_CLOSEST_VENUES:
+    const newClosestVenues = Array.from(convertObjects(action.items))
+    return Object.assign({}, state, {
+      isFetching: false,
+      closest: new Map([...newClosestVenues]),
+      lastUpdated: action.receivedAt
+    });
+  case types.RECEIVE_CLOSEST_VENUES_SEARCH:
+    const newClosestVenuesSearch = Array.from(convertObjects(action.items))
+    return Object.assign({}, state, {
+      isFetching: false,
+      closestSearch: new Map([...newClosestVenuesSearch]),
+      lastUpdated: action.receivedAt
+    });
+  case types.REQUEST_CLOSEST_VENUES_FAILURE:
+    return Object.assign({}, state, {
+      isFetching: false
+    });
   default:
     return state;
   }
