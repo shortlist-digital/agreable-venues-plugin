@@ -25,9 +25,7 @@ class VenueContainer extends Component {
 
   render() {
     // if the venue is being fetched
-    if (this.props.params.name != this.props.venue.slug) {
-      return null
-    }
+    const isLoading = this.props.params.name != this.props.venue.slug
 
     // If venue is empty for example on first load with venue slug.
     if(Object.keys(this.props.venue).length === 0){
@@ -48,6 +46,7 @@ class VenueContainer extends Component {
         site={this.props.site}
         pushState={this.props.pushState}
         closestVenues={this.props.closestVenues}
+        isLoading={isLoading}
         />
     )
   }

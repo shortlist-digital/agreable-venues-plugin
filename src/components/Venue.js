@@ -173,8 +173,13 @@ class Venue extends Component {
   }
 
   render() {
+    const venueClasses = classNames({
+      'venues-overlay-container': true,
+      'venues-overlay-container--is-loading': this.props.isLoading
+    })
+
     return (
-      <div className='venues-overlay-container'>
+      <div className={venueClasses}>
         <a onClick={this.handleClose} className='venues-overlay-container__close'>
           <span className="venues-overlay-container__close__icon">
             <InlineSVG src={require(`!svg-inline!../svgs/close.svg`)} />

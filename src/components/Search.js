@@ -41,10 +41,7 @@ class Search extends Component {
       'venues-search--hide-sml': this.props.hasVenueRoute
     })
 
-    let value = ''
-    if (this.refs.locationInput) {
-      value = this.refs.locationInput.value.trim()
-    }
+    const value = this.refs.locationInput ? this.refs.locationInput.value.trim() : ''
 
     return (
         <div className={searchClasses}>
