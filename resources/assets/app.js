@@ -36678,7 +36678,10 @@
 	  Search.prototype.handleSubmit = function handleSubmit(e) {
 	    e.preventDefault();
 	    var value = this.refs.locationInput.value.trim();
-	    this.props.onImmediateSearch(value);
+
+	    if (value !== '') {
+	      this.props.onImmediateSearch(value);
+	    }
 	  };
 
 	  Search.prototype.handleOnKeyUp = function handleOnKeyUp(e) {
@@ -36689,10 +36692,11 @@
 	      this.props.onDebounceSearch(value);
 	    }
 
-	    // Blur focus on textfield if enter is pressed.
-	    if (e.keyCode == '13') {
-	      document.activeElement.blur();
-	    }
+	    // removed as Android Chrome immediately closes the keyboard on focus
+	    // // Blur focus on textfield if enter is pressed.
+	    // if(e.keyCode == '13'){
+	    //   document.activeElement.blur()
+	    // }
 	  };
 
 	  Search.prototype.render = function render() {
@@ -36740,7 +36744,16 @@
 	          )
 	        )
 	      ),
-	      value && !this.props.isLocating ? _react2['default'].createElement(_ClosestVenues2['default'], { venues: this.props.closestVenues, pushState: this.props.pushState, displayNumber: 10 }) : null
+	      value && !isLocating ? _react2['default'].createElement(_ClosestVenues2['default'], { venues: this.props.closestVenues, pushState: this.props.pushState, displayNumber: 10 }) : null,
+	      value && !isLocating && !closestVenues.size ? _react2['default'].createElement(
+	        'div',
+	        { className: 'venues-search__no-results' },
+	        _react2['default'].createElement(
+	          'p',
+	          null,
+	          'Sorry, but we couldn\'t find any venues at this location.'
+	        )
+	      ) : null
 	    );
 	  };
 

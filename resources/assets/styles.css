@@ -564,7 +564,6 @@
 }
 .venues-overlay-container__close .venues-overlay-container__close__icon {
   display: inline-block;
-  border: 2px solid #fff;
   border-radius: 100%;
   height: 30px;
   line-height: 1;
@@ -572,9 +571,11 @@
   width: 30px;
 }
 .venues-overlay-container__close .venues-overlay-container__close__icon svg {
-  fill: #000;
   height: 16px;
   width: 16px;
+}
+.venues-overlay-container__close .venues-overlay-container__close__icon svg * {
+  fill: #000;
 }
 .venues-overlay-container__close .venues-overlay-container__close__label {
   display: none;
@@ -583,8 +584,19 @@
   text-transform: uppercase;
 }
 .venues-marker {
-  box-shadow: 0 8px 6px -6px #000;
-  border: 5px solid #fff;
+  border: 1px solid #fff;
+  box-shadow: 0 5px 20px 0px rgba(0,0,0,0.5);
+  top: -12px;
+}
+.venues-marker:after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  margin-left: -12px;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #fff;
 }
 .venues-overlay {
   -webkit-overflow-scrolling: touch;
@@ -742,12 +754,6 @@
 }
 .venues-closest {
   background: #fff;
-  padding: 20px;
-}
-@media (min-width: 1024px) {
-  .venues-closest {
-    padding: 40px 60px;
-  }
 }
 .venues-closest ul {
   list-style: none;
@@ -781,7 +787,7 @@
 }
 .venues-search .venues-closest {
   display: none;
-  padding: 20px;
+  padding-top: 10px;
 }
 @media (min-width: 768px) {
   .venues-search .venues-closest {
@@ -872,13 +878,16 @@
   width: 24px;
   overflow: hidden;
   position: absolute;
-  top: 16px;
+  top: 19px;
   right: 16px;
 }
 .venues-search__icon svg {
   fill: #333;
   max-width: 24px;
   max-height: 24px;
+}
+.venues-search__locateme-wrapper {
+  display: none;
 }
 .venues-search__locateme svg {
   fill: #333;
@@ -888,11 +897,28 @@
   position: relative;
   top: 4px;
 }
+.venues-search__no-results {
+  padding-top: 10px;
+}
+.venues-search__no-results p {
+  font-size: 1rem;
+  line-height: 1.2;
+  margin: 0;
+}
 .venues__map {
   zoom: 1;
   float: left;
   width: 100%;
   min-height: 100%;
+  z-index: 1;
+}
+.leaflet-control-container .leaflet-top {
+  bottom: 30px;
+  top: auto;
+}
+.leaflet-control-container .leaflet-left {
+  left: auto;
+  right: 20px;
 }
 body.agreable-venues-plugin {
   height: 100%;
