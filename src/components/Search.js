@@ -63,8 +63,13 @@ class Search extends Component {
               <a disabled={isLocating} onClick={onGeolocate}>Find my location</a>
             </small>
            </div>
-           {value && !this.props.isLocating ?
-              <ClosestVenues venues={this.props.closestVenues} pushState={this.props.pushState} displayNumber={10} /> : null }
+           {value && !isLocating ?
+              <ClosestVenues venues={this.props.closestVenues} pushState={this.props.pushState} displayNumber={10} /> : null}
+            {value && !isLocating && !closestVenues.size ?
+              <div className="venues-search__no-results">
+                <p>Sorry, but we couldn't find any venues at this location.</p>
+              </div>
+              : null}
         </div>
     );
   }
