@@ -30,11 +30,10 @@ class Search extends Component {
       this.props.onDebounceSearch(value)
     }
 
-    // removed as Android Chrome immediately closes the keyboard on focus
-    // // Blur focus on textfield if enter is pressed.
-    // if(e.keyCode == '13'){
-    //   document.activeElement.blur()
-    // }
+    // Blur focus on textfield if enter is pressed.
+    if(e.keyCode == '13'){
+      document.activeElement.blur()
+    }
   }
 
   render() {
@@ -42,7 +41,7 @@ class Search extends Component {
 
     const searchClasses = classNames({
       'venues-search': true,
-      'venues-search--hide-sml': this.props.hasVenueRoute
+      // 'venues-search--hide-sml': this.props.hasVenueRoute
     })
 
     const value = this.refs.locationInput ? this.refs.locationInput.value.trim() : ''
