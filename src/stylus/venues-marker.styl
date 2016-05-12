@@ -1,3 +1,14 @@
 .venues-marker
-  box-shadow 0 8px 6px -6px #000
-  border 5px solid #fff
+  border 1px solid white
+  box-shadow 0 5px 20px 0px rgba(0, 0, 0, 0.5)
+  top -12px // to offset the arrow
+
+  &:after
+    content ""
+    position absolute
+    bottom -12px
+    left 50%
+    margin-left -12px
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid white;
