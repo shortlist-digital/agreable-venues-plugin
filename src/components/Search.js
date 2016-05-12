@@ -16,7 +16,10 @@ class Search extends Component {
   handleSubmit(e) {
     e.preventDefault()
     const value = this.refs.locationInput.value.trim()
-    this.props.onImmediateSearch(value)
+
+    if (value !== '') {
+      this.props.onImmediateSearch(value)
+    }
   }
 
   handleOnKeyUp(e) {
@@ -27,10 +30,11 @@ class Search extends Component {
       this.props.onDebounceSearch(value)
     }
 
-    // Blur focus on textfield if enter is pressed.
-    if(e.keyCode == '13'){
-      document.activeElement.blur()
-    }
+    // removed as Android Chrome immediately closes the keyboard on focus
+    // // Blur focus on textfield if enter is pressed.
+    // if(e.keyCode == '13'){
+    //   document.activeElement.blur()
+    // }
   }
 
   render() {
