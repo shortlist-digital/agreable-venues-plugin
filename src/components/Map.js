@@ -28,10 +28,11 @@ class Map extends Component {
     // const boundsObj = map.getBounds()
     // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
     fetchMarkers(map.getBounds())
-    // Blur focus on textfield if it's currently active.
-    if(document.activeElement.type === 'text'){
-      document.activeElement.blur()
-    }
+
+    // // Blur focus on textfield if it's currently active.
+    // if(document.activeElement.type === 'text'){
+    //   document.activeElement.blur()
+    // }
   }
 
   componentWillReceiveProps(nextProps) {
