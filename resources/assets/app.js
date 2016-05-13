@@ -36692,11 +36692,10 @@
 	      this.props.onDebounceSearch(value);
 	    }
 
-	    // removed as Android Chrome immediately closes the keyboard on focus
-	    // // Blur focus on textfield if enter is pressed.
-	    // if(e.keyCode == '13'){
-	    //   document.activeElement.blur()
-	    // }
+	    // Blur focus on textfield if enter is pressed.
+	    if (e.keyCode == '13') {
+	      document.activeElement.blur();
+	    }
 	  };
 
 	  Search.prototype.render = function render() {
@@ -51323,10 +51322,13 @@
 	    // const boundsObj = map.getBounds()
 	    // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
 	    fetchMarkers(map.getBounds());
-	    // Blur focus on textfield if it's currently active.
-	    if (document.activeElement.type === 'text') {
-	      document.activeElement.blur();
-	    }
+
+	    // removing this as Android Chrome triggers a resize when you focus the search input
+	    // the subsequent map move and trigger of this function blurs the input immediately.
+	    // // Blur focus on textfield if it's currently active.
+	    // if(document.activeElement.type === 'text'){
+	    //   document.activeElement.blur()
+	    // }
 	  };
 
 	  Map.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
