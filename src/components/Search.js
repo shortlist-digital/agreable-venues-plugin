@@ -30,11 +30,10 @@ class Search extends Component {
       this.props.onDebounceSearch(value)
     }
 
-    // removed as Android Chrome immediately closes the keyboard on focus
-    // // Blur focus on textfield if enter is pressed.
-    // if(e.keyCode == '13'){
-    //   document.activeElement.blur()
-    // }
+    // Blur focus on textfield if enter is pressed.
+    if(e.keyCode == '13'){
+      document.activeElement.blur()
+    }
   }
 
   render() {
