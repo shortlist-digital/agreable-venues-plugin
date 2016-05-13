@@ -41,7 +41,7 @@ class Search extends Component {
 
     const searchClasses = classNames({
       'venues-search': true,
-      // 'venues-search--hide-sml': this.props.hasVenueRoute
+      'venues-search--hide-sml': this.props.hasVenueRoute
     })
 
     const value = this.refs.locationInput ? this.refs.locationInput.value.trim() : ''
