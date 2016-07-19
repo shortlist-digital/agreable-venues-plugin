@@ -24,7 +24,8 @@ class SearchContainer extends Component {
         {...this.props.search}
         closestVenues={this.props.closestVenues}
         hasVenueRoute={!!this.props.venueRoute}
-        isLocating={this.props.map.isLocating}
+        isFetching={this.props.isFetching}
+        isLocating={this.props.search.isLocating}
         onGeolocate={this.props.geolocate}
         onImmediateSearch={value =>
           this.props.requestLocationImmediate(value)
@@ -44,7 +45,8 @@ function mapStateToProps(state) {
     closestVenues : state.app.venues.closestSearch,
     search        : state.app.search,
     map           : state.app.map,
-    venueRoute    : state.router.params.name
+    venueRoute    : state.router.params.name,
+    isFetching    : state.app.venues.isFetching
   }
 }
 

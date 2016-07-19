@@ -22,7 +22,11 @@ class ClosestVenues extends Component {
     let venues = Array.from(this.props.venues)
 
     if (venues.length < 1) {
-      return null
+      return (
+        <div className="venues-search__no-results">
+          <p>Sorry, but we couldn't find any venues at this location.</p>
+        </div>
+      );
     }
 
     return (

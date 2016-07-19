@@ -21,7 +21,8 @@ function requestLocation(searchTerm, timer) {
   return {
     type: types.SEARCH_LOCATION_REQUEST,
     searchTerm,
-    timer
+    timer,
+    isLocating: true
   }
 }
 
@@ -65,6 +66,7 @@ function fetchLocation(){
 function fetchLocationSuccess(geometry){
   return {
     type: types.SEARCH_LOCATION_SUCCESS,
-    geometry
+    geometry,
+    isLocating: false
   }
 }
