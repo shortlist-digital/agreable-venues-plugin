@@ -4,18 +4,18 @@
 
 .venues-overlay-container
   box-sizing border-box
-  position fixed
-  top 60px
-  right 20px
   left 20px
-  width 100%
+  position fixed
+  right 20px
+  top 20px
   z-index 10
   fullViewportHeight(95vh)
 
-@media smallTabletsAndUp
+@media ipadsAndUp
   .venues-overlay-container
     position absolute
     left auto
+    max-width 320px
     right 20px
     transform none
 
