@@ -1,21 +1,23 @@
+@import 'nib'
 @import 'mixins'
 @import 'allure-breakpoints'
 
 .venues-overlay-container
   box-sizing border-box
-  position absolute
-  left 50%
-  max-width 320px
-  top 20px
-  transform translateX(-50%)
-  width 100%
+  left 20px
+  position fixed
+  right 20px
+  top 60px
   z-index 10
   fullViewportHeight(95vh)
 
-@media smallTabletsAndUp
+@media ipadsAndUp
   .venues-overlay-container
+    position absolute
     left auto
+    max-width 320px
     right 20px
+    top 20px
     transform none
 
 @media smallDesktopsAndUp

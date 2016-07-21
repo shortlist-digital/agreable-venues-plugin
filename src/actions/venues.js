@@ -33,7 +33,8 @@ function requestVenuesFailure(bounds) {
 
 function requestClosestVenues() {
   return {
-    type: types.REQUEST_CLOSEST_VENUES
+    type: types.REQUEST_CLOSEST_VENUES,
+    isSearching: true,
   }
 }
 
@@ -41,13 +42,14 @@ function receiveClosestVenues(data) {
   return {
     type: types.RECEIVE_CLOSEST_VENUES,
     items: data,
-    receivedAt: Date.now()
+    receivedAt: Date.now(),
   }
 }
 
 function requestClosestVenuesSearch() {
   return {
-    type: types.REQUEST_CLOSEST_VENUES_SEARCH
+    type: types.REQUEST_CLOSEST_VENUES_SEARCH,
+    isSearching: true,
   }
 }
 
@@ -55,7 +57,8 @@ function receiveClosestVenuesSearch(data) {
   return {
     type: types.RECEIVE_CLOSEST_VENUES_SEARCH,
     items: data,
-    receivedAt: Date.now()
+    receivedAt: Date.now(),
+    isSearching: false,
   }
 }
 
