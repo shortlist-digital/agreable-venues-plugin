@@ -27,7 +27,12 @@ class Map extends Component {
     // that is incompatible with Parse GeoPoints. Can use spread syntax then.
     // const boundsObj = map.getBounds()
     // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
-    fetchMarkers(map.getBounds())
+    // fetchMarkers(map.getBounds())
+    let mapCenter = map.getCenter()
+    fetchMarkers({
+      lat: mapCenter.lat,
+      lng: mapCenter.lng
+    }, 1000);
 
     // removing this as Android Chrome triggers a resize when you focus the search input
     // the subsequent map move and trigger of this function blurs the input immediately.
@@ -91,8 +96,13 @@ class Map extends Component {
     // zoomControl.setAttribute('class', 'leaflet-bottom leaflet-right')
 
     if(!hasVenueRoute){
-      // Initial get from Parse.
-      fetchMarkers(map.getBounds())
+      // Initial get from Firebase.
+      // fetchMarkers(map.getBounds())
+      let mapCenter = map.getCenter()
+      fetchMarkers({
+        lat: mapCenter.lat,
+        lng: mapCenter.lng
+      }, 1000);
     }
 
     map.on('click', () => {

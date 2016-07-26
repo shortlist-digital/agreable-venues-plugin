@@ -38,12 +38,12 @@ class MarkerCluster extends MapLayer {
     const newMarkers = []
     newVenues.forEach((obj) => {
       // ES6 Map has been converted to Array: ['objectId', venueObj]
-      const venue = obj[1]
+      const venue = obj[0]
       const options = {}
       if(venue.images && Object.keys(venue.images).length){
         // Custom icon.
         options.icon = Leaflet.divIcon({
-          html : `<img src="${venue.images[0].thumbnail.url}" />`,
+          html : `<img src="${venue.images.thumbnail.url}" />`,
           className: "venues-marker",
           iconAnchor: [0, 0],
           iconSize: [80, 80],
