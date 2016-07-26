@@ -23,11 +23,7 @@ class Map extends Component {
   handleMoveEnd(e) {
     const { fetchMarkers } = this.props
     const map = this.refs.map.leafletElement
-    // TODO: Consider passing them as simple array rather than object
-    // that is incompatible with Parse GeoPoints. Can use spread syntax then.
-    // const boundsObj = map.getBounds()
-    // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
-    // fetchMarkers(map.getBounds())
+
     let mapCenter = map.getCenter()
     fetchMarkers({
       lat: mapCenter.lat,
@@ -84,20 +80,8 @@ class Map extends Component {
     const { fetchMarkers, hasVenueRoute } = this.props
     const map = this.refs.map.leafletElement
 
-    // // Manually remove top left zoom control because
-    // // constructor param (zoomControl:false) is not working
-    // // through react component as far as I can see.
-    // const firstZoomControl = map._controlContainer.firstChild
-    // firstZoomControl.parentNode.removeChild(firstZoomControl)
-
-    // // Manually move zoom control to bottom right
-    // // as L.Control.Zoom isn't working.
-    // const zoomControl = map._controlContainer.firstChild
-    // zoomControl.setAttribute('class', 'leaflet-bottom leaflet-right')
-
     if(!hasVenueRoute){
       // Initial get from Firebase.
-      // fetchMarkers(map.getBounds())
       let mapCenter = map.getCenter()
       fetchMarkers({
         lat: mapCenter.lat,

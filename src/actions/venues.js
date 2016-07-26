@@ -171,7 +171,7 @@ function initialiseFirebase(firebaseReducer, dispatch){
 
   // If parse hasn't been initialized do so here.
   if(firebaseReducer.isInitialized) {
-    return;
+    return false;
   }
 
   const firebaseConfig = {
@@ -236,27 +236,35 @@ function setVenueActive(venue){
 }
 
 export function requestSingleVenue(name) {
-  // return (dispatch, getState) => {
 
-  //   const state = getState()
-  //   const items = state.app.venues.items
-  //   const parse = state.app.parse
-  //   const activeVenue = {}
+  return (dispatch, getState) => {
 
-  //   // Conditionally initialise parse.
-  //   initialiseParse(parse, dispatch)
+    const state = getState()
+    const items = state.app.venues.items
+    const firebaseReducer = state.app.firebaseReducer
+    const activeVenue = {}
 
-  //   if(items.has(name)){
-  //     let activeVenue = items.get(name)
-  //     dispatch(fetchClosestVenues(activeVenue.location, activeVenue, 'venue-overlay'));
-  //   } else {
-  //     dispatch(fetchSingleVenue(name))
-  //   }
-  // }
+    // Conditionally initialise firebase.
+    if (!firebaseReducer.isInitialized) {
+      initialiseFirebase(firebase, dispatch)
+    }
+
+    if (items.has(name)) {
+      let activeVenue = items.get(name)
+      dispatch(fetchClosestVenues(activeVenue.location, activeVenue, 'venue-overlay'));
+    } else {
+      console.log('no venue found');
+      // dispatch(fetchSingleVenue(name))
+    }
+  }
+
 }
 
 export function fetchClosestVenues(mapCenter, venues, type = 'search') {
-  // return function(dispatch, getState) {
+  return function(dispatch, getState) {
+
+    dispatch(setVenueActive(venues))
+
   //   // Inform app state that we've started a request.
   //   dispatch(requestClosestVenues())
   //   const state = getState()
@@ -296,7 +304,7 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
 
   //       console.log('parsing failed', ex)
   //     })
-  // }
+  }
 }
 
 export function setVenueInactive(){

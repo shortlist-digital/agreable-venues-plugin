@@ -10,8 +10,8 @@ class MarkerCluster extends MapLayer {
     super(props)
   }
 
-  handleMarkerClick(objectId, venue) {
-    if(`/${venue.slug}` != this.props.pathname){
+  handleMarkerClick(venue) {
+    if (`/${venue.slug}` != this.props.pathname) {
       this.props.pushState({}, `/${venue.slug}`)
     }
   }
@@ -38,7 +38,7 @@ class MarkerCluster extends MapLayer {
     const newMarkers = []
     newVenues.forEach((obj) => {
       // ES6 Map has been converted to Array: ['objectId', venueObj]
-      const venue = obj[0]
+      const venue = obj[1]
       const options = {}
       if(venue.images && Object.keys(venue.images).length){
         // Custom icon.
@@ -55,7 +55,7 @@ class MarkerCluster extends MapLayer {
       const l = venue.location
       const leafletMarker = Leaflet.marker(l, options)
         .on('click', (e) => {
-          this.handleMarkerClick(...obj)
+          this.handleMarkerClick(venue)
         })
 
       newMarkers.push(leafletMarker)
