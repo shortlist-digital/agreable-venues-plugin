@@ -41,7 +41,7 @@ class ClosestVenues extends Component {
                 return (
                   <li key={i}>
                     <a href={'/food-guide/' + venue.slug} data-slug={venue.slug} onClick={this.handleVenueChange}>
-                      <img alt="" src={venue.images[0].landscape.url} />
+                      <img alt="" src={venue.images.landscape.url} />
                       <h3 dangerouslySetInnerHTML={this.createHTML(venue.name)} />
                     </a>
                   </li>

@@ -49,7 +49,7 @@ function requestClosestVenues() {
 function receiveClosestVenues(data) {
   return {
     type: types.RECEIVE_CLOSEST_VENUES,
-    items: data,
+    items: [data],
     receivedAt: Date.now(),
   }
 }
@@ -64,7 +64,7 @@ function requestClosestVenuesSearch() {
 function receiveClosestVenuesSearch(data) {
   return {
     type: types.RECEIVE_CLOSEST_VENUES_SEARCH,
-    items: data,
+    items: [data],
     receivedAt: Date.now(),
     isSearching: false,
   }
@@ -91,22 +91,21 @@ function fetchVenues(mapCenter, distance) {
     });
     let receivedVenues = [];
 
-    geoQuery.on('ready', function(key, location, distance) {
-      // console.log('ready', receiveVenues);
-
-      for (var i = 0, l = receivedVenues.length; i < l; i++) {
-        firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
-          // console.log(snapshot.val());
-          dispatch(receiveVenues(snapshot.val()))
-        });
-      }
-    });
     geoQuery.on('key_entered', function(key, location, distance) {
       receivedVenues.push({
         key: key,
         location: location,
         disctance: distance
       });
+    });
+    geoQuery.on('ready', function(key, location, distance) {
+      // console.log('ready', receiveVenues);
+
+      for (var i = 0, l = receivedVenues.length; i < l; i++) {
+        firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
+          dispatch(receiveVenues(snapshot.val()))
+        });
+      }
     });
 
   }
@@ -207,14 +206,20 @@ export function fetchVenuesIfNeeded(mapCenter, distance) {
   }
 }
 
-function fetchSingleVenue(name){
-  // return function(dispatch, getState){
-  //   // Inform app state that we've started a request.
-  //   dispatch(requestVenues())
+function fetchSingleVenue(name) {
+  return function(dispatch, getState){
+    // Inform app state that we've started a request.
+    dispatch(requestVenues())
 
-  //   const parse = getState().app.parse
+    const firebaseReducer = getState().app.firebaseReducer
+
+    firebase.database().ref('venues/' + name).once('value', function(snapshot) {
+      dispatch(receiveVenues(snapshot.val()))
+      dispatch(requestSingleVenue(name))
+    });
+
   //   const query = getVenueQuery(parse)
-  //   query.equalTo("slug", name);
+  //   query.equalTo("slug", name);``
 
   //   return query.find()
   //     .then(results => {
@@ -225,7 +230,7 @@ function fetchSingleVenue(name){
   //       console.log('parsing failed', ex)
   //     })
 
-  // }
+  }
 }
 
 function setVenueActive(venue){
@@ -253,8 +258,7 @@ export function requestSingleVenue(name) {
       let activeVenue = items.get(name)
       dispatch(fetchClosestVenues(activeVenue.location, activeVenue, 'venue-overlay'));
     } else {
-      console.log('no venue found');
-      // dispatch(fetchSingleVenue(name))
+      dispatch(fetchSingleVenue(name))
     }
   }
 
@@ -263,7 +267,48 @@ export function requestSingleVenue(name) {
 export function fetchClosestVenues(mapCenter, venues, type = 'search') {
   return function(dispatch, getState) {
 
-    dispatch(setVenueActive(venues))
+    // Inform app state that we've started a request.
+    dispatch(requestVenues());
+
+    const state = getState();
+    const geoFire = new GeoFire(firebase.database().ref('venues/_geofire'));
+    let geoQuery = geoFire.query({
+      center: [mapCenter.lat, mapCenter.lng],
+      radius: 1000
+    });
+    let receivedVenues = [];
+
+    geoQuery.on('key_entered', function(key, location, distance) {
+      if (receivedVenues.length > 9) {
+        geoQuery.cancel();
+      }
+
+      receivedVenues.push({
+        key: key,
+        location: location,
+        disctance: distance
+      });
+    });
+    geoQuery.on('ready', function(key, location, distance) {
+      for (var i = 0, l = receivedVenues.length; i < l; i++) {
+        firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
+          // the it's a single search
+          if (type === 'venue-overlay') {
+            dispatch(receiveClosestVenues(snapshot.val()))
+          } else {
+            dispatch(receiveClosestVenuesSearch(snapshot.val()))
+          }
+        });
+      }
+
+      // the it's a single search
+      if (type === 'venue-overlay') {
+        dispatch(setVenueActive(venues))
+        dispatch(panToLocation(venues.location))
+      } else {
+        dispatch(receiveVenues(venues))
+      }
+    });
 
   //   // Inform app state that we've started a request.
   //   dispatch(requestClosestVenues())

@@ -22,28 +22,6 @@ if (__PRODUCTION__) {
   require('./createDevToolsWindow')(store);
 }
 
-// Initialize the Firebase SDK
-// var firebaseConfig = {
-//   apiKey: "AIzaSyBTJAJMSpkPjEPbWkrlphZ4FQ1bsJum0eY",
-//   authDomain: "venues-database.firebaseapp.com",
-//   databaseURL: "https://venues-database.firebaseio.com",
-//   storageBucket: "venues-database.appspot.com",
-// };
-// firebase.initializeApp(firebaseConfig);
-// var geoFireRef = firebase.database().ref('venues/_geofire');
-// var geoFire = new GeoFire(geoFireRef);
-
-// var geoQuery = geoFire.query({
-//   center: [51.5283064, -0.3824583],
-//   radius: 1000
-// });
-// geoQuery.on('key_entered', function(key, location, distance) {
-//   console.log('key_entered', key, location, distance);
-// });
-// geoQuery.on('key_exited', function(key, location, distance) {
-//   console.log('key_exited', key, location, distance);
-// });
-
 class Root extends Component {
   render() {
     const rootStyle = {
