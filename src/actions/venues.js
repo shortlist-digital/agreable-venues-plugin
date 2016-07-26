@@ -103,8 +103,16 @@ function fetchVenues(mapCenter, distance) {
 
       for (var i = 0, l = receivedVenues.length; i < l; i++) {
         firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
-          dispatch(receiveVenues(snapshot.val()))
+          if (state.app.search.searchTerm !== '') {
+            dispatch(fetchClosestVenues(state.app.map.center, snapshot.val()))
+          } else {
+            dispatch(receiveVenues(snapshot.val()))
+          }
         });
+      }
+
+      if (state.app.search.searchTerm === '') {
+        dispatch(receiveClosestVenuesSearch(new Map()))
       }
     });
 
@@ -293,6 +301,7 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
       for (var i = 0, l = receivedVenues.length; i < l; i++) {
         firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
           // the it's a single search
+          console.log('type', type);
           if (type === 'venue-overlay') {
             dispatch(receiveClosestVenues(snapshot.val()))
           } else {
