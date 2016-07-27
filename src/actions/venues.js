@@ -45,6 +45,7 @@ function receiveClosestVenues(data) {
     type: types.RECEIVE_CLOSEST_VENUES,
     items: data,
     receivedAt: Date.now(),
+    isSearching: false,
   }
 }
 
@@ -201,12 +202,13 @@ export function fetchVenuesIfNeeded(mapCenter, distance) {
 }
 
 function fetchSingleVenue(name) {
+
   return function(dispatch, getState){
     // Inform app state that we've started a request.
     dispatch(requestVenues())
 
     firebase.database().ref('venues/' + name).once('value', function(snapshot) {
-      dispatch(receiveVenues(snapshot.val()))
+      dispatch(receiveVenues([snapshot.val()]))
       dispatch(requestSingleVenue(name))
     });
 
@@ -248,7 +250,9 @@ export function requestSingleVenue(name) {
 
     if (items.has(name)) {
       let activeVenue = items.get(name)
+
       dispatch(fetchClosestVenues(activeVenue.location, activeVenue, 'venue-overlay'));
+      dispatch(setVenueActive(activeVenue))
     } else {
       dispatch(fetchSingleVenue(name))
     }
@@ -259,6 +263,8 @@ export function requestSingleVenue(name) {
 export function fetchClosestVenues(mapCenter, venues, type = 'search') {
 
   return function(dispatch, getState) {
+
+    console.log(mapCenter, venues, type);
 
     // Inform app state that we've started a request.
     dispatch(requestClosestVenues())
@@ -303,8 +309,8 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
 
         // the it's a single search
         if (type === 'venue-overlay') {
-          dispatch(setVenueActive(venues))
           dispatch(panToLocation(venues.location))
+          dispatch(receiveVenues([venues]))
         } else {
           dispatch(receiveVenues(venues))
         }

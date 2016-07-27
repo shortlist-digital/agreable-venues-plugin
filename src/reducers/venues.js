@@ -45,6 +45,7 @@ export function venues(state = {
   case types.REQUEST_CLOSEST_VENUES:
     return Object.assign({}, state, {
       isFetching: true,
+      closest: new Map(),
     });
   case types.RECEIVE_CLOSEST_VENUES:
     const newClosestVenues = Array.from(convertObjects(action.items))
