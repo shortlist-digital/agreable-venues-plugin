@@ -60,10 +60,9 @@ export function venues(state = {
     });
   case types.RECEIVE_CLOSEST_VENUES_SEARCH:
     const newClosestSearchVenues = Array.from(convertObjects(action.items))
-    const currentClosestSearchVenues = Array.from(state.items)
     return Object.assign({}, state, {
       isFetching: false,
-      closestSearch: new Map([...newClosestSearchVenues, ...currentClosestSearchVenues]),
+      closestSearch: new Map([...newClosestSearchVenues]),
       lastUpdated: action.receivedAt
     });
   case types.REQUEST_CLOSEST_VENUES_FAILURE:

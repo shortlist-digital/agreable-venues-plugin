@@ -1,16 +1,10 @@
 import fetch from 'isomorphic-fetch';
-// import { Parse } from 'parse';
 import * as types from '../constants/ActionTypes';
 import { panToLocation } from '../actions/map';
-// import { getVenueQuery } from '../utils/ParseUtils';
 import firebase from 'firebase';
 import GeoFire from 'geofire';
+import RSVP from 'rsvp';
 
-// function initializeParse() {
-//   return {
-//     type: types.INITIALIZE_PARSE
-//   }
-// }
 
 function initializeFirebase() {
   return {
@@ -27,7 +21,7 @@ function requestVenues() {
 function receiveVenues(data) {
   return {
     type: types.RECEIVE_VENUES,
-    items: [data],
+    items: data,
     receivedAt: Date.now()
   }
 }
@@ -49,7 +43,7 @@ function requestClosestVenues() {
 function receiveClosestVenues(data) {
   return {
     type: types.RECEIVE_CLOSEST_VENUES,
-    items: [data],
+    items: data,
     receivedAt: Date.now(),
   }
 }
@@ -64,7 +58,7 @@ function requestClosestVenuesSearch() {
 function receiveClosestVenuesSearch(data) {
   return {
     type: types.RECEIVE_CLOSEST_VENUES_SEARCH,
-    items: [data],
+    items: data,
     receivedAt: Date.now(),
     isSearching: false,
   }
@@ -98,20 +92,25 @@ function fetchVenues(mapCenter, distance) {
         disctance: distance
       });
     });
+    let receivedVenuesFull = [];
     let onReadyRegistration = geoQuery.on('ready', function() {
       onKeyEnteredRegistration.cancel();
 
-      for (var i = 0, l = receivedVenues.length; i < l; i++) {
-        firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
-          if (state.app.search.searchTerm === '') {
-            dispatch(receiveClosestVenuesSearch(new Map()))
-          } else {
-            dispatch(fetchClosestVenues(mapCenter, snapshot.val()))
-          }
-
-          dispatch(receiveVenues(snapshot.val()))
+      var promises = receivedVenues.map(function(item, index) {
+        return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
+          receivedVenuesFull.push(snapshot.val());
         });
-      }
+      });
+
+      // once all promises have been settled
+      RSVP.all(promises).then(function() {
+        if (state.app.search.searchTerm !== '') {
+          dispatch(fetchClosestVenues(mapCenter, receivedVenuesFull))
+        } else {
+          dispatch(receiveVenues(receivedVenuesFull));
+          dispatch(receiveClosestVenuesSearch(new Map()))
+        }
+      });
     });
 
   }
@@ -164,13 +163,6 @@ function shouldFetchVenues(state) {
   return true
 }
 
-// function initialiseParse(parse, dispatch){
-//   // If parse hasn't been initialized do so here.
-//   if(!parse.isInitialized){
-//     Parse.initialize(parse.parse_app_id, parse.parse_js_key);
-//     dispatch(initializeParse())
-//   }
-// }
 
 function initialiseFirebase(firebaseReducer, dispatch){
 
@@ -201,10 +193,6 @@ export function fetchVenuesIfNeeded(mapCenter, distance) {
       initialiseFirebase(firebase, dispatch)
     }
 
-    // if (!canUseParse()) {
-    //   return dispatch(setBrowserIncompatible())
-    // }
-
     // Check conditions under which we should fetch.
     if (shouldFetchVenues(state)) {
       return dispatch(fetchVenues(mapCenter, distance))
@@ -216,8 +204,6 @@ function fetchSingleVenue(name) {
   return function(dispatch, getState){
     // Inform app state that we've started a request.
     dispatch(requestVenues())
-
-    const firebaseReducer = getState().app.firebaseReducer
 
     firebase.database().ref('venues/' + name).once('value', function(snapshot) {
       dispatch(receiveVenues(snapshot.val()))
@@ -285,7 +271,7 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
     });
     let receivedVenues = [];
 
-    geoQuery.on('key_entered', function(key, location, distance) {
+    let onKeyEnteredRegistration = geoQuery.on('key_entered', function(key, location, distance) {
       if (receivedVenues.length > 9) {
         geoQuery.cancel();
       }
@@ -296,25 +282,33 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
         disctance: distance
       });
     });
-    geoQuery.on('ready', function() {
-      for (var i = 0, l = receivedVenues.length; i < l; i++) {
-        firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
-          // the it's a single search
-          if (type === 'venue-overlay') {
-            dispatch(receiveClosestVenues(snapshot.val()))
-          } else {
-            dispatch(receiveClosestVenuesSearch(snapshot.val()))
-          }
-        });
-      }
 
-      // the it's a single search
-      if (type === 'venue-overlay') {
-        dispatch(setVenueActive(venues))
-        dispatch(panToLocation(venues.location))
-      } else {
-        dispatch(receiveVenues(venues))
-      }
+    let receivedVenuesFull = [];
+    let onReadyRegistration = geoQuery.on('ready', function() {
+      onKeyEnteredRegistration.cancel();
+
+      var promises = receivedVenues.map(function(item, index) {
+        return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
+          receivedVenuesFull.push(snapshot.val());
+        });
+      });
+
+      // once all promises have been settled
+      RSVP.all(promises).then(function() {
+        if (type === 'venue-overlay') {
+          dispatch(receiveClosestVenues(receivedVenuesFull));
+        } else {
+          dispatch(receiveClosestVenuesSearch(receivedVenuesFull));
+        }
+
+        // the it's a single search
+        if (type === 'venue-overlay') {
+          dispatch(setVenueActive(venues))
+          dispatch(panToLocation(venues.location))
+        } else {
+          dispatch(receiveVenues(venues))
+        }
+      });
     });
 
   //   // Inform app state that we've started a request.
@@ -364,16 +358,3 @@ export function setVenueInactive(){
     type: types.SET_VENUE_INACTIVE
   }
 }
-
-// function canUseParse(){
-//   var msie = document.documentMode;
-//   return ! msie
-//     || msie > 9
-// }
-
-// export function setBrowserIncompatible(){
-//   return {
-//     type: types.SET_BROWSER_INCOMPATIBLE
-//   }
-// }
-
