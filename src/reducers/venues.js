@@ -56,12 +56,14 @@ export function venues(state = {
   case types.REQUEST_CLOSEST_VENUES_SEARCH:
     return Object.assign({}, state, {
       isFetching: true,
+      closestSearch: new Map(),
     });
   case types.RECEIVE_CLOSEST_VENUES_SEARCH:
-    const newClosestVenuesSearch = Array.from(convertObjects(action.items))
+    const newClosestSearchVenues = Array.from(convertObjects(action.items))
+    const currentClosestSearchVenues = Array.from(state.items)
     return Object.assign({}, state, {
       isFetching: false,
-      closestSearch: new Map([...newClosestVenuesSearch]),
+      closestSearch: new Map([...newClosestSearchVenues, ...currentClosestSearchVenues]),
       lastUpdated: action.receivedAt
     });
   case types.REQUEST_CLOSEST_VENUES_FAILURE:

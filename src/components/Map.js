@@ -24,11 +24,21 @@ class Map extends Component {
     const { fetchMarkers } = this.props
     const map = this.refs.map.leafletElement
 
-    let mapCenter = map.getCenter()
+    var centerLatLng = map.getCenter(); // get map center
+    var pointC = map.latLngToContainerPoint(centerLatLng); // convert to containerpoint (pixels)
+    var pointX = [pointC.x + 1, pointC.y]; // add one pixel to x
+    var pointY = [pointC.x, pointC.y + 1]; // add one pixel to y
+
+    // convert containerpoints to latlng's
+    var latLngC = map.containerPointToLatLng(pointC);
+    var latLngX = map.containerPointToLatLng(pointX);
+
+    var distanceX = latLngC.distanceTo(latLngX); // calculate distance between c and x (latitude)
+
     fetchMarkers({
-      lat: mapCenter.lat,
-      lng: mapCenter.lng
-    }, 1000);
+      lat: centerLatLng.lat,
+      lng: centerLatLng.lng
+    }, distanceX * 2);
 
     // removing this as Android Chrome triggers a resize when you focus the search input
     // the subsequent map move and trigger of this function blurs the input immediately.
@@ -80,13 +90,23 @@ class Map extends Component {
     const { fetchMarkers, hasVenueRoute } = this.props
     const map = this.refs.map.leafletElement
 
-    if(!hasVenueRoute){
-      // Initial get from Firebase.
-      let mapCenter = map.getCenter()
+    var centerLatLng = map.getCenter(); // get map center
+    var pointC = map.latLngToContainerPoint(centerLatLng); // convert to containerpoint (pixels)
+    var pointX = [pointC.x + 1, pointC.y]; // add one pixel to x
+    var pointY = [pointC.x, pointC.y + 1]; // add one pixel to y
+
+    // convert containerpoints to latlng's
+    var latLngC = map.containerPointToLatLng(pointC);
+    var latLngX = map.containerPointToLatLng(pointX);
+
+    var distanceX = latLngC.distanceTo(latLngX); // calculate distance between c and x (latitude)
+
+    if (!hasVenueRoute) {
+      // Initial data fetch from Firebase.
       fetchMarkers({
-        lat: mapCenter.lat,
-        lng: mapCenter.lng
-      }, 1000);
+        lat: centerLatLng.lat,
+        lng: centerLatLng.lng
+      }, distanceX * 2);
     }
 
     map.on('click', () => {
@@ -113,7 +133,8 @@ class Map extends Component {
         className="venues__map"
         center={this.props.startPosition}
         onLeafletMoveend={this.handleMoveEnd}
-        zoom={this.props.zoom}>
+        zoom={this.props.zoom}
+        scaleControl={true}>
         <TileLayer
           maxZoom={this.props.maxZoom}
           minZoom={this.props.minZoom}

@@ -84,35 +84,33 @@ function fetchVenues(mapCenter, distance) {
     // Inform app state that we've started a request.
     dispatch(requestVenues());
     const state = getState();
-    const geoFire = new GeoFire(firebase.database().ref('venues/_geofire'));
+    const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
     let geoQuery = geoFire.query({
       center: [mapCenter.lat, mapCenter.lng],
       radius: distance
     });
     let receivedVenues = [];
 
-    geoQuery.on('key_entered', function(key, location, distance) {
+    let onKeyEnteredRegistration = geoQuery.on('key_entered', function(key, location, distance) {
       receivedVenues.push({
         key: key,
         location: location,
         disctance: distance
       });
     });
-    geoQuery.on('ready', function(key, location, distance) {
-      // console.log('ready', receiveVenues);
+    let onReadyRegistration = geoQuery.on('ready', function() {
+      onKeyEnteredRegistration.cancel();
 
       for (var i = 0, l = receivedVenues.length; i < l; i++) {
         firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
-          if (state.app.search.searchTerm !== '') {
-            dispatch(fetchClosestVenues(state.app.map.center, snapshot.val()))
+          if (state.app.search.searchTerm === '') {
+            dispatch(receiveClosestVenuesSearch(new Map()))
           } else {
-            dispatch(receiveVenues(snapshot.val()))
+            dispatch(fetchClosestVenues(mapCenter, snapshot.val()))
           }
-        });
-      }
 
-      if (state.app.search.searchTerm === '') {
-        dispatch(receiveClosestVenuesSearch(new Map()))
+          dispatch(receiveVenues(snapshot.val()))
+        });
       }
     });
 
@@ -273,16 +271,17 @@ export function requestSingleVenue(name) {
 }
 
 export function fetchClosestVenues(mapCenter, venues, type = 'search') {
+
   return function(dispatch, getState) {
 
     // Inform app state that we've started a request.
-    dispatch(requestVenues());
+    dispatch(requestClosestVenues())
 
     const state = getState();
-    const geoFire = new GeoFire(firebase.database().ref('venues/_geofire'));
+    const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
     let geoQuery = geoFire.query({
       center: [mapCenter.lat, mapCenter.lng],
-      radius: 1000
+      radius: 10
     });
     let receivedVenues = [];
 
@@ -297,11 +296,10 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
         disctance: distance
       });
     });
-    geoQuery.on('ready', function(key, location, distance) {
+    geoQuery.on('ready', function() {
       for (var i = 0, l = receivedVenues.length; i < l; i++) {
         firebase.database().ref('venues/' + receivedVenues[i].key).once('value', function(snapshot) {
           // the it's a single search
-          console.log('type', type);
           if (type === 'venue-overlay') {
             dispatch(receiveClosestVenues(snapshot.val()))
           } else {
