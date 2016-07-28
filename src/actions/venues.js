@@ -172,12 +172,19 @@ function initialiseFirebase(firebaseReducer, dispatch){
     return false;
   }
 
+  // const firebaseConfig = {
+  //   apiKey: "AIzaSyBTJAJMSpkPjEPbWkrlphZ4FQ1bsJum0eY",
+  //   authDomain: "venues-database.firebaseapp.com",
+  //   databaseURL: "https://venues-database.firebaseio.com",
+  //   storageBucket: "venues-database.appspot.com",
+  // };
   const firebaseConfig = {
-    apiKey: "AIzaSyBTJAJMSpkPjEPbWkrlphZ4FQ1bsJum0eY",
-    authDomain: "venues-database.firebaseapp.com",
-    databaseURL: "https://venues-database.firebaseio.com",
-    storageBucket: "venues-database.appspot.com",
+    apiKey: window.__INITIAL_STATE__.app.firebase.api_key,
+    authDomain: window.__INITIAL_STATE__.app.firebase.auth_domain,
+    databaseURL: window.__INITIAL_STATE__.app.firebase.db_url,
+    storageBucket: window.__INITIAL_STATE__.app.firebase.storage_bucket,
   };
+  console.log('firebaseConfig', firebaseConfig);
   firebase.initializeApp(firebaseConfig);
 
   dispatch(initializeFirebase());
