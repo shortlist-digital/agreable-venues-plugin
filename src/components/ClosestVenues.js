@@ -38,8 +38,6 @@ class ClosestVenues extends Component {
             venues.map((item, i) => {
               let venue = item[1]
 
-              console.log(venue.slug, this.props.parentSlug, venue.slug !== this.props.parentSlug);
-
               if (i < this.props.displayNumber && venue.slug !== this.props.parentSlug) {
                 return (
                   <li key={i}>

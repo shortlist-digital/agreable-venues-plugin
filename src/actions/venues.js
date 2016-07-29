@@ -251,13 +251,13 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
     const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
     let geoQuery = geoFire.query({
       center: [mapCenter.lat, mapCenter.lng],
-      radius: 10
+      radius: 100000
     });
     let receivedVenues = [];
 
     let onKeyEnteredRegistration = geoQuery.on('key_entered', function(key, location, distance) {
       if (receivedVenues.length > 9) {
-        geoQuery.cancel();
+        onKeyEnteredRegistration.cancel();
       }
 
       receivedVenues.push({
@@ -287,6 +287,8 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
             // no filter, add all venues
             receivedVenuesFull.push(venue);
           }
+
+          // return snapshot.val();
         });
       });
 
