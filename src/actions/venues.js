@@ -108,8 +108,6 @@ function fetchVenues(mapCenter, distance) {
     });
     let receivedVenuesFull = [];
     let onReadyRegistration = geoQuery.on('ready', function() {
-      onKeyEnteredRegistration.cancel();
-
       let promises = receivedVenues.map(function(item, index) {
         return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
           let brands = window.__INITIAL_STATE__.app.firebase.brands;
@@ -256,10 +254,6 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
     let receivedVenues = [];
 
     let onKeyEnteredRegistration = geoQuery.on('key_entered', function(key, location, distance) {
-      if (receivedVenues.length > 9) {
-        onKeyEnteredRegistration.cancel();
-      }
-
       receivedVenues.push({
         key: key,
         location: location,
@@ -287,8 +281,6 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
             // no filter, add all venues
             receivedVenuesFull.push(venue);
           }
-
-          // return snapshot.val();
         });
       });
 
