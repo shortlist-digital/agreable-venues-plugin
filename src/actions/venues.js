@@ -72,6 +72,19 @@ function requestClosestVenuesFailure(center) {
   }
 }
 
+function filterByBrand(brands, venueBrands) {
+  // step through each venue brand tag
+  for (let i = 0, l = venueBrands.length; i < l; i++) {
+    // the the venue brand is in the brands filter
+    if (brands.indexOf(venueBrands[i].slug) > -1) {
+      return true;
+    }
+  }
+
+  // no venue brands found in the filter
+  return false;
+}
+
 function fetchVenues(mapCenter, distance) {
 
   return function(dispatch, getState) {
@@ -97,9 +110,23 @@ function fetchVenues(mapCenter, distance) {
     let onReadyRegistration = geoQuery.on('ready', function() {
       onKeyEnteredRegistration.cancel();
 
-      var promises = receivedVenues.map(function(item, index) {
+      let promises = receivedVenues.map(function(item, index) {
         return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
-          receivedVenuesFull.push(snapshot.val());
+          let brands = window.__INITIAL_STATE__.app.firebase.brands;
+          let venue = snapshot.val();
+
+          // if there are brand filters applied
+          if (brands.length > 0) {
+            // if the venues contains a brand in the brands filter
+            if (filterByBrand(brands, venue.brands)) {
+              // add the venue
+              receivedVenuesFull.push(venue);
+            }
+          } else {
+            // no filter, add all venues
+            receivedVenuesFull.push(venue);
+          }
+
         });
       });
 
@@ -115,42 +142,6 @@ function fetchVenues(mapCenter, distance) {
     });
 
   }
-
-  // return function(dispatch, getState){
-  //   // Inform app state that we've started a request.
-  //   dispatch(requestVenues())
-  //   const state = getState()
-  //   const items = state.app.venues.items
-  //   const parse = state.app.parse
-
-  //   const swBounds = bounds.getSouthWest()
-  //   const neBounds = bounds.getNorthEast()
-
-  //   const query = getVenueQuery(parse)
-  //   const sw = new Parse.GeoPoint(swBounds.lat, swBounds.lng)
-  //   const ne = new Parse.GeoPoint(neBounds.lat, neBounds.lng)
-  //   query.withinGeoBox("location", sw, ne).limit(1000)
-
-  //   // If we already have some venues then exclude them from
-  //   // query to Parse.
-  //   if(items.size > 0){
-  //     query.notContainedIn('slug', Array.from(items.keys()))
-  //   }
-
-  //   return query.find()
-  //     .then(results => {
-  //       // if there is a search
-  //       if (state.app.search.searchTerm !== '') {
-  //         dispatch(fetchClosestVenues(state.app.map.center, results))
-  //       } else {
-  //         dispatch(receiveVenues(results))
-  //         dispatch(receiveClosestVenuesSearch(new Map()))
-  //       }
-  //     }, ex => {
-  //       dispatch(requestVenuesError(bounds))
-  //       console.log('parsing failed', ex)
-  //     })
-  // }
 }
 
 function shouldFetchVenues(state) {
@@ -172,19 +163,13 @@ function initialiseFirebase(firebaseReducer, dispatch){
     return false;
   }
 
-  // const firebaseConfig = {
-  //   apiKey: "AIzaSyBTJAJMSpkPjEPbWkrlphZ4FQ1bsJum0eY",
-  //   authDomain: "venues-database.firebaseapp.com",
-  //   databaseURL: "https://venues-database.firebaseio.com",
-  //   storageBucket: "venues-database.appspot.com",
-  // };
   const firebaseConfig = {
     apiKey: window.__INITIAL_STATE__.app.firebase.api_key,
     authDomain: window.__INITIAL_STATE__.app.firebase.auth_domain,
     databaseURL: window.__INITIAL_STATE__.app.firebase.db_url,
     storageBucket: window.__INITIAL_STATE__.app.firebase.storage_bucket,
   };
-  console.log('firebaseConfig', firebaseConfig);
+
   firebase.initializeApp(firebaseConfig);
 
   dispatch(initializeFirebase());
@@ -218,18 +203,6 @@ function fetchSingleVenue(name) {
       dispatch(receiveVenues([snapshot.val()]))
       dispatch(requestSingleVenue(name))
     });
-
-  //   const query = getVenueQuery(parse)
-  //   query.equalTo("slug", name);``
-
-  //   return query.find()
-  //     .then(results => {
-  //       dispatch(receiveVenues(results))
-  //       dispatch(requestSingleVenue(name))
-  //     }, ex => {
-  //       dispatch(requestVenuesError(bounds))
-  //       console.log('parsing failed', ex)
-  //     })
 
   }
 }
@@ -271,8 +244,6 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
 
   return function(dispatch, getState) {
 
-    console.log(mapCenter, venues, type);
-
     // Inform app state that we've started a request.
     dispatch(requestClosestVenues())
 
@@ -302,7 +273,20 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
 
       var promises = receivedVenues.map(function(item, index) {
         return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
-          receivedVenuesFull.push(snapshot.val());
+          let brands = window.__INITIAL_STATE__.app.firebase.brands;
+          let venue = snapshot.val();
+
+          // if there are brand filters applied
+          if (brands.length > 0) {
+            // if the venues contains a brand in the brands filter
+            if (filterByBrand(brands, venue.brands)) {
+              // add the venue
+              receivedVenuesFull.push(venue);
+            }
+          } else {
+            // no filter, add all venues
+            receivedVenuesFull.push(venue);
+          }
         });
       });
 
@@ -323,46 +307,6 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
         }
       });
     });
-
-  //   // Inform app state that we've started a request.
-  //   dispatch(requestClosestVenues())
-  //   const state = getState()
-  //   const parse = state.app.parse
-
-  //   const query = getVenueQuery(parse)
-  //   const mapCentre = new Parse.GeoPoint(mapCenter[0], mapCenter[1])
-
-  //   query.withinMiles("location", mapCentre, 1).limit(10)
-
-  //   // the it's a single search
-  //   if (type === 'venue-overlay') {
-  //     // remove the active venue from the search
-  //     query.notEqualTo('slug', venues.slug)
-  //   }
-
-  //   return query.find()
-  //     .then(results => {
-  //       // the it's a single search
-  //       if (type === 'venue-overlay') {
-  //         dispatch(setVenueActive(venues))
-  //         dispatch(panToLocation(venues.location))
-  //         dispatch(receiveClosestVenues(results))
-  //       } else {
-  //         dispatch(receiveVenues(venues))
-  //         dispatch(receiveClosestVenuesSearch(results))
-  //       }
-  //     }, ex => {
-  //       dispatch(requestClosestVenuesError(mapCenter))
-
-  //       if (type === 'venue-overlay') {
-  //         dispatch(setVenueActive(venues))
-  //         dispatch(panToLocation(venues.location))
-  //       } else {
-  //         dispatch(receiveVenues(venues))
-  //       }
-
-  //       console.log('parsing failed', ex)
-  //     })
   }
 }
 
