@@ -64,6 +64,9 @@ class Venue extends Component {
 
     let link = ''
     switch(channel){
+      case 'opening-times':
+        link = <span>{url}</span>
+        break
       case 'website':
         link = <a target="_blank" href={url}>{url}</a>
         break
@@ -107,7 +110,8 @@ class Venue extends Component {
   }
 
   renderSocial(){
-    if (!this.props.contact.instagram &&
+    if (!this.props.info.opening_times &&
+      !this.props.contact.instagram &&
       !this.props.contact.website &&
       !this.props.contact.facebook &&
       !this.props.contact.twitter) {
@@ -117,6 +121,8 @@ class Venue extends Component {
     return (
       <div className="venues-overlay__social">
         <h2>About this venue:</h2>
+        {(this.props.info.opening_times) ?
+          this.renderSocialItem('opening-times', this.props.info.opening_times):null }
         {(this.props.contact.website) ?
           this.renderSocialItem('website', this.props.contact.website):null }
         {(this.props.contact.instagram) ?
