@@ -87,48 +87,52 @@ class Venue extends Component {
   }
 
   rawReview(){
-    return { __html: this.props.review };
+    return { __html: this.props.info.review };
+  }
+
+  rawHTML(html) {
+    return { __html: html };
   }
 
   renderWebsite(){
-    if(!this.props.website){
+    if (!this.props.contact.website) {
       return null
     }
 
     return (
       <div className="venues-overlay__website">
-        <a target="_blank" className="default-button" href={this.props.website} title={this.props.name}>Visit Website</a>
+        <a target="_blank" className="default-button" href={this.props.contact.website} title={this.props.name}>Visit Website</a>
       </div>
     )
   }
 
   renderSocial(){
-    if(!this.props.instagram &&
-      !this.props.website &&
-      !this.props.facebook &&
-      !this.props.twitter){
+    if (!this.props.contact.instagram &&
+      !this.props.contact.website &&
+      !this.props.contact.facebook &&
+      !this.props.contact.twitter) {
         return null
     }
 
     return (
       <div className="venues-overlay__social">
         <h2>About this venue:</h2>
-        {(this.props.website) ?
-          this.renderSocialItem('website', this.props.website):null }
-        {(this.props.instagram) ?
-          this.renderSocialItem('instagram', this.props.instagram):null }
-        {(this.props.facebook) ?
-          this.renderSocialItem('facebook', this.props.facebook):null }
-        {(this.props.twitter) ?
-          this.renderSocialItem('twitter', this.props.twitter):null }
+        {(this.props.contact.website) ?
+          this.renderSocialItem('website', this.props.contact.website):null }
+        {(this.props.contact.instagram) ?
+          this.renderSocialItem('instagram', this.props.contact.instagram):null }
+        {(this.props.contact.facebook) ?
+          this.renderSocialItem('facebook', this.props.contact.facebook):null }
+        {(this.props.contact.twitter) ?
+          this.renderSocialItem('twitter', this.props.contact.twitter):null }
       </div>
     )
   }
 
   renderPrice(){
-    const price = this.props.price
+    const price = this.props.info.price
 
-    if(!price) {
+    if (!price) {
       return null
     }
 
@@ -146,6 +150,24 @@ class Venue extends Component {
         })}
       </div>
     )
+  }
+
+  renderOffer() {
+    const offer = this.props.offer;
+
+    if (!offer || offer.details === '') {
+      return null
+    }
+
+    return (
+      <div className='venues-overlay__offer'>
+        <h2>Offers:</h2>
+        <p dangerouslySetInnerHTML={this.rawHTML(offer.details)} />
+        {offer.end_date !== '' ?
+          <p>Offer ends at {offer.end_date}</p>
+        : null}
+      </div>
+    );
   }
 
   renderTags(){
@@ -168,7 +190,7 @@ class Venue extends Component {
 
   renderPhoneLink() {
     return (
-      <a className="venues-overlay__phone-number" href={`tel:${this.props.phone_number}`}><InlineSVG src={require(`!svg-inline!../svgs/phone.svg`)} /></a>
+      <a className="venues-overlay__phone-number" href={`tel:${this.props.contact.phone_number}`}><InlineSVG src={require(`!svg-inline!../svgs/phone.svg`)} /></a>
     )
   }
 
@@ -188,19 +210,20 @@ class Venue extends Component {
         </a>
         <div className='venues-overlay'>
           <header>
-            {(this.props.phone_number) ? this.renderPhoneLink() : null}
+            {(this.props.contact.phone_number) ? this.renderPhoneLink() : null}
             <h1 dangerouslySetInnerHTML={this.rawTitle()} />
             {this.renderVenueTypes()}
           </header>
           {this.renderImage()}
           <p dangerouslySetInnerHTML={this.rawReview()} />
           {this.renderPrice()}
+          {this.renderOffer()}
           {this.renderTags()}
           {this.renderSocial()}
           <VenueShare
             {...this.props.site}
             name={this.props.name}
-            review={this.props.review}
+            review={this.props.info.review}
             image={Object.keys(this.props.images).length
               ? this.props.images[0] : null } />
           <ClosestVenues venues={this.props.closestVenues} parentSlug={this.props.slug} pushState={this.props.pushState} />
@@ -210,20 +233,33 @@ class Venue extends Component {
   }
 }
 
+// Venue.propTypes = {
+//   pushState: PropTypes.func.isRequired,
+//   name: PropTypes.string.isRequired,
+//   address: PropTypes.string.isRequired,
+//   VenueTypes: PropTypes.array,
+//   images: PropTypes.object.isRequired,
+//   review: PropTypes.string.isRequired,
+//   website: PropTypes.string,
+//   instagram: PropTypes.string,
+//   facebook: PropTypes.string,
+//   twitter: PropTypes.string,
+//   price: PropTypes.string,
+//   Tags: PropTypes.array,
+//   copy: PropTypes.object,
+// }
+
 Venue.propTypes = {
   pushState: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
+  images: PropTypes.object.isRequired,
+  info: PropTypes.object.isRequired,
+  contact: PropTypes.object.isRequired,
   VenueTypes: PropTypes.array,
   images: PropTypes.object.isRequired,
-  review: PropTypes.string.isRequired,
-  website: PropTypes.string,
-  instagram: PropTypes.string,
-  facebook: PropTypes.string,
-  twitter: PropTypes.string,
   price: PropTypes.string,
   Tags: PropTypes.array,
-  copy: PropTypes.object,
+  offer: PropTypes.object,
 }
 
 Venue.defaultProps = {

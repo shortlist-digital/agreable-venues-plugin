@@ -1,23 +1,17 @@
 const firebaseColumns = [
-  'name',
-  'address',
-  'ephemeral',
-  'opening_date',
-  'closing_date',
-  'facebook',
-  'instagram',
-  'twitter',
-  'website',
-  'images',
-  'location',
-  'phone_number',
-  'price',
-  'review',
-  'sell',
-  'slug',
-  'venueTypes',
   'brands',
-  'tags'
+  'contact',
+  'images',
+  'info',
+  'location',
+  'name',
+  'offer',
+  'price',
+  'slug',
+  'tags',
+  'venueTypes',
+  'opening_date',
+  'closing_date'
 ];
 
 function returnSimpleObject(parseObject) {

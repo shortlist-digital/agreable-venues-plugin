@@ -40,6 +40,7 @@ class MarkerCluster extends MapLayer {
       // ES6 Map has been converted to Array: ['objectId', venueObj]
       const venue = obj[1]
       const options = {}
+
       if(venue.images && Object.keys(venue.images).length){
         // Custom icon.
         options.icon = Leaflet.divIcon({
