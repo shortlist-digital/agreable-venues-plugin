@@ -11,6 +11,7 @@ class Venue extends Component {
   constructor(props){
     super(props)
     this.handleClose = this.handleClose.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   componentDidUpdate() {
@@ -21,6 +22,23 @@ class Venue extends Component {
 
   handleClose(e){
     this.props.pushState({}, '/')
+  }
+
+  handleFormSubmit(e) {
+    e.preventDefault()
+
+    console.log(this);
+
+    let voucherForm = e.currentTarget;
+    let voucherObject = {
+      "restaurantName": this.props.name,
+      "restaurantAddress": this.props.info.address,
+      "restaurantLink": "http://nationalburgerday.co.uk/" + window.__INITIAL_STATE__.app.map.slug + "/" + this.props.slug,
+      "restaurantWebsite": this.props.contact.website,
+      "restaurantTerms": "20% offer valid on burgers only between 8.00am - 10.00pm on 25 August 2016. Valid only for one person per voucher at the stated restaurant. Voucher must be presented with individual promotion code at the time of payment. Voucher only valid for one transaction. Not valid in conjunction with any other offer. No cash alternative. No pre-booking required."
+    };
+
+    console.log(voucherObject);
   }
 
   rawTitle(){
@@ -135,6 +153,45 @@ class Venue extends Component {
     )
   }
 
+  renderVoucher() {
+    if (!window.__INITIAL_STATE__.app.display_vouchers) {
+      return null;
+    }
+
+    return (
+      <div className="venues-voucher">
+        <h2>Get 20% off at { this.props.name }</h2>
+        <p>Vouchers may take up to an hour to arrive. Please check your spam folder if it doesn't turn up.</p>
+        <form id="voucher-form" onSubmit={this.handleFormSubmit}>
+          <div className="form-row">
+            <label className="visually-hidden" htmlFor="firstname">First name</label>
+            <input id="firstname" name="firstname" placeholder="First name" required type="text" />
+          </div>
+          <div className="form-row">
+            <label className="visually-hidden" htmlFor="lastname">Last name</label>
+            <input id="lastname" name="lastname" placeholder="Last name" required type="text" />
+          </div>
+          <div className="form-row">
+            <label className="visually-hidden" htmlFor="email">Email address</label>
+            <input id="email" name="email" placeholder="e.g. lisa@gmail.com" required type="email" />
+          </div>
+          <div className="form-row form-row--submit">
+            <button type="submit">Get voucher</button>
+          </div>
+          <p className="form-row">By entering your details to claim your Mr Hyde National Burger Day voucher you will automatically be signed up to Mr Hyde, the daily email for men covering film, style, culture and places to eat meat. <a href="/website-terms-and-conditions-of-use">Terms & Conditions</a></p>
+          {this.props.promotion.promo_third_party ?
+            <div className="form-row form-row--option">
+              <input id="third-party-optin" name="third-party-optin" type="checkbox" />
+              <label htmlFor="third-party-optin">{ this.props.promotion.promo_third_party_message }</label>
+            </div>
+          :
+            null
+          }
+        </form>
+      </div>
+    );
+  }
+
   renderPrice(){
     const price = this.props.info.price
 
@@ -158,23 +215,23 @@ class Venue extends Component {
     )
   }
 
-  renderOffer() {
-    const offer = this.props.offer;
+  // renderOffer() {
+  //   const offer = this.props.offer;
 
-    if (!offer || offer.details === '') {
-      return null
-    }
+  //   if (!offer || !offer.details ) {
+  //     return null
+  //   }
 
-    return (
-      <div className='venues-overlay__offer'>
-        <h2>Offers:</h2>
-        <p dangerouslySetInnerHTML={this.rawHTML(offer.details)} />
-        {offer.end_date !== '' ?
-          <p>Offer ends at {offer.end_date}</p>
-        : null}
-      </div>
-    );
-  }
+  //   return (
+  //     <div className='venues-overlay__offer'>
+  //       <h2>Offers:</h2>
+  //       <p dangerouslySetInnerHTML={this.rawHTML(offer.details)} />
+  //       {offer.end_date !== '' ?
+  //         <p>Offer ends at {offer.end_date}</p>
+  //       : null}
+  //     </div>
+  //   );
+  // }
 
   renderTags(){
     const tags = this.props.Tags
@@ -222,8 +279,8 @@ class Venue extends Component {
           </header>
           {this.renderImage()}
           <p dangerouslySetInnerHTML={this.rawReview()} />
+          {this.renderVoucher()}
           {this.renderPrice()}
-          {this.renderOffer()}
           {this.renderTags()}
           {this.renderSocial()}
           <VenueShare
@@ -265,7 +322,7 @@ Venue.propTypes = {
   images: PropTypes.object.isRequired,
   price: PropTypes.string,
   Tags: PropTypes.array,
-  offer: PropTypes.object,
+  promotion: PropTypes.object,
 }
 
 Venue.defaultProps = {

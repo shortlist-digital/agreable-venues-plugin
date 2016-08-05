@@ -94,6 +94,57 @@
 .venues-overlay__website a
   font-size 14px
 
+.venues-voucher
+  .form-row
+    padding 0 20px
+
+    @media smallDesktopsAndUp
+      padding 10px 60px
+
+    &--submit
+      margin-bottom 20px
+
+  p.form-row
+    margin-bottom 0
+
+  label
+    display inline
+    color black
+    font-size 16px
+    font-weight normal
+
+    &.visually-hidden
+      // hide it
+      position absolute
+      margin -1px
+      padding 0
+      width 1px
+      height 1px
+      border 0
+      clip rect(0 0 0 0)
+      overflow hidden
+
+  input[type="email"]
+  input[type="text"]
+    padding 10px
+    width 100%
+    font-size 18px
+    text-align center
+
+  button
+    display block
+    margin 0
+    padding 20px 15px 15px
+    width 100%
+    background black
+    border 0
+    box-shadow 0
+    color white
+    font-family 'Nanami-Medium', Helvetica, Arial, sans-serif
+    font-size 18px
+    line-height 1
+    text-transform uppercase
+
 .venue-price
   text-align center
   margin-bottom 16px

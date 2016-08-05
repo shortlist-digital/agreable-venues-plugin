@@ -73,8 +73,10 @@ class RenderController {
         'map' => array(
           'mapboxToken' => get_field('venues_map_mapbox_token', 'option'),
           'mapboxMapId' => get_field('venues_map_mapbox_mapid', 'option'),
+          'slug'        => get_field('agreable_venues_plugin_map_slug', 'option'),
           'tileUrl'     => get_field('venues_map_tiles_url', 'option'),
-        )
+        ),
+        'display_vouchers' => get_field('field_578dff0210320', 'option'), // only for burger day
       )
     );
 
