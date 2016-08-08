@@ -12,9 +12,7 @@
 
   {% else %}
 
-    <script>
-      {{js_string|raw}}
-    </script>
+    <script src="{{site.link}}/app/plugins/agreable-venues-plugin{{js_path}}?cachebust={{ date().timestamp }}"></script>
 
     <style>
       {{css_string|raw}}

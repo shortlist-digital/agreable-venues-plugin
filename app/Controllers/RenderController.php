@@ -52,8 +52,8 @@ class RenderController {
     // $context['common_css_path'] = Helper::asset('styles.css');
     $context['js_string'] =  $js_string;
     $context['css_string'] =  $css_string;
-    $context['css_path'] = Helper::path('/resources/assets/styles.css');
-    $context['js_path'] = Helper::path('/resources/assets/app.js');
+    $context['css_path'] = '/resources/assets/styles.css';
+    $context['js_path'] = '/resources/assets/app.js';
     $context['webpack_plugin_port'] = $webpack_port;
     $brand_str = strtolower(get_field('venues_brand', 'option'));
     $brands = ! empty($brand_str) ?

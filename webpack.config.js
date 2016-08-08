@@ -15,10 +15,10 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader?paths[]=./styles&paths[]=./node_modules")},
-      { test: /\.svg$/, exclude:'node_modules', loader: 'raw-loader' },
+      { test: /\.svg$/, exclude:'/node_modules/', loader: 'raw-loader' },
       { test: /\.json$/, loader: 'json-loader' },
       { test: /\.woff$|.eot$|.svg$|.ttf$|.png$|.gif$|.jpg$|.jpeg$/, loader: "url" },
-      { test: /\.js$/, exclude:'node_modules', loader: 'babel-loader?stage=0&loose=all' }
+      { test: /\.jsx?$/, exclude: '/node_modules/' , loader: 'babel-loader?stage=0', include: [path.join(__dirname, "src"), path.join(__dirname, 'node_modules/svg-inline-react')] }
     ]
   },
 
