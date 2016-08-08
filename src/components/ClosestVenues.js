@@ -20,6 +20,7 @@ class ClosestVenues extends Component {
 
   render() {
     let venues = Array.from(this.props.venues)
+    let displayNumber = this.props.displayNumber;
 
     if (venues.length < 1) {
       return (
@@ -37,15 +38,17 @@ class ClosestVenues extends Component {
             venues.map((item, i) => {
               let venue = item[1]
 
-              if (i < this.props.displayNumber) {
+              if (i < this.props.displayNumber && venue.slug !== this.props.parentSlug) {
                 return (
                   <li key={i}>
                     <a href={'/food-guide/' + venue.slug} data-slug={venue.slug} onClick={this.handleVenueChange}>
-                      <img alt="" src={venue.images[0].landscape.url} />
+                      <img alt="" src={venue.images.landscape.url} />
                       <h3 dangerouslySetInnerHTML={this.createHTML(venue.name)} />
                     </a>
                   </li>
                 )
+              } else {
+                displayNumber += 1;
               }
             })
           }

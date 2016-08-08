@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes';
-import { convertObjects } from '../utils/ParseUtils';
+import { convertObjects } from '../utils/FirebaseUtils';
 
 export function venues(state = {
   isBrowserIncompatible : false,
@@ -45,6 +45,7 @@ export function venues(state = {
   case types.REQUEST_CLOSEST_VENUES:
     return Object.assign({}, state, {
       isFetching: true,
+      closest: new Map(),
     });
   case types.RECEIVE_CLOSEST_VENUES:
     const newClosestVenues = Array.from(convertObjects(action.items))
@@ -56,12 +57,13 @@ export function venues(state = {
   case types.REQUEST_CLOSEST_VENUES_SEARCH:
     return Object.assign({}, state, {
       isFetching: true,
+      closestSearch: new Map(),
     });
   case types.RECEIVE_CLOSEST_VENUES_SEARCH:
-    const newClosestVenuesSearch = Array.from(convertObjects(action.items))
+    const newClosestSearchVenues = Array.from(convertObjects(action.items))
     return Object.assign({}, state, {
       isFetching: false,
-      closestSearch: new Map([...newClosestVenuesSearch]),
+      closestSearch: new Map([...newClosestSearchVenues]),
       lastUpdated: action.receivedAt
     });
   case types.REQUEST_CLOSEST_VENUES_FAILURE:

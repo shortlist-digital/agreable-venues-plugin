@@ -15,14 +15,11 @@ class Admin {
 
     $screen = get_current_screen();
 
-    $app_id = get_field("{$ns}_plugin_parse_app_id", 'options');
-    $js_key = get_field("{$ns}_plugin_parse_js_key", 'options');
+    $app_id = get_field("{$ns}_plugin_firebase_api_key", 'options');
 
-    if(empty($app_id) || empty($js_key)){
+    if(empty($app_id)){
       $options = get_admin_url( null, '/admin.php?page=acf-options#acf-options_group_agreable_venues');
-      $missing = empty($app_id) ? "'Parse Application ID'" : '';
-      $missing .= (empty($app_id) === true && empty($js_key) === true) ? ' and ' : '';
-      $missing .= empty($js_key) ? "'Parse JavaScript Key'" : '';
+      $missing = empty($app_id) ? "'Firebase API Key'" : '';
       Notifier::error("Your are missing options that will cause Venues to not display correctly ($missing). Please visit <a href='$options'>Options</a> page and contact the digital operations team if necessary.");
       return;
     }

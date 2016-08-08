@@ -1,26 +1,26 @@
 <?php namespace AgreableVenuesPlugin\Controllers;
 
 use AgreableVenuesPlugin\Helper;
-use Parse\ParseClient;
-use Parse\ParseQuery;
+// use Parse\ParseClient;
+// use Parse\ParseQuery;
 
 class RenderController {
 
   function __construct() {
-    $app_id = get_field('venues_parse_app_id', 'option');
-    $rest_key = get_field('venues_parse_rest_key', 'option');
-    $master_key = get_field('venues_parse_master_key', 'option');
+  //   $app_id = get_field('venues_parse_app_id', 'option');
+  //   $rest_key = get_field('venues_parse_rest_key', 'option');
+  //   $master_key = get_field('venues_parse_master_key', 'option');
 
-    ParseClient::initialize( $app_id, $rest_key, $master_key );
+  //   ParseClient::initialize( $app_id, $rest_key, $master_key );
   }
 
   public function single($application, $slug){
-    $query = new ParseQuery("Venue");
-    $query->equalTo("slug", $slug);
-    $results = $query->find();
-    $venue = $results[0];
+    // $query = new ParseQuery("Venue");
+    // $query->equalTo("slug", $slug);
+    // $results = $query->find();
+    // $venue = $results[0];
 
-    $this->render($venue);
+    $this->render();
   }
 
   public function home(){
@@ -53,7 +53,7 @@ class RenderController {
     $context['js_string'] =  $js_string;
     $context['css_string'] =  $css_string;
     $context['webpack_plugin_port'] = $webpack_port;
-    $brand_str = strtolower(get_field('venues_brand'));
+    $brand_str = strtolower(get_field('venues_brand', 'option'));
     $brands = ! empty($brand_str) ?
       array_map('trim', explode(',', $brand_str)) :
       array();
@@ -63,16 +63,20 @@ class RenderController {
           'sitename'  => get_bloginfo('name'),
           'env'       => $environment
         ),
-        'parse' => array(
-          'parse_app_id'  => get_field('venues_parse_app_id', 'option'),
-          'parse_js_key'  => get_field('venues_parse_js_key', 'option'),
-          'brands'        => $brands
+        'firebase' => array(
+          'api_key'        => get_field('venues_firebase_api_key', 'option'),
+          'auth_domain'    => get_field('venues_firebase_auth_domain', 'option'),
+          'db_url'         => get_field('venues_firebase_db_url', 'option'),
+          'storage_bucket' => get_field('venues_firebase_storage_bucket', 'option'),
+          'brands'         => $brands
         ),
         'map' => array(
           'mapboxToken' => get_field('venues_map_mapbox_token', 'option'),
           'mapboxMapId' => get_field('venues_map_mapbox_mapid', 'option'),
+          'slug'        => get_field('agreable_venues_plugin_map_slug', 'option'),
           'tileUrl'     => get_field('venues_map_tiles_url', 'option'),
-        )
+        ),
+        'display_vouchers' => get_field('field_578dff0210320', 'option'), // only for burger day
       )
     );
 

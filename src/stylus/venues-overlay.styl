@@ -7,7 +7,7 @@
   overflow scroll
   overflow-x hidden
   padding 20px
-  height 100%
+  max-height 100%
 
   .venues-overlay-container--is-loading &
     background-image url(images/loading-ripple.gif)
@@ -94,6 +94,68 @@
 .venues-overlay__website a
   font-size 14px
 
+.venues-voucher
+  .form-row
+    padding 0 20px
+
+    @media smallDesktopsAndUp
+      padding 10px 60px
+
+    &--submit
+      margin-bottom 20px
+
+  p.form-row
+    margin-bottom 0
+
+  label
+    display inline
+    color black
+    font-size 16px
+    font-weight normal
+
+    &.visually-hidden
+      // hide it
+      position absolute
+      margin -1px
+      padding 0
+      width 1px
+      height 1px
+      border 0
+      clip rect(0 0 0 0)
+      overflow hidden
+
+  input[type="email"]
+  input[type="text"]
+    padding 10px
+    width 100%
+    border 1px solid #ccc
+    font-size 18px
+    text-align center
+
+    &.is-error
+      border-color red
+
+  button
+    display block
+    margin 0
+    padding 20px 15px 15px
+    width 100%
+    background black
+    border 0
+    box-shadow 0
+    color white
+    font-family 'Nanami-Medium', Helvetica, Arial, sans-serif
+    font-size 18px
+    line-height 1
+    text-transform uppercase
+
+  p.thank-you-msg
+    display none
+    margin-bottom 40px
+    font-size 18px
+    font-weight bold
+    text-align center
+
 .venue-price
   text-align center
   margin-bottom 16px
@@ -133,6 +195,7 @@
   z-index 1
 
 .venues-overlay__social__item a
+.venues-overlay__social__item span
   display block
   float left
   height 30px
@@ -171,7 +234,7 @@
     padding-top 10px
     @media ipadsAndUp
       display block
-      height 75vh
+      max-height 75vh
       overflow scroll
     li
       padding-bottom 10px
