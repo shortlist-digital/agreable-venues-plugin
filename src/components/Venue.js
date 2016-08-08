@@ -1,10 +1,16 @@
 import React, {Component, PropTypes} from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import InlineSVG from 'svg-inline-react/lib';
+import request from 'superagent';
+import legacyIESupport from 'superagent-legacyIESupport';
+import CalaisClient from 'calais-js-client';
 const classNames = require('classnames')
 
 import VenueShare from './VenueShare'
 import ClosestVenues from './ClosestVenues'
+
+const PASSPORT_SECRET = "98ffcfb9435d732db12315f980718d4aee7179b3edb89e1acf904975dab6e7af";
+const PASSPORT_ID = "mrhyde_event_national-burger-day-2016";
 
 class Venue extends Component {
 
@@ -12,6 +18,42 @@ class Venue extends Component {
     super(props)
     this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+
+    this.calaisClient = new CalaisClient(PASSPORT_ID, PASSPORT_SECRET);
+  }
+
+  setComponentState(props) {
+    this.state = {
+      firstName: null,
+      lastName: null,
+      emailAddress: null,
+      restaurantCode: this.makeId(),
+      restaurantName: props.name,
+      restaurantSlug: props.slug,
+      restaurantId: props.post_id,
+      restaurantTerms: '',
+      restaurantLink: 'http://nationalburgerday.co.uk/' + window.__INITIAL_STATE__.app.map.slug + '/' + props.slug,
+      restaurantWebsite: props.contact.website,
+      restaurantAddress: props.info.address,
+      thirdPartyOptInMessage: props.promotion.promo_third_party_message || null,
+      thirdPartyOptIn: null,
+      location: window.location.pathname
+    };
+  }
+
+  makeId() {
+    let text = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (let i = 0; i < 6; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return text;
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.post_id !== this.props.post_id;
   }
 
   componentDidUpdate() {
@@ -20,25 +62,132 @@ class Venue extends Component {
     overlay.scrollTop = 0;
   }
 
+  componentWillReceiveProps(nextProps) {
+    // set next state
+    this.setComponentState(nextProps);
+  }
+
   handleClose(e){
     this.props.pushState({}, '/')
   }
 
   handleFormSubmit(e) {
     e.preventDefault()
+    e.stopPropagation()
 
-    console.log(this);
+    let form = e.currentTarget;
 
-    let voucherForm = e.currentTarget;
-    let voucherObject = {
-      "restaurantName": this.props.name,
-      "restaurantAddress": this.props.info.address,
-      "restaurantLink": "http://nationalburgerday.co.uk/" + window.__INITIAL_STATE__.app.map.slug + "/" + this.props.slug,
-      "restaurantWebsite": this.props.contact.website,
-      "restaurantTerms": "20% offer valid on burgers only between 8.00am - 10.00pm on 25 August 2016. Valid only for one person per voucher at the stated restaurant. Voucher must be presented with individual promotion code at the time of payment. Voucher only valid for one transaction. Not valid in conjunction with any other offer. No cash alternative. No pre-booking required."
-    };
+    // if there is an opt in check box
+    if (this.props.promotion.promo_third_party) {
+      // set the opt in data
+      this.checkOptIn(form.querySelector('#third-party-optin'));
+    }
 
-    console.log(voucherObject);
+    // validate fields
+    this.validateEmail(form.querySelector('#email'));
+    this.validateFirstName(form.querySelector('#firstname'));
+    this.validateLastName(form.querySelector('#lastname'));
+
+    // if all fields are valid
+    if (form.querySelectorAll('.is-error').length < 1) {
+      // this.sendVoucher();
+      this.saveEmail();
+    }
+  }
+
+  validateEmail(input) {
+    let value = input.value;
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (re.test(value)) {
+      // remove error class
+      input.classList.remove('is-error');
+
+      // set state
+      this.state.emailAddress = value;
+    } else {
+      // set error class
+      input.classList.add('is-error');
+    }
+  }
+
+  validateLastName(input) {
+    let value = input.value;
+
+    if (value.length) {
+      // remove error class
+      input.classList.remove('is-error');
+
+      // set state
+      this.state.lastName = value;
+    } else {
+      // set error class
+      input.classList.add('is-error');
+    }
+  }
+
+  validateFirstName(input) {
+    let value = input.value;
+
+    if (value.length) {
+      // remove error class
+      input.classList.remove('is-error');
+
+      // set state
+      this.state.firstName = value;
+    } else {
+      // set error class
+      input.classList.add('is-error');
+    }
+  }
+
+  checkOptIn(input) {
+    // save state user opt in to third party
+    this.state.thirdPartyOptIn = input.checked;
+  }
+
+  sendVoucher() {
+    // push the data to generate the voucher
+    request.post('https://nbd-voucher.herokuapp.com/send')
+      .use(legacyIESupport)
+      .set('content-type', 'application/json')
+      .send(JSON.stringify(this.state))
+      .end(function(err, res) {
+    });
+  }
+
+  saveEmail() {
+    let payload = {
+      emailAddress: this.state.emailAddress,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      restaurantName: this.state.restaurantName,
+      restaurantId: this.state.restaurantId,
+      restaurantSlug: this.state.restaurantSlug,
+      thirdPartyOptIn1Key: this.state.thirdPartyOptInMessage,
+      thirdPartyOptIn1Value: this.state.thirdPartyOptIn,
+      location: this.state.location
+    }
+
+    // push data to calais
+    this.calaisClient.setDataRecord(payload);
+    this.calaisClient.post().then(this.handlePostSuccess).catch(this.handlePostFailure);
+  }
+
+  handlePostSuccess(error, response) {
+    let form = document.querySelector('#voucher-form');
+    let msg = form.nextSibling;
+
+    // hide the form
+    form.style.display = 'none';
+
+    // show the message
+    msg.style.display = 'block';
+  }
+
+  handlePostFailure(error, response) {
+    // not ideal...
+    this.handlePostSuccess();
   }
 
   rawTitle(){
@@ -164,16 +313,16 @@ class Venue extends Component {
         <p>Vouchers may take up to an hour to arrive. Please check your spam folder if it doesn't turn up.</p>
         <form id="voucher-form" onSubmit={this.handleFormSubmit}>
           <div className="form-row">
-            <label className="visually-hidden" htmlFor="firstname">First name</label>
-            <input id="firstname" name="firstname" placeholder="First name" required type="text" />
+            <label className="visually-hidden" htmlFor="firstname">First name (required)</label>
+            <input id="firstname" name="firstname" placeholder="First name" type="text" />
           </div>
           <div className="form-row">
-            <label className="visually-hidden" htmlFor="lastname">Last name</label>
-            <input id="lastname" name="lastname" placeholder="Last name" required type="text" />
+            <label className="visually-hidden" htmlFor="lastname">Last name (required)</label>
+            <input id="lastname" name="lastname" placeholder="Last name" type="text" />
           </div>
           <div className="form-row">
-            <label className="visually-hidden" htmlFor="email">Email address</label>
-            <input id="email" name="email" placeholder="e.g. lisa@gmail.com" required type="email" />
+            <label className="visually-hidden" htmlFor="email">Email address (required)</label>
+            <input id="email" name="email" placeholder="e.g. lisa@gmail.com" type="email" />
           </div>
           <div className="form-row form-row--submit">
             <button type="submit">Get voucher</button>
@@ -188,6 +337,7 @@ class Venue extends Component {
             null
           }
         </form>
+        <p className="thank-you-msg">Thank you! Your voucher is on its way!</p>
       </div>
     );
   }
@@ -214,24 +364,6 @@ class Venue extends Component {
       </div>
     )
   }
-
-  // renderOffer() {
-  //   const offer = this.props.offer;
-
-  //   if (!offer || !offer.details ) {
-  //     return null
-  //   }
-
-  //   return (
-  //     <div className='venues-overlay__offer'>
-  //       <h2>Offers:</h2>
-  //       <p dangerouslySetInnerHTML={this.rawHTML(offer.details)} />
-  //       {offer.end_date !== '' ?
-  //         <p>Offer ends at {offer.end_date}</p>
-  //       : null}
-  //     </div>
-  //   );
-  // }
 
   renderTags(){
     const tags = this.props.Tags
@@ -296,23 +428,8 @@ class Venue extends Component {
   }
 }
 
-// Venue.propTypes = {
-//   pushState: PropTypes.func.isRequired,
-//   name: PropTypes.string.isRequired,
-//   address: PropTypes.string.isRequired,
-//   VenueTypes: PropTypes.array,
-//   images: PropTypes.object.isRequired,
-//   review: PropTypes.string.isRequired,
-//   website: PropTypes.string,
-//   instagram: PropTypes.string,
-//   facebook: PropTypes.string,
-//   twitter: PropTypes.string,
-//   price: PropTypes.string,
-//   Tags: PropTypes.array,
-//   copy: PropTypes.object,
-// }
-
 Venue.propTypes = {
+  post_id: PropTypes.number.isRequired,
   pushState: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   images: PropTypes.object.isRequired,

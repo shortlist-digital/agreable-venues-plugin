@@ -128,8 +128,12 @@
   input[type="text"]
     padding 10px
     width 100%
+    border 1px solid #ccc
     font-size 18px
     text-align center
+
+    &.is-error
+      border-color red
 
   button
     display block
@@ -144,6 +148,13 @@
     font-size 18px
     line-height 1
     text-transform uppercase
+
+  p.thank-you-msg
+    display none
+    margin-bottom 40px
+    font-size 18px
+    font-weight bold
+    text-align center
 
 .venue-price
   text-align center

@@ -62,6 +62,9 @@
     "svg-inline-react": "^0.3.1",
     "firebase": "^3.2.0",
     "geofire": "^4.1.1",
-    "rsvp": "^3.2.1"
+    "rsvp": "^3.2.1",
+    "superagent": "^1.2.0",
+    "superagent-legacyiesupport": "^1.0.1",
+    "calais-js-client": "^0.2.1"
   }
 }
