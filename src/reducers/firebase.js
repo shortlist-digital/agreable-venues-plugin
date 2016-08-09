@@ -1,15 +1,15 @@
 import * as types from '../constants/ActionTypes';
 
 const initialState = {
-  parse_app_id: '',
-  parse_js_key: '',
+  firebase_app_id: '',
+  firebase_js_key: '',
   isInitialized:false,
   brands: [],
   venue_types: [],
   tags: [],
 }
 
-export function parse(state = initialState, action){
+export function firebaseReducer(state = initialState, action){
 
   // https://github.com/rackt/redux/issues/433
   if (!state.hydrated) {
@@ -17,7 +17,7 @@ export function parse(state = initialState, action){
   }
 
   switch (action.type) {
-  case types.INITIALIZE_PARSE:
+  case types.INITIALIZE_FIREBASE:
 		return Object.assign({}, state, {
 			isInitialized: true
 		})

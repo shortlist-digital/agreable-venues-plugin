@@ -12,6 +12,20 @@ class Map extends Component {
     this.handleLocationFound = this.handleLocationFound.bind(this)
   }
 
+  getDistanceFromZoom(map, mapCenter) {
+    var pointC = map.latLngToContainerPoint(mapCenter); // convert to containerpoint (pixels)
+    var pointX = [pointC.x + 1, pointC.y]; // add one pixel to x
+    var pointY = [pointC.x, pointC.y + 1]; // add one pixel to y
+
+    // convert containerpoints to latlng's
+    var latLngC = map.containerPointToLatLng(pointC);
+    var latLngX = map.containerPointToLatLng(pointX);
+
+    var distanceX = latLngC.distanceTo(latLngX); // calculate distance between c and x (latitude)
+
+    return distanceX * 2;
+  }
+
   handleLocationFound(e) {
     const map = this.refs.map.leafletElement
     // Remove event handler
@@ -23,11 +37,13 @@ class Map extends Component {
   handleMoveEnd(e) {
     const { fetchMarkers } = this.props
     const map = this.refs.map.leafletElement
-    // TODO: Consider passing them as simple array rather than object
-    // that is incompatible with Parse GeoPoints. Can use spread syntax then.
-    // const boundsObj = map.getBounds()
-    // const bounds = Object.keys(boundsObj).map((k) => boundsObj[k])
-    fetchMarkers(map.getBounds())
+
+    let mapCenter = map.getCenter();
+
+    fetchMarkers({
+      lat: mapCenter.lat,
+      lng: mapCenter.lng
+    }, this.getDistanceFromZoom(map, mapCenter));
 
     // removing this as Android Chrome triggers a resize when you focus the search input
     // the subsequent map move and trigger of this function blurs the input immediately.
@@ -79,20 +95,14 @@ class Map extends Component {
     const { fetchMarkers, hasVenueRoute } = this.props
     const map = this.refs.map.leafletElement
 
-    // // Manually remove top left zoom control because
-    // // constructor param (zoomControl:false) is not working
-    // // through react component as far as I can see.
-    // const firstZoomControl = map._controlContainer.firstChild
-    // firstZoomControl.parentNode.removeChild(firstZoomControl)
+    if (!hasVenueRoute) {
+      // Initial data fetch from Firebase.
+      let mapCenter = map.getCenter();
 
-    // // Manually move zoom control to bottom right
-    // // as L.Control.Zoom isn't working.
-    // const zoomControl = map._controlContainer.firstChild
-    // zoomControl.setAttribute('class', 'leaflet-bottom leaflet-right')
-
-    if(!hasVenueRoute){
-      // Initial get from Parse.
-      fetchMarkers(map.getBounds())
+      fetchMarkers({
+        lat: mapCenter.lat,
+        lng: mapCenter.lng
+      }, this.getDistanceFromZoom(map, mapCenter));
     }
 
     map.on('click', () => {
@@ -119,7 +129,8 @@ class Map extends Component {
         className="venues__map"
         center={this.props.startPosition}
         onLeafletMoveend={this.handleMoveEnd}
-        zoom={this.props.zoom}>
+        zoom={this.props.zoom}
+        scaleControl={true}>
         <TileLayer
           maxZoom={this.props.maxZoom}
           minZoom={this.props.minZoom}

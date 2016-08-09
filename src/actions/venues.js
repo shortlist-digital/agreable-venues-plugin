@@ -1,12 +1,14 @@
-import fetch from 'isomorphic-fetch'
-import { Parse } from 'parse';
+import fetch from 'isomorphic-fetch';
 import * as types from '../constants/ActionTypes';
 import { panToLocation } from '../actions/map';
-import { getVenueQuery } from '../utils/ParseUtils';
+import firebase from 'firebase';
+import GeoFire from 'geofire';
+import RSVP from 'rsvp';
 
-function initializeParse() {
+
+function initializeFirebase() {
   return {
-    type: types.INITIALIZE_PARSE
+    type: types.INITIALIZE_FIREBASE
   }
 }
 
@@ -43,6 +45,7 @@ function receiveClosestVenues(data) {
     type: types.RECEIVE_CLOSEST_VENUES,
     items: data,
     receivedAt: Date.now(),
+    isSearching: false,
   }
 }
 
@@ -69,41 +72,73 @@ function requestClosestVenuesFailure(center) {
   }
 }
 
-function fetchVenues(bounds) {
-  return function(dispatch, getState){
-    // Inform app state that we've started a request.
-    dispatch(requestVenues())
-    const state = getState()
-    const items = state.app.venues.items
-    const parse = state.app.parse
-
-    const swBounds = bounds.getSouthWest()
-    const neBounds = bounds.getNorthEast()
-
-    const query = getVenueQuery(parse)
-    const sw = new Parse.GeoPoint(swBounds.lat, swBounds.lng)
-    const ne = new Parse.GeoPoint(neBounds.lat, neBounds.lng)
-    query.withinGeoBox("location", sw, ne).limit(1000)
-
-    // If we already have some venues then exclude them from
-    // query to Parse.
-    if(items.size > 0){
-      query.notContainedIn('slug', Array.from(items.keys()))
+function filterByBrand(brands, venueBrands) {
+  // step through each venue brand tag
+  for (let i = 0, l = venueBrands.length; i < l; i++) {
+    // the the venue brand is in the brands filter
+    if (brands.indexOf(venueBrands[i].slug) > -1) {
+      return true;
     }
+  }
 
-    return query.find()
-      .then(results => {
-        // if there is a search
+  // no venue brands found in the filter
+  return false;
+}
+
+function fetchVenues(mapCenter, distance) {
+
+  return function(dispatch, getState) {
+
+    // Inform app state that we've started a request.
+    dispatch(requestVenues());
+    const state = getState();
+    const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
+    let geoQuery = geoFire.query({
+      center: [mapCenter.lat, mapCenter.lng],
+      radius: distance
+    });
+    let receivedVenues = [];
+
+    let onKeyEnteredRegistration = geoQuery.on('key_entered', function(key, location, distance) {
+      receivedVenues.push({
+        key: key,
+        location: location,
+        distance: distance
+      });
+    });
+    let receivedVenuesFull = [];
+    let onReadyRegistration = geoQuery.on('ready', function() {
+      let promises = receivedVenues.map(function(item, index) {
+        return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
+          let brands = window.__INITIAL_STATE__.app.firebase.brands;
+          let venue = snapshot.val();
+
+          // if there are brand filters applied
+          if (brands.length > 0) {
+            // if the venues contains a brand in the brands filter
+            if (filterByBrand(brands, venue.brands)) {
+              // add the venue
+              receivedVenuesFull.push(venue);
+            }
+          } else {
+            // no filter, add all venues
+            receivedVenuesFull.push(venue);
+          }
+
+        });
+      });
+
+      // once all promises have been settled
+      RSVP.all(promises).then(function() {
         if (state.app.search.searchTerm !== '') {
-          dispatch(fetchClosestVenues(state.app.map.center, results))
+          dispatch(fetchClosestVenues(mapCenter, receivedVenuesFull))
         } else {
-          dispatch(receiveVenues(results))
+          dispatch(receiveVenues(receivedVenuesFull));
           dispatch(receiveClosestVenuesSearch(new Map()))
         }
-      }, ex => {
-        dispatch(requestVenuesError(bounds))
-        console.log('parsing failed', ex)
-      })
+      });
+    });
+
   }
 }
 
@@ -118,51 +153,54 @@ function shouldFetchVenues(state) {
   return true
 }
 
-function initialiseParse(parse, dispatch){
+
+function initialiseFirebase(firebaseReducer, dispatch){
+
   // If parse hasn't been initialized do so here.
-  if(!parse.isInitialized){
-    Parse.initialize(parse.parse_app_id, parse.parse_js_key);
-    dispatch(initializeParse())
+  if(firebaseReducer.isInitialized) {
+    return false;
   }
+
+  const firebaseConfig = {
+    apiKey: window.__INITIAL_STATE__.app.firebase.api_key,
+    authDomain: window.__INITIAL_STATE__.app.firebase.auth_domain,
+    databaseURL: window.__INITIAL_STATE__.app.firebase.db_url,
+    storageBucket: window.__INITIAL_STATE__.app.firebase.storage_bucket,
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  dispatch(initializeFirebase());
 }
 
-export function fetchVenuesIfNeeded(bounds) {
+export function fetchVenuesIfNeeded(mapCenter, distance) {
   return (dispatch, getState) => {
 
     const state = getState()
-    const parse = state.app.parse
+    const firebaseReducer = state.app.firebaseReducer
 
-    // Conditionally initialise parse.
-    initialiseParse(parse, dispatch)
-
-    if (!canUseParse()) {
-      return dispatch(setBrowserIncompatible())
+    // Conditionally initialise firebase.
+    if (!firebaseReducer.isInitialized) {
+      initialiseFirebase(firebase, dispatch)
     }
 
     // Check conditions under which we should fetch.
-    if (shouldFetchVenues(state, bounds)) {
-      return dispatch(fetchVenues(bounds))
+    if (shouldFetchVenues(state)) {
+      return dispatch(fetchVenues(mapCenter, distance))
     }
   }
 }
 
-function fetchSingleVenue(name){
+function fetchSingleVenue(name) {
+
   return function(dispatch, getState){
     // Inform app state that we've started a request.
     dispatch(requestVenues())
 
-    const parse = getState().app.parse
-    const query = getVenueQuery(parse)
-    query.equalTo("slug", name);
-
-    return query.find()
-      .then(results => {
-        dispatch(receiveVenues(results))
-        dispatch(requestSingleVenue(name))
-      }, ex => {
-        dispatch(requestVenuesError(bounds))
-        console.log('parsing failed', ex)
-      })
+    firebase.database().ref('venues/' + name).once('value', function(snapshot) {
+      dispatch(receiveVenues([snapshot.val()]))
+      dispatch(requestSingleVenue(name))
+    });
 
   }
 }
@@ -175,66 +213,97 @@ function setVenueActive(venue){
 }
 
 export function requestSingleVenue(name) {
+
   return (dispatch, getState) => {
 
     const state = getState()
     const items = state.app.venues.items
-    const parse = state.app.parse
+    const firebaseReducer = state.app.firebaseReducer
     const activeVenue = {}
 
-    // Conditionally initialise parse.
-    initialiseParse(parse, dispatch)
+    // Conditionally initialise firebase.
+    if (!firebaseReducer.isInitialized) {
+      initialiseFirebase(firebase, dispatch)
+    }
 
-    if(items.has(name)){
+    if (items.has(name)) {
       let activeVenue = items.get(name)
+
       dispatch(fetchClosestVenues(activeVenue.location, activeVenue, 'venue-overlay'));
+      dispatch(setVenueActive(activeVenue))
     } else {
       dispatch(fetchSingleVenue(name))
     }
   }
+
 }
 
 export function fetchClosestVenues(mapCenter, venues, type = 'search') {
+
   return function(dispatch, getState) {
+
     // Inform app state that we've started a request.
     dispatch(requestClosestVenues())
-    const state = getState()
-    const parse = state.app.parse
 
-    const query = getVenueQuery(parse)
-    const mapCentre = new Parse.GeoPoint(mapCenter[0], mapCenter[1])
+    const state = getState();
+    const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
+    let geoQuery = geoFire.query({
+      center: [mapCenter.lat, mapCenter.lng],
+      radius: 2
+    });
+    let receivedVenues = [];
 
-    query.withinMiles("location", mapCentre, 1).limit(10)
+    let onKeyEnteredRegistration = geoQuery.on('key_entered', function(key, location, distance) {
+      receivedVenues.push({
+        key: key,
+        location: location,
+        distance: distance
+      });
+    });
 
-    // the it's a single search
-    if (type === 'venue-overlay') {
-      // remove the active venue from the search
-      query.notEqualTo('slug', venues.slug)
-    }
+    let receivedVenuesFull = [];
+    let onReadyRegistration = geoQuery.on('ready', function() {
+      onKeyEnteredRegistration.cancel();
 
-    return query.find()
-      .then(results => {
+      var promises = receivedVenues.map(function(item, index) {
+        return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
+          let brands = window.__INITIAL_STATE__.app.firebase.brands;
+          let venue = snapshot.val();
+
+          venue.distance = receivedVenues[index].distance;
+
+          // if there are brand filters applied
+          if (brands.length > 0) {
+            // if the venues contains a brand in the brands filter
+            if (filterByBrand(brands, venue.brands)) {
+              // add the venue
+              receivedVenuesFull.push(venue);
+            }
+          } else {
+            // no filter, add all venues
+            receivedVenuesFull.push(venue);
+          }
+        });
+      });
+
+      // once all promises have been settled
+      RSVP.all(promises).then(function() {
+        // dispatch events
+        if (type === 'venue-overlay') {
+          dispatch(receiveClosestVenues(receivedVenuesFull));
+        } else {
+          dispatch(receiveClosestVenuesSearch(receivedVenuesFull));
+        }
+
         // the it's a single search
         if (type === 'venue-overlay') {
-          dispatch(setVenueActive(venues))
           dispatch(panToLocation(venues.location))
-          dispatch(receiveClosestVenues(results))
-        } else {
-          dispatch(receiveVenues(venues))
-          dispatch(receiveClosestVenuesSearch(results))
-        }
-      }, ex => {
-        dispatch(requestClosestVenuesError(mapCenter))
-
-        if (type === 'venue-overlay') {
-          dispatch(setVenueActive(venues))
-          dispatch(panToLocation(venues.location))
+          dispatch(receiveVenues([venues]))
         } else {
           dispatch(receiveVenues(venues))
         }
-
-        console.log('parsing failed', ex)
-      })
+      });
+    });
   }
 }
 
@@ -243,16 +312,3 @@ export function setVenueInactive(){
     type: types.SET_VENUE_INACTIVE
   }
 }
-
-function canUseParse(){
-  var msie = document.documentMode;
-  return ! msie
-    || msie > 9
-}
-
-export function setBrowserIncompatible(){
-  return {
-    type: types.SET_BROWSER_INCOMPATIBLE
-  }
-}
-
