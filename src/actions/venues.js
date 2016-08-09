@@ -103,7 +103,7 @@ function fetchVenues(mapCenter, distance) {
       receivedVenues.push({
         key: key,
         location: location,
-        disctance: distance
+        distance: distance
       });
     });
     let receivedVenuesFull = [];
@@ -249,7 +249,7 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
     const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
     let geoQuery = geoFire.query({
       center: [mapCenter.lat, mapCenter.lng],
-      radius: 100000
+      radius: 2
     });
     let receivedVenues = [];
 
@@ -257,7 +257,7 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
       receivedVenues.push({
         key: key,
         location: location,
-        disctance: distance
+        distance: distance
       });
     });
 
@@ -269,6 +269,8 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
         return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
           let brands = window.__INITIAL_STATE__.app.firebase.brands;
           let venue = snapshot.val();
+
+          venue.distance = receivedVenues[index].distance;
 
           // if there are brand filters applied
           if (brands.length > 0) {
@@ -286,6 +288,7 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
 
       // once all promises have been settled
       RSVP.all(promises).then(function() {
+        // dispatch events
         if (type === 'venue-overlay') {
           dispatch(receiveClosestVenues(receivedVenuesFull));
         } else {
