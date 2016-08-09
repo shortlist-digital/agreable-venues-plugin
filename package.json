@@ -65,6 +65,6 @@
     "rsvp": "^3.2.1",
     "superagent": "^1.2.0",
     "superagent-legacyiesupport": "^1.0.1",
-    "calais-js-client": "^0.2.1"
+    "calais-js-client": "0.3.0"
   }
 }
