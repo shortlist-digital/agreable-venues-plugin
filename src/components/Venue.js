@@ -90,7 +90,7 @@ class Venue extends Component {
 
     // if all fields are valid
     if (form.querySelectorAll('.is-error').length < 1) {
-      // this.sendVoucher();
+      this.sendVoucher();
       this.saveEmail();
     }
   }
@@ -328,7 +328,7 @@ class Venue extends Component {
             <button type="submit">Get voucher</button>
           </div>
           <p className="form-row">By entering your details to claim your Mr Hyde National Burger Day voucher you will automatically be signed up to Mr Hyde, the daily email for men covering film, style, culture and places to eat meat. <a href="/website-terms-and-conditions-of-use">Terms & Conditions</a></p>
-          {this.props.promotion.promo_third_party ?
+          {this.props.promotion.promo_third_party !== '0' ?
             <div className="form-row form-row--option">
               <input id="third-party-optin" name="third-party-optin" type="checkbox" />
               <label htmlFor="third-party-optin">{ this.props.promotion.promo_third_party_message }</label>
