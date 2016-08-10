@@ -39,8 +39,6 @@ class Venue extends Component {
       thirdPartyOptIn: null,
       location: window.location.pathname
     };
-
-    console.log(this.state);
   }
 
   makeId() {
