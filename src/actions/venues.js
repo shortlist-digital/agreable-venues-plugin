@@ -92,8 +92,6 @@ function fetchVenues(mapCenter, distance) {
     // set new distance
     let amendedDistance = window.innerWidth < 480 ? distance / 3 : distance;
 
-    console.log('amendedDistance', amendedDistance);
-
     // Inform app state that we've started a request.
     dispatch(requestVenues());
     const state = getState();
@@ -275,6 +273,11 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
           let brands = window.__INITIAL_STATE__.app.firebase.brands;
           let venue = snapshot.val();
 
+          if (!venue) {
+            return;
+          }
+
+          // make sure venue exists - there one item that returns null
           venue.distance = receivedVenues[index].distance;
 
           // if there are brand filters applied
