@@ -162,7 +162,7 @@ Map.propTypes = {
 }
 
 Map.defaultProps = {
-  startPosition: [51.505, -0.09],
+  startPosition: [51.507, -0.128],
   maxZoom: config.MAP_MAX_ZOOM,
   minZoom: config.MAP_MIN_ZOOM,
   zoom: config.MAP_INIT_ZOOM

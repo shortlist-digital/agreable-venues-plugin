@@ -42,8 +42,10 @@ export function convertObjects(parseObjects) {
   const map = new Map()
 
   parseObjects.forEach(obj => {
-    if (Object.keys(obj).length > 0) {
-      map.set(obj.slug, returnSimpleObject(obj))
+    if (obj !== null) {
+      if (Object.keys(obj).length > 0) {
+        map.set(obj.slug, returnSimpleObject(obj))
+      }
     }
   })
 
