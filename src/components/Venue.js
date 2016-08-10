@@ -231,7 +231,7 @@ class Venue extends Component {
 
     let link = ''
     switch(channel){
-      case 'opening-times':
+      case 'content-only':
         link = <span>{url}</span>
         break
       case 'website':
@@ -277,7 +277,7 @@ class Venue extends Component {
   }
 
   renderSocial(){
-    if (!this.props.info.opening_times &&
+    if (!this.props.info.address &&
       !this.props.contact.instagram &&
       !this.props.contact.website &&
       !this.props.contact.facebook &&
@@ -288,8 +288,6 @@ class Venue extends Component {
     return (
       <div className="venues-overlay__social">
         <h2>About this venue:</h2>
-        {(this.props.info.opening_times) ?
-          this.renderSocialItem('opening-times', this.props.info.opening_times):null }
         {(this.props.contact.website) ?
           this.renderSocialItem('website', this.props.contact.website):null }
         {(this.props.contact.instagram) ?
@@ -298,6 +296,8 @@ class Venue extends Component {
           this.renderSocialItem('facebook', this.props.contact.facebook):null }
         {(this.props.contact.twitter) ?
           this.renderSocialItem('twitter', this.props.contact.twitter):null }
+        {(this.props.info.address) ?
+          this.renderSocialItem('content-only', this.props.info.address):null }
       </div>
     )
   }
