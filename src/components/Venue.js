@@ -32,7 +32,7 @@ class Venue extends Component {
       restaurantSlug: props.slug,
       restaurantId: props.post_id,
       restaurantTerms: '',
-      restaurantLink: 'http://nationalburgerday.co.uk/' + window.__INITIAL_STATE__.app.map.slug + '/' + props.slug,
+      restaurantLink: 'https://nationalburgerday.co.uk/' + window.__INITIAL_STATE__.app.map.slug + '/' + props.slug,
       restaurantWebsite: props.contact.website,
       restaurantAddress: props.info.address,
       thirdPartyOptInMessage: props.promotion.promo_third_party_message || null,
