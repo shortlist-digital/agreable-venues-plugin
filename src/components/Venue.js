@@ -32,13 +32,15 @@ class Venue extends Component {
       restaurantSlug: props.slug,
       restaurantId: props.post_id,
       restaurantTerms: '',
-      restaurantLink: 'https://nationalburgerday.co.uk/' + window.__INITIAL_STATE__.app.map.slug + '/' + props.slug,
+      restaurantLink: window.location.href,
       restaurantWebsite: props.contact.website,
       restaurantAddress: props.info.address,
       thirdPartyOptInMessage: props.promotion.promo_third_party_message || null,
       thirdPartyOptIn: null,
       location: window.location.pathname
     };
+
+    console.log(this.state);
   }
 
   makeId() {
