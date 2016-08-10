@@ -421,7 +421,7 @@ class Venue extends Component {
             review={this.props.info.review}
             image={Object.keys(this.props.images).length
               ? this.props.images[0] : null } />
-          <ClosestVenues venues={this.props.closestVenues} parentSlug={this.props.slug} pushState={this.props.pushState} />
+          <ClosestVenues venues={this.props.closestVenues} parentSlug={this.props.slug} displayLocation="overlay" pushState={this.props.pushState} />
         </div>
       </div>
     );

@@ -25,8 +25,10 @@ class ClosestVenues extends Component {
   render() {
     let venues = Array.from(this.props.venues);
     let displayNumber = this.props.displayNumber;
+    // one venue will always be returned as it'll be the venue that is currently selected on overlays
+    let displayThreshold = this.props.displayLocation === 'search' ? 1 : 2;
 
-    if (venues.length < 1) {
+    if (venues.length < displayThreshold) {
       return (
         <div className="venues-search__no-results">
           <p>Sorry, but we couldn't find any venues at this location.</p>

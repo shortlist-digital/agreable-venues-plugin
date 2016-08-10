@@ -63,7 +63,7 @@ class Search extends Component {
             </small>
            </div>
            {value && !isLocating && !isFetching ?
-              <ClosestVenues venues={closestVenues} pushState={pushState} displayNumber={10} /> : null}
+              <ClosestVenues venues={closestVenues} pushState={pushState} displayLocation="search" displayNumber={10} /> : null}
         </div>
     );
   }
