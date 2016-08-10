@@ -116,6 +116,10 @@ function fetchVenues(mapCenter, distance) {
           let brands = window.__INITIAL_STATE__.app.firebase.brands;
           let venue = snapshot.val();
 
+          if (!venue) {
+            return;
+          }
+
           // if there are brand filters applied
           if (brands.length > 0) {
             // if the venues contains a brand in the brands filter
