@@ -89,13 +89,18 @@ function fetchVenues(mapCenter, distance) {
 
   return function(dispatch, getState) {
 
+    // set new distance
+    let amendedDistance = window.innerWidth < 480 ? distance / 3 : distance;
+
+    console.log('amendedDistance', amendedDistance);
+
     // Inform app state that we've started a request.
     dispatch(requestVenues());
     const state = getState();
     const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
     let geoQuery = geoFire.query({
       center: [mapCenter.lat, mapCenter.lng],
-      radius: distance
+      radius: amendedDistance
     });
     let receivedVenues = [];
 
