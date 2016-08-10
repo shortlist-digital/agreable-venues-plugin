@@ -26,11 +26,13 @@ function site(state = initialState, action){
 }
 
 const app = combineReducers({
-  venues,
+  firebaseReducer,
   map,
   search,
-  firebaseReducer,
-  site
+  site,
+  venues,
+  display_vouchers: (state = {}) => state,
+  firebase: (state = {}) => state
 })
 
 export default app

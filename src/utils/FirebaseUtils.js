@@ -1,6 +1,7 @@
 const firebaseColumns = [
   'brands',
   'contact',
+  'distance',
   'post_id',
   'images',
   'info',

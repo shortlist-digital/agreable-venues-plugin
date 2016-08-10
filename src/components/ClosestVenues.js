@@ -18,17 +18,32 @@ class ClosestVenues extends Component {
     this.props.pushState({}, '/' + e.currentTarget.getAttribute('data-slug'))
   }
 
-  render() {
-    let venues = Array.from(this.props.venues)
-    let displayNumber = this.props.displayNumber;
+  convertDistance(distance) {
+    return (distance * 0.62).toFixed(2);
+  }
 
-    if (venues.length < 1) {
+  render() {
+    let venues = Array.from(this.props.venues);
+    let displayNumber = this.props.displayNumber;
+    // one venue will always be returned as it'll be the venue that is currently selected on overlays
+    let displayThreshold = this.props.displayLocation === 'search' ? 1 : 2;
+
+    if (venues.length < displayThreshold) {
       return (
         <div className="venues-search__no-results">
           <p>Sorry, but we couldn't find any venues at this location.</p>
         </div>
       );
     }
+
+    // sort the venues by distance
+    venues.sort(function(a, b) {
+      if (a[1].distance > b[1].distance) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
 
     return (
       <div className="venues-closest">
@@ -38,12 +53,15 @@ class ClosestVenues extends Component {
             venues.map((item, i) => {
               let venue = item[1]
 
-              if (i < this.props.displayNumber && venue.slug !== this.props.parentSlug) {
+              if (i <= this.props.displayNumber && venue.slug !== this.props.parentSlug) {
                 return (
                   <li key={i}>
                     <a href={'/food-guide/' + venue.slug} data-slug={venue.slug} onClick={this.handleVenueChange}>
-                      <img alt="" src={venue.images.landscape.url} />
+                      { venue.images ?
+                        <img alt="" src={venue.images.landscape.url} />
+                      : null }
                       <h3 dangerouslySetInnerHTML={this.createHTML(venue.name)} />
+                      <p class="venues-closest-distance">{this.convertDistance(venue.distance)} miles away</p>
                     </a>
                   </li>
                 )

@@ -218,16 +218,20 @@
   a
     display block
     overflow hidden
+    text-decoration none
   img
     float left
     height auto
     margin 0 15px 0 0
     width 110px
   h3
+    margin-bottom 0
     padding-top 5px
     text-align left
     @media smallDesktopsAndUp
       padding-top 10px
+  p
+    text-align left
 
   .venues-search &
     display none
@@ -246,3 +250,6 @@
       display none
     h3
       font-size 1rem
+
+.venues-overlay .venues-search__no-results
+  display none
