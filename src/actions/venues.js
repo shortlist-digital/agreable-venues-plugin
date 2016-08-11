@@ -36,7 +36,7 @@ function requestVenuesFailure(bounds) {
 function requestClosestVenues() {
   return {
     type: types.REQUEST_CLOSEST_VENUES,
-    isSearching: true,
+    isFetching: true,
   }
 }
 
@@ -45,7 +45,7 @@ function receiveClosestVenues(data) {
     type: types.RECEIVE_CLOSEST_VENUES,
     items: data,
     receivedAt: Date.now(),
-    isSearching: false,
+    isFetching: false
   }
 }
 
@@ -61,7 +61,7 @@ function receiveClosestVenuesSearch(data) {
     type: types.RECEIVE_CLOSEST_VENUES_SEARCH,
     items: data,
     receivedAt: Date.now(),
-    isSearching: false,
+    isSearching: false
   }
 }
 
@@ -137,12 +137,12 @@ function fetchVenues(mapCenter, distance) {
 
       // once all promises have been settled
       RSVP.all(promises).then(function() {
-        if (state.app.search.searchTerm !== '') {
-          dispatch(fetchClosestVenues(mapCenter, receivedVenuesFull))
-        } else {
+        if (state.app.search.searchTerm === '') {
           dispatch(receiveVenues(receivedVenuesFull));
           dispatch(receiveClosestVenuesSearch(new Map()))
         }
+
+        dispatch(receiveVenues(receivedVenuesFull));
       });
     });
 
@@ -250,7 +250,11 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
   return function(dispatch, getState) {
 
     // Inform app state that we've started a request.
-    dispatch(requestClosestVenues())
+    if (type === 'search') {
+      dispatch(requestClosestVenuesSearch())
+    } else {
+      dispatch(requestClosestVenues())
+    }
 
     const state = getState();
     const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
@@ -311,8 +315,6 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
         if (type === 'venue-overlay') {
           dispatch(panToLocation(venues.location))
           dispatch(receiveVenues([venues]))
-        } else {
-          dispatch(receiveVenues(venues))
         }
       });
     });
