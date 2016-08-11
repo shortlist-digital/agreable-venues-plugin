@@ -81,6 +81,7 @@ class RenderController {
         'display_vouchers' => get_field('field_578dff0210320', 'option'), // only for burger day
       )
     );
+    $context['calais_domain'] = 'https://www.calaisapi.com';
 
     if(isset($venue)){
       // If on single venue page we set all meta data accordingly.
