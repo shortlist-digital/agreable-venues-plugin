@@ -37,7 +37,7 @@ class Search extends Component {
   }
 
   render() {
-    const { searchTerm, isFetching, isLocating, onGeolocate, closestVenues, pushState } = this.props
+    const { searchTerm, isSearching, isLocating, onGeolocate, closestVenues, pushState } = this.props
 
     const searchClasses = classNames({
       'venues-search': true,
@@ -62,7 +62,7 @@ class Search extends Component {
               <a disabled={isLocating} onClick={onGeolocate}>Find my location</a>
             </small>
            </div>
-           {value && !isLocating && !isFetching ?
+           {value && !isSearching && !isLocating ?
               <ClosestVenues venues={closestVenues} pushState={pushState} displayLocation="search" displayNumber={10} /> : null}
         </div>
     );
