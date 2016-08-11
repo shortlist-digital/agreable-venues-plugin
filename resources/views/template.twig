@@ -4,6 +4,8 @@
 
   <script type="text/javascript">
     window.__INITIAL_STATE__ = {{initial_state|json_encode(constant('JSON_PRETTY_PRINT'))}};
+
+    window.calaisDomain = '{{ calais_domain }}';
   </script>
 
   {% if env == "development" %}
