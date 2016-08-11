@@ -61,7 +61,7 @@ class ClosestVenues extends Component {
                         <img alt="" src={venue.images.landscape.url} />
                       : null }
                       <h3 dangerouslySetInnerHTML={this.createHTML(venue.name)} />
-                      <p class="venues-closest-distance">{this.convertDistance(venue.distance)} miles away</p>
+                      <p className="venues-closest-distance">{this.convertDistance(venue.distance)} miles away</p>
                     </a>
                   </li>
                 )
