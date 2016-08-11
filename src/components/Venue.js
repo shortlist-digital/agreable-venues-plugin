@@ -19,7 +19,6 @@ class Venue extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
 
-    window.calaisDomain = 'https://www.calaisapi.com';
     this.calaisClient = new CalaisClient(PASSPORT_ID, PASSPORT_SECRET);
   }
 
