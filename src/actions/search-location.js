@@ -1,4 +1,7 @@
 import * as types from '../constants/ActionTypes';
+import {
+  fetchClosestVenues
+} from './venues'
 
 export function requestLocationDebounce(searchTerm) {
   return (dispatch, getState) => {
@@ -9,7 +12,7 @@ export function requestLocationDebounce(searchTerm) {
     clearTimeout(search.timer)
     const timer = setTimeout(() => {
       dispatch(fetchLocation())
-    }, 1000)
+    }, 750)
 
     // Add search term to state on every request and
     // we extract it when timer completes.
@@ -56,8 +59,10 @@ function fetchLocation(){
         return response.json();
       })
       .then(function(data) {
-        if(data.results.length > 0){
+        if (data.results.length > 0) {
           dispatch(fetchLocationSuccess(data.results[0].geometry));
+          // search for closest venues to searched location
+          dispatch(fetchClosestVenues(data.results[0].geometry.location, false));
         }
       })
   }

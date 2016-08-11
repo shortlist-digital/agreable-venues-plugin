@@ -4,6 +4,7 @@ import { convertObjects } from '../utils/FirebaseUtils';
 export function venues(state = {
   isBrowserIncompatible : false,
   isFetching : false,
+  isSearching : false,
   items : new Map(),
   active : {},
   closest : new Map(),
@@ -50,25 +51,26 @@ export function venues(state = {
   case types.RECEIVE_CLOSEST_VENUES:
     const newClosestVenues = Array.from(convertObjects(action.items))
     return Object.assign({}, state, {
-      isFetching: false,
+      isSearching: false,
       closest: new Map([...newClosestVenues]),
       lastUpdated: action.receivedAt
     });
   case types.REQUEST_CLOSEST_VENUES_SEARCH:
     return Object.assign({}, state, {
-      isFetching: true,
+      isSearching: true,
       closestSearch: new Map(),
     });
   case types.RECEIVE_CLOSEST_VENUES_SEARCH:
     const newClosestSearchVenues = Array.from(convertObjects(action.items))
     return Object.assign({}, state, {
-      isFetching: false,
+      isSearching: false,
       closestSearch: new Map([...newClosestSearchVenues]),
       lastUpdated: action.receivedAt
     });
   case types.REQUEST_CLOSEST_VENUES_FAILURE:
     return Object.assign({}, state, {
-      isFetching: false
+      isFetching: false,
+      isSearching: false
     });
   default:
     return state;
