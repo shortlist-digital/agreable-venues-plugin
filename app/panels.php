@@ -207,6 +207,28 @@ register_field_group(array (
       'readonly' => 0,
       'disabled' => 0,
     ),
+    array (
+      'key' => "{$ns}_plugin_terms",
+      'label' => 'Venues Promotion Terms and Conditions',
+      'name' => 'venues_promo_terms',
+      'prefix' => '',
+      'type' => 'wysiwyg',
+      'instructions' => '',
+      'required' => 0,
+      'conditional_logic' => 0,
+      'wrapper' => array (
+        'width' => '',
+        'class' => '',
+        'id' => '',
+      ),
+      'default_value' => '',
+      'placeholder' => '',
+      'prepend' => '',
+      'append' => '',
+      'maxlength' => '',
+      'readonly' => 0,
+      'disabled' => 0,
+    ),
   ),
   'location' => array (
     array (
