@@ -55,7 +55,7 @@
 .venues-overlay__img
   margin-bottom 16px
   img
-    max-width 100%
+    width 100%
 
 .venues-overlay__types
   text-align center
@@ -96,7 +96,7 @@
 
 .venues-voucher
   .form-row
-    padding 0 20px
+    padding 10px 20px
 
     @media smallDesktopsAndUp
       padding 10px 60px
@@ -104,8 +104,9 @@
     &--submit
       margin-bottom 20px
 
-  p.form-row
-    margin-bottom 0
+    p
+      margin-bottom 0
+      padding 0
 
   label
     display inline
@@ -182,6 +183,7 @@
 .venues-overlay__social
   font-size 17px
   margin-bottom 32px
+  overflow hidden
 
 .venues-overlay__social__item
   display block
@@ -204,6 +206,10 @@
   width 100%
   line-height 30px
   -webkit-mask-image -webkit-gradient(linear, 90% top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
+
+.venues-overlay__social__item span
+  width 90%
+  height auto
 
 .venues-closest
   background white

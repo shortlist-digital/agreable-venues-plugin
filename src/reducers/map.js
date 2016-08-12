@@ -2,6 +2,7 @@ import * as types from '../constants/ActionTypes';
 
 const initialState = {
   isLocating : false,
+  isGeolocated : false,
   bounds : {northeast:{}, southwest:{}},
   center : [],
   focusLocation : [],
@@ -23,10 +24,16 @@ export function map(state = initialState, action){
   case types.GEOLOCATE_REQUEST:
     return Object.assign({}, state, {
       isLocating: true,
+      isGeolocated: false
     })
   case types.GEOLOCATE_SUCCESS:
     return Object.assign({}, state, {
       isLocating: false,
+      isGeolocated: true
+    })
+  case types.SEARCH_LOCATION_REQUEST:
+    return Object.assign({}, state, {
+      isGeolocated: false
     })
   case types.SEARCH_LOCATION_SUCCESS:
     return Object.assign({}, state, {

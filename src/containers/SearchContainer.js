@@ -25,6 +25,7 @@ class SearchContainer extends Component {
         closestVenues={this.props.closestVenues}
         hasVenueRoute={!!this.props.venueRoute}
         isFetching={this.props.isFetching}
+        isGeolocated={this.props.map.isGeolocated}
         isLocating={this.props.search.isLocating}
         isSearching={this.props.isSearching}
         onGeolocate={this.props.geolocate}

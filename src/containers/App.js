@@ -34,6 +34,7 @@ class App extends Component {
         <SearchContainer />
         {this.props.children}
         {this.renderOutdated()}
+        {this.props.isFetching ? <p className="venues-loading">Loading...</p> : null}
       </div>
     )
   }
@@ -47,7 +48,8 @@ App.propTypes = {
 function mapStateToProps(state) {
   return {
     venues : state.app.venues.items,
-    isBrowserIncompatible : state.app.venues.isBrowserIncompatible
+    isBrowserIncompatible : state.app.venues.isBrowserIncompatible,
+    isFetching : state.app.venues.isFetching
   }
 }
 

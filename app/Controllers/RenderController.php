@@ -63,7 +63,8 @@ class RenderController {
       'app' => array(
         'site' => array(
           'sitename'  => get_bloginfo('name'),
-          'env'       => $environment
+          'env'       => $environment,
+          'terms'     => get_field('venues_promo_terms', 'option'),
         ),
         'firebase' => array(
           'api_key'        => get_field('venues_firebase_api_key', 'option'),
