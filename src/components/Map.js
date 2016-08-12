@@ -32,6 +32,15 @@ class Map extends Component {
     map.off('locationfound', this.handleLocationFound)
 
     this.props.onGeolocateSuccess()
+
+    // setTimeout(function() {
+      let mapCenter = map.getCenter();
+
+      this.props.panToLocation({
+        lat: mapCenter.lat,
+        lng: mapCenter.lng
+      }, 'search');
+    // }, 2000);
   }
 
   handleMoveEnd(e) {
@@ -151,6 +160,7 @@ class Map extends Component {
 Map.propTypes = {
   pathname: PropTypes.string.isRequired,
   pushState: PropTypes.func.isRequired,
+  panToLocation: PropTypes.func.isRequired,
   isLocating: PropTypes.bool.isRequired,
   bounds: PropTypes.object,
   markerLatLng: PropTypes.array,

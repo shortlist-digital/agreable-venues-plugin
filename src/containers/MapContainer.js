@@ -3,7 +3,7 @@ import { pushState } from 'redux-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { geolocateSuccess } from '../actions/map'
+import { geolocateSuccess, panToLocation } from '../actions/map'
 import { fetchVenuesIfNeeded, setVenueInactive } from '../actions/venues'
 
 import Map from '../components/Map'
@@ -20,6 +20,7 @@ class MapContainer extends Component {
         {...this.props.map}
         pathname={this.props.pathname}
         onGeolocateSuccess={this.props.geolocateSuccess}
+        panToLocation={this.props.panToLocation}
         fetchMarkers={this.props.fetchVenuesIfNeeded}
         pushState={this.props.pushState}
         venues={this.props.venues}
@@ -43,6 +44,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     geolocateSuccess,
     fetchVenuesIfNeeded,
+    panToLocation,
     setVenueInactive,
     pushState
   }, dispatch)

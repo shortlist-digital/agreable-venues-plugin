@@ -139,7 +139,6 @@ function fetchVenues(mapCenter, distance) {
       RSVP.all(promises).then(function() {
         if (state.app.search.searchTerm === '') {
           dispatch(receiveVenues(receivedVenuesFull));
-          dispatch(receiveClosestVenuesSearch(new Map()))
         }
 
         dispatch(receiveVenues(receivedVenuesFull));
@@ -313,7 +312,7 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
 
         // the it's a single search
         if (type === 'venue-overlay') {
-          dispatch(panToLocation(venues.location))
+          dispatch(panToLocation(venues.location), type)
           dispatch(receiveVenues([venues]))
         }
       });
