@@ -327,7 +327,7 @@ class Venue extends Component {
           <div className="form-row form-row--submit">
             <button type="submit">Get voucher</button>
           </div>
-          {window.__INITIAL_STATE__.app.site.terms ? <div className="form-row" dangerouslySetInnerHTML={this.rawHTML(window.__INITIAL_STATE__.app.site.terms)} /> : null}
+          {this.props.promotion.details ? <div className="form-row"><p dangerouslySetInnerHTML={this.rawHTML(this.props.promotion.details)} /></div> : null}
           {this.props.promotion.promo_third_party == '1' ?
             <div className="form-row form-row--option">
               <input id="third-party-optin" name="third-party-optin" type="checkbox" />
