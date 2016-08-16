@@ -60,6 +60,9 @@ class Venue extends Component {
     // move the window to the top
     let overlay = document.querySelector('.venues-overlay')
     overlay.scrollTop = 0;
+
+    // reset the voucher form
+    this.resetVoucherForm();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -172,6 +175,17 @@ class Venue extends Component {
     // push data to calais
     this.calaisClient.setDataRecord(payload);
     this.calaisClient.post().then(this.handlePostSuccess).catch(this.handlePostFailure);
+  }
+
+  resetVoucherForm() {
+    let form = document.querySelector('#voucher-form');
+    let msg = form.nextSibling;
+
+    // hide the form
+    form.style.display = 'block';
+
+    // show the message
+    msg.style.display = 'none';
   }
 
   handlePostSuccess(error, response) {
