@@ -78,7 +78,7 @@ class Venue extends Component {
     let form = e.currentTarget;
 
     // if there is an opt in check box
-    if (this.props.promotion.promo_third_party) {
+    if (this.props.promotion.promo_third_party === '1') {
       // set the opt in data
       this.checkOptIn(form.querySelector('#third-party-optin'));
     }
@@ -328,7 +328,7 @@ class Venue extends Component {
             <button type="submit">Get voucher</button>
           </div>
           {this.props.promotion.details ? <div className="form-row"><p dangerouslySetInnerHTML={this.rawHTML(this.props.promotion.details)} /></div> : null}
-          {this.props.promotion.promo_third_party == '1' ?
+          {this.props.promotion.promo_third_party === '1' ?
             <div className="form-row form-row--option">
               <input id="third-party-optin" name="third-party-optin" type="checkbox" />
               <label htmlFor="third-party-optin">{ this.props.promotion.promo_third_party_message }</label>
