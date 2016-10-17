@@ -8,8 +8,23 @@ class Map extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      locationLat: 51.507,
+      locationLon: -0.128,
+    }
     this.handleMoveEnd = this.handleMoveEnd.bind(this)
     this.handleLocationFound = this.handleLocationFound.bind(this)
+  }
+
+  getDefaultLocation() {
+    let url = window.location.search.substr(1);
+    let locationName = url.match(/l=([^&]*)/);
+    for (let loc of this.props.locationDetails) {
+      if (loc.location_name === locationName[1]) {
+        this.setState({locationLat: loc.location_latitude})
+        this.setState({locationLon: loc.location_longitude})
+      }
+    }
   }
 
   getDistanceFromZoom(map, mapCenter) {
@@ -104,6 +119,8 @@ class Map extends Component {
     const { fetchMarkers, hasVenueRoute } = this.props
     const map = this.refs.map.leafletElement
 
+    this.getDefaultLocation()
+
     if (!hasVenueRoute) {
       // Initial data fetch from Firebase.
       let mapCenter = map.getCenter();
@@ -136,7 +153,7 @@ class Map extends Component {
         ref="map"
         attributionControl={false}
         className="venues__map"
-        center={this.props.startPosition}
+        center={[this.state.locationLat,this.state.locationLon]}
         onLeafletMoveend={this.handleMoveEnd}
         zoom={this.props.zoom}
         scaleControl={true}>
@@ -165,6 +182,7 @@ Map.propTypes = {
   bounds: PropTypes.object,
   markerLatLng: PropTypes.array,
   startPosition: PropTypes.array,
+  locationDetails: PropTypes.array,
   venues: PropTypes.object.isRequired,
   tileUrl : PropTypes.string.isRequired,
   mapboxToken : PropTypes.string,
@@ -172,7 +190,6 @@ Map.propTypes = {
 }
 
 Map.defaultProps = {
-  startPosition: [51.507, -0.128],
   maxZoom: config.MAP_MAX_ZOOM,
   minZoom: config.MAP_MIN_ZOOM,
   zoom: config.MAP_INIT_ZOOM

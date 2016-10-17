@@ -78,11 +78,15 @@ class RenderController {
           'mapboxMapId' => get_field('venues_map_mapbox_mapid', 'option'),
           'slug'        => get_field('agreable_venues_plugin_map_slug', 'option'),
           'tileUrl'     => get_field('venues_map_tiles_url', 'option'),
+          'locationDetails' => get_field('map_default_location', 'option'),
         ),
         'display_vouchers' => get_field('field_578dff0210320', 'option'), // only for burger day
       )
     );
     $context['calais_domain'] = 'https://calaisapi.com';
+
+    // var_dump(get_field('map_default_location', 'option'));
+    // die;
 
     if(isset($venue)){
       // If on single venue page we set all meta data accordingly.
