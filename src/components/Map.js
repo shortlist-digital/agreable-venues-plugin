@@ -20,7 +20,7 @@ class Map extends Component {
     let url = window.location.search.substr(1);
     let locationName = url.match(/l=([^&]*)/);
     for (let loc of this.props.locationDetails) {
-      if (loc.location_name === locationName[1]) {
+      if (loc.location_name.toLowerCase() === locationName[1]) {
         this.setState({locationLat: loc.location_latitude})
         this.setState({locationLon: loc.location_longitude})
       }
