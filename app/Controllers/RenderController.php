@@ -85,9 +85,6 @@ class RenderController {
     );
     $context['calais_domain'] = 'https://calaisapi.com';
 
-    // var_dump(get_field('map_default_location', 'option'));
-    // die;
-
     if(isset($venue)){
       // If on single venue page we set all meta data accordingly.
       $context['wp_title'] = htmlentities($venue->get('name'));
