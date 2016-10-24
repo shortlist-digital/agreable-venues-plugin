@@ -445,7 +445,6 @@ Venue.propTypes = {
   post_id: PropTypes.number.isRequired,
   pushState: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  images: PropTypes.object.isRequired,
   info: PropTypes.object.isRequired,
   contact: PropTypes.object.isRequired,
   VenueTypes: PropTypes.array,

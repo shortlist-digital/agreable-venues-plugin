@@ -38,5 +38,6 @@ class Root extends Component {
 }
 
 DOMReady(function() {
+  alert('work')
   ReactDOM.render(<Root />, document.getElementById('agreable-venues'))
 })
