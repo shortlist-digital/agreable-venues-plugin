@@ -20,11 +20,11 @@ class Map extends Component {
   getDefaultLocation() {
     let url = window.location.search.substr(1);
     let locationName = url.match(/l=([^&]*)/);
-    if (locationName === null||'undefined') {
+    if (locationName === null) {
       this.setState({locationName: false})
       return
     }
-    if (locationName === true) {
+    if (this.state.locationName === true) {
       for (let loc of this.props.locationDetails) {
         if (loc.location_name.toLowerCase() === locationName[1]) {
           this.setState({locationLat: loc.location_latitude})
