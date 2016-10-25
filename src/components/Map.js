@@ -11,6 +11,7 @@ class Map extends Component {
     this.state = {
       locationLat: 51.507,
       locationLon: -0.128,
+      locationName: true
     }
     this.handleMoveEnd = this.handleMoveEnd.bind(this)
     this.handleLocationFound = this.handleLocationFound.bind(this)
@@ -19,10 +20,16 @@ class Map extends Component {
   getDefaultLocation() {
     let url = window.location.search.substr(1);
     let locationName = url.match(/l=([^&]*)/);
-    for (let loc of this.props.locationDetails) {
-      if (loc.location_name.toLowerCase() === locationName[1]) {
-        this.setState({locationLat: loc.location_latitude})
-        this.setState({locationLon: loc.location_longitude})
+    if (locationName === null) {
+      this.setState({locationName: false})
+      return
+    }
+    if (this.state.locationName === true) {
+      for (let loc of this.props.locationDetails) {
+        if (loc.location_name.toLowerCase() === locationName[1]) {
+          this.setState({locationLat: loc.location_latitude})
+          this.setState({locationLon: loc.location_longitude})
+        }
       }
     }
   }
@@ -182,7 +189,6 @@ Map.propTypes = {
   bounds: PropTypes.object,
   markerLatLng: PropTypes.array,
   startPosition: PropTypes.array,
-  locationDetails: PropTypes.array,
   venues: PropTypes.object.isRequired,
   tileUrl : PropTypes.string.isRequired,
   mapboxToken : PropTypes.string,
