@@ -178,24 +178,26 @@ class Venue extends Component {
   }
 
   resetVoucherForm() {
+    // get form element
     let form = document.querySelector('#voucher-form');
+    // detect the form before updating its style
+    if (!form) return;
     let msg = form.nextSibling;
-
-    // hide the form
+    // show the form
     form.style.display = 'block';
-
-    // show the message
+    // hide the message
     msg.style.display = 'none';
   }
 
   handlePostSuccess(error, response) {
+    // get form element
     let form = document.querySelector('#voucher-form');
+    // detect the form before updating its style
+    if (!form) return;
     let msg = form.nextSibling;
-
-    // hide the form
+    // show the form
     form.style.display = 'none';
-
-    // show the message
+    // hide the message
     msg.style.display = 'block';
   }
 
