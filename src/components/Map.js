@@ -189,7 +189,6 @@ Map.propTypes = {
   bounds: PropTypes.object,
   markerLatLng: PropTypes.array,
   startPosition: PropTypes.array,
-  locationDetails: PropTypes.array,
   venues: PropTypes.object.isRequired,
   tileUrl : PropTypes.string.isRequired,
   mapboxToken : PropTypes.string,
