@@ -13,7 +13,7 @@
     "getherbert/framework": "~0.9",
     "illuminate/container": "~5.1.0"
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "config": {
     "preferred-install": "dist"
   },

@@ -91,7 +91,7 @@ class RenderController {
       $context['post'] = $this->get_post_meta_data($venue);
     }
 
-	  \Timber::render("{$views}template.twig", $context);
+	  \Timber::render("template.twig", $context);
   }
 
   protected function get_post_meta_data($venue){
