@@ -32,7 +32,7 @@ export function venues(state = {
     // Without `Array.from()` you cannot merge the old and new Maps
     // as per this: http://stackoverflow.com/a/32000937
     // Maybe an issue with transpiling.
-    const newVenues = Array.from(convertObjects(action.items))
+    const newVenues = Array.from(action.items)
     const currentVenues = Array.from(state.items)
     return Object.assign({}, state, {
       isFetching: false,

@@ -32,7 +32,8 @@ const app = combineReducers({
   site,
   venues,
   display_vouchers: (state = {}) => state,
-  firebase: (state = {}) => state
+  firebase: (state = {}) => state,
+  kitchin: (state = {}) => state
 })
 
 export default app

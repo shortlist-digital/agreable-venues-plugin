@@ -73,6 +73,10 @@ class RenderController {
           'storage_bucket' => get_field('venues_firebase_storage_bucket', 'option'),
           'brands'         => $brands
         ),
+        'kitchin' => array(
+          'url'            => 'http://local.kitchin.com/api/v1/',
+          'brand'          => 2
+        ),
         'map' => array(
           'mapboxToken' => get_field('venues_map_mapbox_token', 'option'),
           'mapboxMapId' => get_field('venues_map_mapbox_mapid', 'option'),
