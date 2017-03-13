@@ -45,7 +45,7 @@ class Map extends Component {
 
     var distanceX = latLngC.distanceTo(latLngX); // calculate distance between c and x (latitude)
 
-    return distanceX * 2;
+    return distanceX;
   }
 
   handleLocationFound(e) {
@@ -55,14 +55,12 @@ class Map extends Component {
 
     this.props.onGeolocateSuccess()
 
-    // setTimeout(function() {
-      let mapCenter = map.getCenter();
+    let mapCenter = map.getCenter();
 
-      this.props.panToLocation({
-        lat: mapCenter.lat,
-        lng: mapCenter.lng
-      }, 'search');
-    // }, 2000);
+    this.props.panToLocation({
+      lat: mapCenter.lat,
+      lng: mapCenter.lng
+    }, 'search');
   }
 
   handleMoveEnd(e) {

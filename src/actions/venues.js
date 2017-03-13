@@ -76,6 +76,8 @@ function fetchVenues(mapCenter, distance) {
     const kitchin = window.__INITIAL_STATE__.app.kitchin;
 
     // convert distance from miles to metres
+    // (miles * 1.6) * 1000 = m = miles * 1600
+    console.log('distance', distance);
     let distanceInMeters = Math.floor(distance * 1600);
     
     // inform we've started a new request
