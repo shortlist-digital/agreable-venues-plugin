@@ -57,8 +57,8 @@ class ClosestVenues extends Component {
                 return (
                   <li key={i}>
                     <a href={'/food-guide/' + venue.slug} data-slug={venue.slug} onClick={this.handleVenueChange}>
-                      { venue.images ?
-                        <img alt="" src={venue.images.landscape.url} />
+                      { venue.image_url ?
+                        <img alt="" src={venue.image_url} />
                       : null }
                       <h3 dangerouslySetInnerHTML={this.createHTML(venue.name)} />
                       <p className="venues-closest-distance">{this.convertDistance(venue.distance)} miles away</p>

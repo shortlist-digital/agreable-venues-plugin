@@ -30,12 +30,12 @@ class Venue extends Component {
       restaurantCode: this.makeId(),
       restaurantName: props.name,
       restaurantSlug: props.slug,
-      restaurantId: props.post_id,
+      restaurantId: props.id,
       restaurantTerms: '',
       restaurantLink: window.location.href,
-      restaurantWebsite: props.contact.website,
+      restaurantWebsite: props.info.website,
       restaurantAddress: props.info.address,
-      thirdPartyOptInMessage: props.promotion.promo_third_party_message || null,
+      // thirdPartyOptInMessage: props.promotion.promo_third_party_message || null,
       thirdPartyOptIn: null,
       location: window.location.pathname
     };
@@ -53,7 +53,7 @@ class Venue extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (nextProps.post_id !== this.props.post_id) || (nextProps.closestVenues !== this.props.closestVenues);
+    return (nextProps.id !== this.props.id) || (nextProps.closestVenues !== this.props.closestVenues);
   }
 
   componentDidUpdate() {
@@ -80,11 +80,11 @@ class Venue extends Component {
 
     let form = e.currentTarget;
 
-    // if there is an opt in check box
-    if (this.props.promotion.promo_third_party === '1') {
-      // set the opt in data
-      this.checkOptIn(form.querySelector('#third-party-optin'));
-    }
+    // // if there is an opt in check box
+    // if (this.props.promotion.promo_third_party === '1') {
+    //   // set the opt in data
+    //   this.checkOptIn(form.querySelector('#third-party-optin'));
+    // }
 
     // validate fields
     this.validateEmail(form.querySelector('#email'));
@@ -234,7 +234,7 @@ class Venue extends Component {
 
     return (
       <div className="venues-overlay__img">
-        <img src={this.props.images.landscape.url} title={this.props.name} />
+        <img src={this.props.images[2].url} title={this.props.name} />
       </div>
     )
   }
@@ -281,37 +281,37 @@ class Venue extends Component {
   }
 
   renderWebsite(){
-    if (!this.props.contact.website) {
+    if (!this.props.info.website) {
       return null
     }
 
     return (
       <div className="venues-overlay__website">
-        <a target="_blank" className="default-button" href={this.props.contact.website} title={this.props.name}>Visit Website</a>
+        <a target="_blank" className="default-button" href={this.props.info.website} title={this.props.name}>Visit Website</a>
       </div>
     )
   }
 
   renderSocial(){
     if (!this.props.info.address &&
-      !this.props.contact.instagram &&
-      !this.props.contact.website &&
-      !this.props.contact.facebook &&
-      !this.props.contact.twitter) {
+      !this.props.info.instagram &&
+      !this.props.info.website &&
+      !this.props.info.facebook &&
+      !this.props.info.twitter) {
         return null
     }
 
     return (
       <div className="venues-overlay__social">
         <h2>About this venue:</h2>
-        {(this.props.contact.website) ?
-          this.renderSocialItem('website', this.props.contact.website):null }
-        {(this.props.contact.instagram) ?
-          this.renderSocialItem('instagram', this.props.contact.instagram):null }
-        {(this.props.contact.facebook) ?
-          this.renderSocialItem('facebook', this.props.contact.facebook):null }
-        {(this.props.contact.twitter) ?
-          this.renderSocialItem('twitter', this.props.contact.twitter):null }
+        {(this.props.info.website) ?
+          this.renderSocialItem('website', this.props.info.website):null }
+        {(this.props.info.instagram) ?
+          this.renderSocialItem('instagram', this.props.info.instagram):null }
+        {(this.props.info.facebook) ?
+          this.renderSocialItem('facebook', this.props.info.facebook):null }
+        {(this.props.info.twitter) ?
+          this.renderSocialItem('twitter', this.props.info.twitter):null }
         {(this.props.info.address) ?
           this.renderSocialItem('content-only', this.props.info.address):null }
       </div>
@@ -322,6 +322,18 @@ class Venue extends Component {
     if (!window.__INITIAL_STATE__.app.display_vouchers) {
       return null;
     }
+
+    /*{this.props.promotion.promo_third_party === '1' ?
+      <div className="form-row form-row--option">
+        <input id="third-party-optin" name="third-party-optin" type="checkbox" />
+        <label htmlFor="third-party-optin">{ this.props.promotion.promo_third_party_message }</label>
+      </div>
+    : null}
+    <div className="form-row form-row--submit">
+      <button type="submit">Get voucher</button>
+    </div>
+    {this.props.promotion.details ? <div className="form-row"><p dangerouslySetInnerHTML={this.rawHTML(this.props.promotion.details)} /></div> : null}
+    {window.__INITIAL_STATE__.app.site.terms !== '' ? <div className="form-row" dangerouslySetInnerHTML={this.rawHTML(window.__INITIAL_STATE__.app.site.terms)} /> : null}*/
 
     return (
       <div className="venues-voucher">
@@ -340,17 +352,6 @@ class Venue extends Component {
             <label className="visually-hidden" htmlFor="email">Email address (required)</label>
             <input id="email" name="email" placeholder="e.g. lisa@gmail.com" type="email" />
           </div>
-          {this.props.promotion.promo_third_party === '1' ?
-            <div className="form-row form-row--option">
-              <input id="third-party-optin" name="third-party-optin" type="checkbox" />
-              <label htmlFor="third-party-optin">{ this.props.promotion.promo_third_party_message }</label>
-            </div>
-          : null}
-          <div className="form-row form-row--submit">
-            <button type="submit">Get voucher</button>
-          </div>
-          {this.props.promotion.details ? <div className="form-row"><p dangerouslySetInnerHTML={this.rawHTML(this.props.promotion.details)} /></div> : null}
-          {window.__INITIAL_STATE__.app.site.terms !== '' ? <div className="form-row" dangerouslySetInnerHTML={this.rawHTML(window.__INITIAL_STATE__.app.site.terms)} /> : null}
         </form>
         <p className="thank-you-msg">Thank you! Your voucher is on its way!</p>
       </div>
@@ -400,7 +401,7 @@ class Venue extends Component {
 
   renderPhoneLink() {
     return (
-      <a className="venues-overlay__phone-number" href={`tel:${this.props.contact.phone_number}`}><InlineSVG src={require(`!svg-inline!../svgs/phone.svg`)} /></a>
+      <a className="venues-overlay__phone-number" href={`tel:${this.props.info.phone_number}`}><InlineSVG src={require(`!svg-inline!../svgs/phone.svg`)} /></a>
     )
   }
 
@@ -420,7 +421,7 @@ class Venue extends Component {
         </a>
         <div className='venues-overlay'>
           <header>
-            {(this.props.contact.phone_number) ? this.renderPhoneLink() : null}
+            {(this.props.info.phone_number) ? this.renderPhoneLink() : null}
             <h1 dangerouslySetInnerHTML={this.rawTitle()} />
             {this.renderVenueTypes()}
           </header>
@@ -431,9 +432,10 @@ class Venue extends Component {
           {this.renderTags()}
           {this.renderSocial()}
           <VenueShare
-            {...this.props.site}
+            {...this.props.info.website}
             name={this.props.name}
-            review={this.props.info.review}
+            review={Object.keys(this.props.reviews).length
+              ? this.props.reviews[0] : null }
             image={Object.keys(this.props.images).length
               ? this.props.images[0] : null } />
           <ClosestVenues venues={this.props.closestVenues} parentSlug={this.props.slug} displayLocation="overlay" pushState={this.props.pushState} />
@@ -444,11 +446,10 @@ class Venue extends Component {
 }
 
 Venue.propTypes = {
-  post_id: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
   pushState: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   info: PropTypes.object.isRequired,
-  contact: PropTypes.object.isRequired,
   VenueTypes: PropTypes.array,
   images: PropTypes.object.isRequired,
   price: PropTypes.string,

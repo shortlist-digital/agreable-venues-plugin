@@ -3,11 +3,6 @@ import * as types from '../constants/ActionTypes';
 import { panToLocation } from '../actions/map';
 import 'es6-promise/auto';
 
-// to bin
-import firebase from 'firebase';
-import GeoFire from 'geofire';
-import RSVP from 'rsvp';
-
 
 function requestVenues() {
   return {
@@ -77,7 +72,6 @@ function fetchVenues(mapCenter, distance) {
 
     // convert distance from miles to metres
     // (miles * 1.6) * 1000 = m = miles * 1600
-    console.log('distance', distance);
     let distanceInMeters = Math.floor(distance * 1600);
     
     // inform we've started a new request
@@ -114,12 +108,6 @@ export function fetchVenuesIfNeeded(mapCenter, distance) {
   return (dispatch, getState) => {
 
     const state = getState()
-    const firebaseReducer = state.app.firebaseReducer
-
-    // // Conditionally initialise firebase.
-    // if (!firebaseReducer.isInitialized) {
-    //   initialiseFirebase(firebase, dispatch)
-    // }
 
     // Check conditions under which we should fetch.
     if (shouldFetchVenues(state)) {
@@ -128,16 +116,30 @@ export function fetchVenuesIfNeeded(mapCenter, distance) {
   }
 }
 
-function fetchSingleVenue(name) {
+function fetchSingleVenue(slug) {
 
-  return function(dispatch, getState){
+  return function(dispatch, getState) {
     // Inform app state that we've started a request.
     dispatch(requestVenues())
 
-    firebase.database().ref('venues/' + name).once('value', function(snapshot) {
-      dispatch(receiveVenues([snapshot.val()]))
-      dispatch(requestSingleVenue(name))
-    });
+    const kitchin = window.__INITIAL_STATE__.app.kitchin;
+
+    fetch(kitchin.url + 'venue/0/' + slug)
+      .then(function(response) {
+          if (response.status >= 400) {
+              throw new Error("Bad response from server");
+          }
+
+          return response.json();
+      })
+      .then(function(json) {
+          dispatch(receiveVenues([json]))
+          // dispatch(requestSingleVenue(slug))
+          
+          dispatch(setVenueActive(json))
+          dispatch(fetchClosestVenues(json, json, 'venue-overlay'));
+      })
+    ;
 
   }
 }
@@ -149,28 +151,12 @@ function setVenueActive(venue){
   }
 }
 
-export function requestSingleVenue(name) {
+export function requestSingleVenue(slug) {
 
   return (dispatch, getState) => {
 
-    const state = getState()
-    const items = state.app.venues.items
-    const firebaseReducer = state.app.firebaseReducer
-    const activeVenue = {}
+    dispatch(fetchSingleVenue(slug))
 
-    // Conditionally initialise firebase.
-    if (!firebaseReducer.isInitialized) {
-      initialiseFirebase(firebase, dispatch)
-    }
-
-    if (items.has(name)) {
-      let activeVenue = items.get(name)
-
-      dispatch(fetchClosestVenues(activeVenue.location, activeVenue, 'venue-overlay'));
-      dispatch(setVenueActive(activeVenue))
-    } else {
-      dispatch(fetchSingleVenue(name))
-    }
   }
 
 }
@@ -184,70 +170,37 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
       dispatch(requestClosestVenuesSearch())
     } else {
       dispatch(requestClosestVenues())
+
+      dispatch(panToLocation({lat: venues.lat, lng: venues.lng}), type)
     }
 
-    const state = getState();
-    const geoFire = new GeoFire(firebase.database().ref('venues').child('_geofire'));
-    let geoQuery = geoFire.query({
-      center: [mapCenter.lat, mapCenter.lng],
-      radius: 2
-    });
-    let receivedVenues = [];
+    const kitchin = window.__INITIAL_STATE__.app.kitchin;
 
-    let onKeyEnteredRegistration = geoQuery.on('key_entered', function(key, location, distance) {
-      receivedVenues.push({
-        key: key,
-        location: location,
-        distance: distance
-      });
-    });
+    // 1 mile
+    let distanceInMeters = 1600;
 
-    let receivedVenuesFull = [];
-    let onReadyRegistration = geoQuery.on('ready', function() {
-      onKeyEnteredRegistration.cancel();
-
-      var promises = receivedVenues.map(function(item, index) {
-        return firebase.database().ref('venues/' + receivedVenues[index].key).once('value', function(snapshot) {
-          let brands = window.__INITIAL_STATE__.app.firebase.brands;
-          let venue = snapshot.val();
-
-          if (!venue) {
-            return;
+    fetch(kitchin.url + 'brand/' + kitchin.brand + '/venues?lat=' + mapCenter.lat + '&lng=' + mapCenter.lng + '&radius=' + distanceInMeters)
+      .then(function(response) {
+          if (response.status >= 400) {
+              throw new Error("Bad response from server");
           }
 
-          // make sure venue exists - there one item that returns null
-          venue.distance = receivedVenues[index].distance;
-
-          // if there are brand filters applied
-          if (brands.length > 0) {
-            // if the venues contains a brand in the brands filter
-            if (filterByBrand(brands, venue.brands)) {
-              // add the venue
-              receivedVenuesFull.push(venue);
-            }
-          } else {
-            // no filter, add all venues
-            receivedVenuesFull.push(venue);
-          }
-        });
-      });
-
-      // once all promises have been settled
-      RSVP.all(promises).then(function() {
+          return response.json();
+      })
+      .then(function(json) {
         // dispatch events
         if (type === 'venue-overlay') {
-          dispatch(receiveClosestVenues(receivedVenuesFull));
+          dispatch(receiveClosestVenues(json));
         } else {
-          dispatch(receiveClosestVenuesSearch(receivedVenuesFull));
+          dispatch(receiveClosestVenuesSearch(json));
         }
 
         // the it's a single search
         if (type === 'venue-overlay') {
-          dispatch(panToLocation(venues.location), type)
           dispatch(receiveVenues([venues]))
         }
-      });
-    });
+      })
+    ;
   }
 }
 

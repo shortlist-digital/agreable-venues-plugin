@@ -1,6 +1,5 @@
 const dataColumns = [
   'brands',
-  'closing_date',
   'contact',
   'distance',
   'id',
@@ -9,9 +8,9 @@ const dataColumns = [
   'lat',
   'lng',
   'name',
-  'opening_date',
   'price',
-  'promotion',
+  'promotions',
+  'reviews',
   'slug',
   'tags',
   'venueTypes'
@@ -24,7 +23,8 @@ function returnSimpleObject(parseObject) {
 
   dataColumns.forEach(item => {
     const val = parseObject[item]
-    if (val && ['brands', 'venueTypes', 'tags'].indexOf(item) > -1) {
+
+    if (val && ['brands', 'tags', 'venueTypes'].indexOf(item) > -1) {
       obj[item] = Array.from(val, (obj) => {
         return { slug : obj.slug, name : obj.name }
       })
