@@ -134,8 +134,6 @@ function fetchSingleVenue(slug) {
       })
       .then(function(json) {
           dispatch(receiveVenues([json]))
-          // dispatch(requestSingleVenue(slug))
-          
           dispatch(setVenueActive(json))
           dispatch(fetchClosestVenues(json, json, 'venue-overlay'));
       })
@@ -191,13 +189,9 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
         // dispatch events
         if (type === 'venue-overlay') {
           dispatch(receiveClosestVenues(json));
+          dispatch(receiveVenues([venues]))
         } else {
           dispatch(receiveClosestVenuesSearch(json));
-        }
-
-        // the it's a single search
-        if (type === 'venue-overlay') {
-          dispatch(receiveVenues([venues]))
         }
       })
     ;

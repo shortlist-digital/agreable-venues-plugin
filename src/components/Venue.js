@@ -80,11 +80,11 @@ class Venue extends Component {
 
     let form = e.currentTarget;
 
-    // // if there is an opt in check box
-    // if (this.props.promotion.promo_third_party === '1') {
-    //   // set the opt in data
-    //   this.checkOptIn(form.querySelector('#third-party-optin'));
-    // }
+    // if there is an opt in check box
+    if (this.props.promotion[0].promo_third_party === '1') {
+      // set the opt in data
+      this.checkOptIn(form.querySelector('#third-party-optin'));
+    }
 
     // validate fields
     this.validateEmail(form.querySelector('#email'));
@@ -273,7 +273,7 @@ class Venue extends Component {
   }
 
   rawReview(){
-    return { __html: this.props.info.review };
+    return { __html: this.props.reviews[0].description };
   }
 
   rawHTML(html) {
@@ -323,17 +323,7 @@ class Venue extends Component {
       return null;
     }
 
-    /*{this.props.promotion.promo_third_party === '1' ?
-      <div className="form-row form-row--option">
-        <input id="third-party-optin" name="third-party-optin" type="checkbox" />
-        <label htmlFor="third-party-optin">{ this.props.promotion.promo_third_party_message }</label>
-      </div>
-    : null}
-    <div className="form-row form-row--submit">
-      <button type="submit">Get voucher</button>
-    </div>
-    {this.props.promotion.details ? <div className="form-row"><p dangerouslySetInnerHTML={this.rawHTML(this.props.promotion.details)} /></div> : null}
-    {window.__INITIAL_STATE__.app.site.terms !== '' ? <div className="form-row" dangerouslySetInnerHTML={this.rawHTML(window.__INITIAL_STATE__.app.site.terms)} /> : null}*/
+    let promotion = this.props.promotions.length > 0 ? this.props.promotions[0] : null;
 
     return (
       <div className="venues-voucher">
@@ -352,6 +342,17 @@ class Venue extends Component {
             <label className="visually-hidden" htmlFor="email">Email address (required)</label>
             <input id="email" name="email" placeholder="e.g. lisa@gmail.com" type="email" />
           </div>
+          {promotion.promo_third_party === 1 ?
+            <div className="form-row form-row--option">
+              <input id="third-party-optin" name="third-party-optin" type="checkbox" />
+              <label htmlFor="third-party-optin">{ promotion.promo_third_party_message }</label>
+            </div>
+          : null}
+          <div className="form-row form-row--submit">
+            <button type="submit">Get voucher</button>
+          </div>
+          {promotion.details ? <div className="form-row"><p dangerouslySetInnerHTML={this.rawHTML(promotion.details)} /></div> : null}
+          {window.__INITIAL_STATE__.app.site.terms !== '' ? <div className="form-row" dangerouslySetInnerHTML={this.rawHTML(window.__INITIAL_STATE__.app.site.terms)} /> : null}
         </form>
         <p className="thank-you-msg">Thank you! Your voucher is on its way!</p>
       </div>
@@ -435,9 +436,7 @@ class Venue extends Component {
             {...this.props.info.website}
             name={this.props.name}
             review={Object.keys(this.props.reviews).length
-              ? this.props.reviews[0] : null }
-            image={Object.keys(this.props.images).length
-              ? this.props.images[0] : null } />
+              ? this.props.reviews[0].description : null } />
           <ClosestVenues venues={this.props.closestVenues} parentSlug={this.props.slug} displayLocation="overlay" pushState={this.props.pushState} />
         </div>
       </div>
@@ -451,7 +450,7 @@ Venue.propTypes = {
   name: PropTypes.string.isRequired,
   info: PropTypes.object.isRequired,
   VenueTypes: PropTypes.array,
-  images: PropTypes.object.isRequired,
+  images: PropTypes.array.isRequired,
   price: PropTypes.string,
   Tags: PropTypes.array,
   promotion: PropTypes.object,
