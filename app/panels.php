@@ -21,15 +21,15 @@ register_field_group(array (
       'disabled' => 0,
     ),
     array (
-      'key' => "{$ns}_plugin_brand",
+      'key' => "venue_plugin_brand",
       'label' => 'Brand - Choose which brand to filter Venues by',
       'name' => 'venues_brand',
-      'type' => 'text',
-      'instructions' => 'E.g. mr-hyde, emerald-street, shortlist, stylist.',
-      'required' => 0,
-      'conditional_logic' => 0,
-      'readonly' => 0,
-      'disabled' => 0,
+      'type' => 'select',
+      'instructions' => 'The Brand to select Venues for.',
+      'required' => 1,
+      'choices' => array(
+
+      ),
     ),
     array (
       'key' => "{$ns}_plugin_kitchin_base_url",
@@ -37,7 +37,7 @@ register_field_group(array (
       'name' => 'venues_kitchin_base_url',
       'type' => 'text',
       'instructions' => 'Most likely http://kitchin.rest/api/v1/',
-      'required' => 0,
+      'required' => 1,
       'conditional_logic' => 0,
       'readonly' => 0,
       'disabled' => 0,

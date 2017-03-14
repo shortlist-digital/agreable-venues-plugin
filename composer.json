@@ -11,6 +11,7 @@
   ],
   "require": {
     "getherbert/framework": "~0.9",
+    "guzzlehttp/guzzle": "~6.0",
     "illuminate/container": "~5.1.0"
   },
   "minimum-stability": "dev",
