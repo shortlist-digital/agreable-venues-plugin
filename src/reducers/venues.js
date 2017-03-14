@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes';
-import { convertObjects } from '../utils/FirebaseUtils';
+import { convertObjects } from '../utils/DataUtils';
 
 export function venues(state = {
   isBrowserIncompatible : false,

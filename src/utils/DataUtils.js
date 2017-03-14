@@ -1,35 +1,37 @@
-const firebaseColumns = [
+const dataColumns = [
   'brands',
   'contact',
   'distance',
-  'post_id',
-  'images',
+  'id',
+  'image_url',
   'info',
-  'location',
+  'lat',
+  'lng',
   'name',
   'price',
-  'promotion',
+  'promotions',
+  'reviews',
   'slug',
   'tags',
-  'venueTypes',
-  'opening_date',
-  'closing_date'
+  'venueTypes'
 ];
 
 function returnSimpleObject(parseObject) {
-  const obj = { }
+  const obj = {
+    location: {}
+  }
 
-  firebaseColumns.forEach(item => {
+  dataColumns.forEach(item => {
     const val = parseObject[item]
-    if (val && ['brands', 'venueTypes', 'tags'].indexOf(item) > -1) {
+
+    if (val && ['brands', 'tags', 'venueTypes'].indexOf(item) > -1) {
       obj[item] = Array.from(val, (obj) => {
         return { slug : obj.slug, name : obj.name }
       })
-    } else if (item == 'location') {
-      obj[item] = {
-        lat: val.lat,
-        lng: val.lng
-      }
+    } else if (item == 'lat') {
+      obj.location['lat'] = val;
+    } else if (item == 'lng') {
+      obj.location['lng'] = val;
     } else {
       obj[item] = val
     }

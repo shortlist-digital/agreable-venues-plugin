@@ -55,10 +55,6 @@ class RenderController {
     $context['css_path'] = '/resources/assets/styles.css';
     $context['js_path'] = '/resources/assets/app.js';
     $context['webpack_plugin_port'] = $webpack_port;
-    $brand_str = strtolower(get_field('venues_brand', 'option'));
-    $brands = ! empty($brand_str) ?
-      array_map('trim', explode(',', $brand_str)) :
-      array();
     $context['initial_state'] = array(
       'app' => array(
         'site' => array(
@@ -66,12 +62,9 @@ class RenderController {
           'env'       => $environment,
           'terms'     => get_field('venues_promo_terms', 'option'),
         ),
-        'firebase' => array(
-          'api_key'        => get_field('venues_firebase_api_key', 'option'),
-          'auth_domain'    => get_field('venues_firebase_auth_domain', 'option'),
-          'db_url'         => get_field('venues_firebase_db_url', 'option'),
-          'storage_bucket' => get_field('venues_firebase_storage_bucket', 'option'),
-          'brands'         => $brands
+        'kitchin' => array(
+          'url'            => get_field('venues_kitchin_base_url', 'option'),
+          'brand'          => get_field('venues_brand', 'option'),
         ),
         'map' => array(
           'mapboxToken' => get_field('venues_map_mapbox_token', 'option'),
@@ -91,7 +84,7 @@ class RenderController {
       $context['post'] = $this->get_post_meta_data($venue);
     }
 
-	  \Timber::render("{$views}template.twig", $context);
+	  \Timber::render("template.twig", $context);
   }
 
   protected function get_post_meta_data($venue){

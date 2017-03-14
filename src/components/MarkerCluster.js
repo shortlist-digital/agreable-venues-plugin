@@ -41,10 +41,10 @@ class MarkerCluster extends MapLayer {
       const venue = obj[1]
       const options = {}
 
-      if(venue.images && Object.keys(venue.images).length){
+      if (venue.image_url) {
         // Custom icon.
         options.icon = Leaflet.divIcon({
-          html : `<img src="${venue.images.thumbnail.url}" />`,
+          html : `<img alt="${venue.name}" src="${venue.image_url}" />`,
           className: "venues-marker",
           iconAnchor: [0, 0],
           iconSize: [80, 80],

@@ -19,7 +19,8 @@ class ClosestVenues extends Component {
   }
 
   convertDistance(distance) {
-    return (distance * 0.62).toFixed(2);
+    // (meters / 1000) / 1.6 = km = meters / 1600 
+    return (distance / 1600).toFixed(2);
   }
 
   render() {
@@ -55,10 +56,10 @@ class ClosestVenues extends Component {
 
               if (i <= this.props.displayNumber && venue.slug !== this.props.parentSlug) {
                 return (
-                  <li key={i}>
+                  <li key={ venue.id }>
                     <a href={'/food-guide/' + venue.slug} data-slug={venue.slug} onClick={this.handleVenueChange}>
-                      { venue.images ?
-                        <img alt="" src={venue.images.landscape.url} />
+                      { venue.image_url ?
+                        <img alt="" src={venue.image_url} />
                       : null }
                       <h3 dangerouslySetInnerHTML={this.createHTML(venue.name)} />
                       <p className="venues-closest-distance">{this.convertDistance(venue.distance)} miles away</p>

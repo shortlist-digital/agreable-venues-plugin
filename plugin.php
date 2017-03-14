@@ -26,3 +26,42 @@ if(file_exists(__DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php'))
 } else {
   throw new Exception('Something went badly wrong');
 }
+
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ServerException;
+
+class AgreableVenuesPlugin
+{
+	public function __construct()
+	{
+    add_filter('acf/load_field/key=venue_plugin_brand', array($this, 'loadBrands'), 11, 3);
+  }
+
+  public function loadBrands($field) {
+    $baseUri = get_field('venues_kitchin_base_url', 'option');
+
+    $client = new Client([
+      'base_uri' => $baseUri,
+      'timeout'  => 10.0
+    ]);
+
+    try {
+      $response = $client->get(
+        'brand'
+      );
+      $body = (string) $response->getBody();
+      $responseObject = json_decode($body, true, JSON_PRETTY_PRINT);
+      
+      foreach ($responseObject as $key => $brand) {
+        $field['choices'][$brand['id']] = $brand['name'];
+      }
+    } catch (ServerException $exception) {
+      $field['choices'][1] = "Loading error. The default Brand will be used.";
+    }
+
+    return $field;
+  }
+}
+
+new AgreableVenuesPlugin();
