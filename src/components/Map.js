@@ -127,7 +127,7 @@ class Map extends Component {
     this.getDefaultLocation()
 
     if (!hasVenueRoute) {
-      // Initial data fetch from Firebase.
+      // Initial data fetch from kitchin.
       let mapCenter = map.getCenter();
 
       fetchMarkers({

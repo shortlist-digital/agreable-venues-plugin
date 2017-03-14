@@ -7,8 +7,6 @@ import * as types from '../constants/ActionTypes';
 import { venues } from './venues'
 import { map } from './map'
 import { search } from './search'
-// import { parse } from './parse'
-import { firebaseReducer } from './firebase'
 
 const initialState = {
   sitename : ''
@@ -26,13 +24,11 @@ function site(state = initialState, action){
 }
 
 const app = combineReducers({
-  firebaseReducer,
   map,
   search,
   site,
   venues,
   display_vouchers: (state = {}) => state,
-  firebase: (state = {}) => state,
   kitchin: (state = {}) => state
 })
 
