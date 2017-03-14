@@ -26,6 +26,9 @@ module.exports = {
     new ExtractTextPlugin('styles.css'),
     new webpack.DefinePlugin({
       __PRODUCTION__: 'true'
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
     })
   ],
 
