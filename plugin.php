@@ -30,12 +30,14 @@ if(file_exists(__DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php'))
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
+use AgreableVenuesPlugin\Helper;
 
 class AgreableVenuesPlugin
 {
 	public function __construct()
 	{
-    add_filter('acf/load_field/key=venue_plugin_brand', array($this, 'loadBrands'), 11, 3);
+    $ns = Helper::get('agreable_namespace');
+    add_filter("acf/load_field/key={$ns}_plugin_brand", array($this, 'loadBrands'), 11, 3);
   }
 
   public function loadBrands($field) {

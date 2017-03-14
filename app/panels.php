@@ -21,7 +21,7 @@ register_field_group(array (
       'disabled' => 0,
     ),
     array (
-      'key' => "venue_plugin_brand",
+      'key' => "${ns}_plugin_brand",
       'label' => 'Brand - Choose which brand to filter Venues by',
       'name' => 'venues_brand',
       'type' => 'select',
