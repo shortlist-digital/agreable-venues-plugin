@@ -41,7 +41,7 @@ class AgreableVenuesPlugin
   }
 
   public function loadBrands($field) {
-    $baseUri = get_field('venues_kitchin_base_url', 'option');
+    $baseUri = getenv('KITCHIN_API');
 
     $client = new Client([
       'base_uri' => $baseUri,
@@ -50,7 +50,7 @@ class AgreableVenuesPlugin
 
     try {
       $response = $client->get(
-        'brand'
+        'api/v1/brand'
       );
       $body = (string) $response->getBody();
       $responseObject = json_decode($body, true, JSON_PRETTY_PRINT);
