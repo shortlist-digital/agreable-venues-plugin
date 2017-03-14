@@ -19,7 +19,8 @@ class ClosestVenues extends Component {
   }
 
   convertDistance(distance) {
-    return (distance * 0.62).toFixed(2);
+    // (meters / 1000) / 1.6 = km = meters / 1600 
+    return (distance / 1600).toFixed(2);
   }
 
   render() {

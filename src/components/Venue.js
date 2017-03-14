@@ -251,7 +251,7 @@ class Venue extends Component {
         link = <span>{url}</span>
         break
       case 'website':
-        link = <a target="_blank" href={url}>{url}</a>
+        link = <a target="_blank" href={`http://${url}`}>{url}</a>
         break
       case 'instagram':
         link = <a target="_blank" href={`http://instagram.com/${url}`}>{url}</a>

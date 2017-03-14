@@ -124,7 +124,7 @@ function fetchSingleVenue(slug) {
 
     const kitchin = window.__INITIAL_STATE__.app.kitchin;
 
-    fetch(kitchin.url + 'venue/0/' + slug)
+    fetch(kitchin.url + 'venue/?slug=' + slug)
       .then(function(response) {
           if (response.status >= 400) {
               throw new Error("Bad response from server");
