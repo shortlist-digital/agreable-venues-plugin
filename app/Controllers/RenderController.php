@@ -63,7 +63,7 @@ class RenderController {
           'terms'     => get_field('venues_promo_terms', 'option'),
         ),
         'kitchin' => array(
-          'url'            => get_field('venues_kitchin_base_url', 'option'),
+          'url'            => getenv('KITCHIN_API'),
           'brand'          => get_field('venues_brand', 'option'),
         ),
         'map' => array(

@@ -77,7 +77,7 @@ function fetchVenues(mapCenter, distance) {
     // inform we've started a new request
     dispatch(requestVenues);
 
-    fetch(kitchin.url + 'brand/' + kitchin.brand + '/venues?lat=' + mapCenter.lat + '&lng=' + mapCenter.lng + '&radius=' + distanceInMeters)
+    fetch(kitchin.url + 'api/v1/brand/' + kitchin.brand + '/venues?lat=' + mapCenter.lat + '&lng=' + mapCenter.lng + '&radius=' + distanceInMeters)
       .then(function(response) {
           if (response.status >= 400) {
               throw new Error("Bad response from server");
@@ -124,7 +124,7 @@ function fetchSingleVenue(slug) {
 
     const kitchin = window.__INITIAL_STATE__.app.kitchin;
 
-    fetch(kitchin.url + 'venue/?slug=' + slug)
+    fetch(kitchin.url + 'api/v1/venue/?slug=' + slug)
       .then(function(response) {
           if (response.status >= 400) {
               throw new Error("Bad response from server");
@@ -177,7 +177,7 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
     // 1 mile
     let distanceInMeters = 1600;
 
-    fetch(kitchin.url + 'brand/' + kitchin.brand + '/venues?lat=' + mapCenter.lat + '&lng=' + mapCenter.lng + '&radius=' + distanceInMeters)
+    fetch(kitchin.url + 'api/v1/brand/' + kitchin.brand + '/venues?lat=' + mapCenter.lat + '&lng=' + mapCenter.lng + '&radius=' + distanceInMeters)
       .then(function(response) {
           if (response.status >= 400) {
               throw new Error("Bad response from server");

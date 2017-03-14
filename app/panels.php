@@ -21,7 +21,7 @@ register_field_group(array (
       'disabled' => 0,
     ),
     array (
-      'key' => "${ns}_plugin_brand",
+      'key' => "{$ns}_plugin_brand",
       'label' => 'Brand - Choose which brand to filter Venues by',
       'name' => 'venues_brand',
       'type' => 'select',
@@ -30,18 +30,6 @@ register_field_group(array (
       'choices' => array(
 
       ),
-    ),
-    array (
-      'key' => "{$ns}_plugin_kitchin_base_url",
-      'label' => 'Kitchin URL Base',
-      'name' => 'venues_kitchin_base_url',
-      'type' => 'text',
-      'instructions' => 'Most likely http://kitchin.rest/api/v1/',
-      'required' => 1,
-      'conditional_logic' => 0,
-      'readonly' => 0,
-      'disabled' => 0,
-      'default_value' => 'http://kitchin.rest/api/v1/',
     ),
     array (
       'key' => "{$ns}_plugin_map_tiles_url",
