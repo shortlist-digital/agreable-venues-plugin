@@ -56,7 +56,7 @@ class ClosestVenues extends Component {
 
               if (i <= this.props.displayNumber && venue.slug !== this.props.parentSlug) {
                 return (
-                  <li key={i}>
+                  <li key={ venue.id }>
                     <a href={'/food-guide/' + venue.slug} data-slug={venue.slug} onClick={this.handleVenueChange}>
                       { venue.image_url ?
                         <img alt="" src={venue.image_url} />
