@@ -1,46 +1,60 @@
-var webpack = require('webpack')
-var nib = require('nib')
-var path = require('path')
-var ExtractTextPlugin = require("extract-text-webpack-plugin")
+const webpack = require('webpack')
+const path = require('path')
+const StatsPlugin = require('stats-webpack-plugin')
 
-var buildPath = path.resolve(__dirname, 'resources', 'assets');
-var mainPath = path.resolve(__dirname, 'src', 'main.js');
-
-module.exports = {
-  entry: mainPath,
+module.exports = (env) => ({
+  target: 'web',
+  entry: path.resolve(__dirname, 'src', 'main.js'),
   output: {
-    path: buildPath,
-    filename: 'app.js'
-  },
+    path: path.resolve(__dirname, 'resources', 'assets'),
+    filename: 'app.js',
+    libraryTarget: 'commonjs2'
+  }.
   module: {
-    loaders: [
-      { test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader?paths[]=./styles&paths[]=./node_modules")},
-      { test: /\.svg$/, exclude:'/node_modules/', loader: 'raw-loader' },
-      { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.woff$|.eot$|.svg$|.ttf$|.png$|.gif$|.jpg$|.jpeg$/, loader: "url" },
-      { test: /\.jsx?$/, exclude: '/node_modules/' , loader: 'babel-loader?stage=0', include: [path.join(__dirname, "src"), path.join(__dirname, 'node_modules/svg-inline-react')] }
-    ]
+    rules: [{
+      include: [
+        path.join(__dirname, 'src'),
+        path.join(__dirname, 'node_modules/svg-inline-react')
+      ],
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          presets: ['stage-0']
+        }
+      }]
+    }]
   },
-
   plugins: [
-    new ExtractTextPlugin('styles.css'),
+    // expose environment to user
     new webpack.DefinePlugin({
       __PRODUCTION__: 'true'
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false
+    }),
+    new StatsPlugin('../stats.json', {
+      chunkModules: true
+    }),
+    // minify/optimize output bundle, screw_ie8 a bunch
+    new webpack.optimize.UglifyJsPlugin({
+      comments: false,
+      compress: {
+        screw_ie8: true,
+        warnings: false
+      },
+      mangle: {
+        screw_ie8: true
+      },
+      output: {
+        comments: false,
+        screw_ie8: true
+      }
     })
-  ],
-
-  resolve: {
-    context: __dirname,
-    extensions: ['','.js', '.json', '.styl'],
-    modulesDirectories: [
-      'widgets', 'javascripts', 'web_modules', 'style-atoms', 'node_modules'
-    ]
-  },
-
-  stylus: {
-    use: [nib()]
-  }
-}
+  ]
+})

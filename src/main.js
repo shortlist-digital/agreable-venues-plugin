@@ -1,8 +1,8 @@
-require('es6-object-assign').polyfill()
-require('./stylus/main.styl')
+// require('es6-object-assign').polyfill()
+// require('./stylus/main.styl')
 
-import DOMReady from 'detect-dom-ready'
-import ReactDOM from 'react-dom'
+// import DOMReady from 'detect-dom-ready'
+// import ReactDOM from 'react-dom'
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import { ReduxRouter } from 'redux-router'
@@ -37,6 +37,4 @@ class Root extends Component {
   }
 }
 
-DOMReady(function() {
-  ReactDOM.render(<Root />, document.getElementById('agreable-venues'))
-})
+export default <Root />
