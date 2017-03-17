@@ -2,14 +2,14 @@ const webpack = require('webpack')
 const path = require('path')
 const StatsPlugin = require('stats-webpack-plugin')
 
-module.exports = (env) => ({
+module.exports = {
   target: 'web',
   entry: path.resolve(__dirname, 'src', 'main.js'),
   output: {
     path: path.resolve(__dirname, 'resources', 'assets'),
     filename: 'app.js',
     libraryTarget: 'commonjs2'
-  }.
+  },
   module: {
     rules: [{
       include: [
@@ -21,11 +21,16 @@ module.exports = (env) => ({
       use: [{
         loader: 'babel-loader',
         options: {
-          presets: ['stage-0']
+          presets: ['react', 'stage-0']
         }
       }]
     }]
   },
+  // resolve: {
+  //   modules: [
+  //     'widgets', 'javascripts', 'web_modules', 'style-atoms', 'node_modules'
+  //   ]
+  // },
   plugins: [
     // expose environment to user
     new webpack.DefinePlugin({
@@ -57,4 +62,4 @@ module.exports = (env) => ({
       }
     })
   ]
-})
+}
