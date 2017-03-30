@@ -233,9 +233,11 @@ class Venue extends Component {
       return null
     }
 
+    const imageUrl = this.props.images[2].url ? this.props.images[2].url : this.props.images[6].url
+
     return (
       <div className="venues-overlay__img">
-        <img src={this.props.images[2].url || this.props.images[2].url} title={this.props.name} />
+        <img src={imageUrl} title={this.props.name} />
       </div>
     )
   }
@@ -301,7 +303,6 @@ class Venue extends Component {
       !this.props.info.twitter) {
         return null
     }
-    console.log('facebook', this.props.info.facebook == '0')
 
     return (
       <div className="venues-overlay__social">
