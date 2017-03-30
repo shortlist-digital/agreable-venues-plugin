@@ -233,11 +233,23 @@ class Venue extends Component {
       return null
     }
 
-    return (
-      <div className="venues-overlay__img">
-        <img src={this.props.images[2].url} title={this.props.name} />
-      </div>
-    )
+    if (this.props.images[2].url) {
+      return (
+        <div className="venues-overlay__img">
+          <img src={this.props.images[2].url} title={this.props.name} />
+        </div>
+      )
+    }
+
+    if (this.props.images[6].url) {
+      return (
+        <div className="venues-overlay__img">
+          <img src={this.props.images[6].url} title={this.props.name} />
+        </div>
+      )
+    }
+
+    return null
   }
 
   renderSocialItem(channel, url){
