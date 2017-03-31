@@ -233,9 +233,11 @@ class Venue extends Component {
       return null
     }
 
+    const imageUrl = this.props.images[2].url ? this.props.images[2].url : this.props.images[6].url
+
     return (
       <div className="venues-overlay__img">
-        <img src={this.props.images[2].url} title={this.props.name} />
+        <img src={imageUrl} title={this.props.name} />
       </div>
     )
   }
@@ -252,7 +254,7 @@ class Venue extends Component {
         link = <span>{url}</span>
         break
       case 'website':
-        link = <a target="_blank" href={`http://${url}`}>{url}</a>
+        link = <a target="_blank" href={'http://' + url.replace(/https?:?\/\//ig, '')}>{url}</a>
         break
       case 'instagram':
         link = <a target="_blank" href={`http://instagram.com/${url}`}>{url}</a>
@@ -307,11 +309,11 @@ class Venue extends Component {
         <h2>About this venue:</h2>
         {(this.props.info.website) ?
           this.renderSocialItem('website', this.props.info.website):null }
-        {(this.props.info.instagram) ?
+        {(this.props.info.instagram && this.props.info.instagram !== '0') ?
           this.renderSocialItem('instagram', this.props.info.instagram):null }
-        {(this.props.info.facebook) ?
+        {(this.props.info.facebook && this.props.info.facebook !== '0') ?
           this.renderSocialItem('facebook', this.props.info.facebook):null }
-        {(this.props.info.twitter) ?
+        {(this.props.info.twitter && this.props.info.twitter !== '0') ?
           this.renderSocialItem('twitter', this.props.info.twitter):null }
         {(this.props.info.address) ?
           this.renderSocialItem('content-only', this.props.info.address):null }
