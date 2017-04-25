@@ -269,7 +269,7 @@ class Venue extends Component {
 
     return (
       <span className={socialClasses}>
-        <InlineSVG src={require(`!svg-inline!../svgs/${channel}.svg`)} />
+        <InlineSVG src={require(`!svg-inline-loader!../svgs/${channel}.svg`)} />
         {link}
       </span>
     )
@@ -405,7 +405,7 @@ class Venue extends Component {
 
   renderPhoneLink() {
     return (
-      <a className="venues-overlay__phone-number" href={`tel:${this.props.info.phone_number}`}><InlineSVG src={require(`!svg-inline!../svgs/phone.svg`)} /></a>
+      <a className="venues-overlay__phone-number" href={`tel:${this.props.info.phone_number}`}><InlineSVG src={require(`!svg-inline-loader!../svgs/phone.svg`)} /></a>
     )
   }
 
@@ -419,7 +419,7 @@ class Venue extends Component {
       <div className={venueClasses}>
         <a onClick={this.handleClose} className='venues-overlay-container__close'>
           <span className="venues-overlay-container__close__icon">
-            <InlineSVG src={require(`!svg-inline!../svgs/close.svg`)} />
+            <InlineSVG src={require(`!svg-inline-loader!../svgs/close.svg`)} />
           </span>
           <span className="venues-overlay-container__close__label">Back to map</span>
         </a>
