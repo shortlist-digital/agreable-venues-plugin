@@ -143,6 +143,11 @@ class Map extends Component {
     })
   }
 
+  componentDidUpdate() {
+    const event = new Event('resize')
+    window.dispatchEvent(event)
+  }
+
   setViewOffset(latLng, map){
 
     const overlayWidth = 360
