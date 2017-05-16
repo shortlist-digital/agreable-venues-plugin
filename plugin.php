@@ -34,11 +34,21 @@ use AgreableVenuesPlugin\Helper;
 
 class AgreableVenuesPlugin
 {
+  const FILE_LOCATION = "/tmp/kitchin-brand-response.json";
+
 	public function __construct()
 	{
     $ns = Helper::get('agreable_namespace');
     add_filter("acf/load_field/key={$ns}_plugin_brand", array($this, 'loadBrands'), 11, 3);
+    add_action('acf/save_post', array($this, 'clearCachedResponse'), 20);
   }
+
+  public function clearCachedResponse() {
+    $screen = get_current_screen();
+    if (strpos($screen->id, "acf-options") == true) {
+      unlink($this::FILE_LOCATION);
+    }
+}
 
   public function loadBrands($field) {
     $baseUri = getenv('KITCHIN_API');
@@ -49,12 +59,17 @@ class AgreableVenuesPlugin
     ]);
 
     try {
-      $response = $client->get(
-        'api/v1/brand'
-      );
-      $body = (string) $response->getBody();
+      if (file_exists($this::FILE_LOCATION)) {
+        $body = file_get_contents($this::FILE_LOCATION);
+      } else {
+        $response = $client->get(
+          'api/v1/brand'
+        );
+        $body = (string) $response->getBody();
+        file_put_contents($this::FILE_LOCATION, $body);
+      }
       $responseObject = json_decode($body, true, JSON_PRETTY_PRINT);
-      
+
       foreach ($responseObject as $key => $brand) {
         $field['choices'][$brand['id']] = $brand['name'];
       }
