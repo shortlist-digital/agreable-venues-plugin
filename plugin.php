@@ -44,9 +44,11 @@ class AgreableVenuesPlugin
   }
 
   public function clearCachedResponse() {
-    $screen = get_current_screen();
-    if (strpos($screen->id, "acf-options") == true) {
-      unlink($this::FILE_LOCATION);
+    if (function_exists('get_current_screen')) {
+      $screen = get_current_screen();
+      if ($screen->id && (strpos($screen->id, "acf-options") == true)) {
+        unlink($this::FILE_LOCATION);
+      }
     }
 }
 
