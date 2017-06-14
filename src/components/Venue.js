@@ -278,6 +278,10 @@ class Venue extends Component {
   rawReview(){
     return { __html: this.props.reviews[0].description };
   }
+  
+  rawOffers(){
+    return { __html: this.props.promotions[0].special_offers }
+  }
 
   rawHTML(html) {
     return { __html: html };
@@ -431,6 +435,7 @@ class Venue extends Component {
           </header>
           {this.renderImage()}
           <p dangerouslySetInnerHTML={this.rawReview()} />
+          <p dangerouslySetInnerHTML={this.rawOffers()} />
           {this.renderVoucher()}
           {this.renderPrice()}
           {this.renderTags()}
