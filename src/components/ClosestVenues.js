@@ -15,7 +15,7 @@ class ClosestVenues extends Component {
 
   handleVenueChange(e) {
     e.preventDefault()
-    this.props.pushState({}, '/' + e.currentTarget.getAttribute('data-slug'))
+    this.props.pushState({}, `/${e.currentTarget.getAttribute('data-slug')}${window.location.search}`)
   }
 
   convertDistance(distance) {
@@ -28,7 +28,7 @@ class ClosestVenues extends Component {
     let displayNumber = this.props.displayNumber;
     // one venue will always be returned as it'll be the venue that is currently selected on overlays
     let displayThreshold = this.props.displayLocation === 'search' ? 1 : 2;
-
+      
     if (venues.length < displayThreshold) {
       return (
         <div className="venues-search__no-results">
@@ -57,12 +57,20 @@ class ClosestVenues extends Component {
               if (i <= this.props.displayNumber && venue.slug !== this.props.parentSlug) {
                 return (
                   <li key={ venue.id }>
-                    <a href={'/food-guide/' + venue.slug} data-slug={venue.slug} onClick={this.handleVenueChange}>
-                      { venue.image_url ?
-                        <img alt="" src={venue.image_url} />
-                      : null }
+                    <a
+                      href={`/food-guide/${venue.slug}${window.location.search}`}
+                      data-slug={venue.slug}
+                      onClick={this.handleVenueChange}
+                    >
+                      {
+                        venue.image_url ?
+                          <img alt="" src={venue.image_url} /> :
+                          null
+                      }
                       <h3 dangerouslySetInnerHTML={this.createHTML(venue.name)} />
-                      <p className="venues-closest-distance">{this.convertDistance(venue.distance)} miles away</p>
+                      <p className="venues-closest-distance">
+                        {this.convertDistance(venue.distance)} miles away
+                      </p>
                     </a>
                   </li>
                 )

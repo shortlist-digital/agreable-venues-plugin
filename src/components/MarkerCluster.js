@@ -12,7 +12,7 @@ class MarkerCluster extends MapLayer {
 
   handleMarkerClick(venue) {
     if (`/${venue.slug}` != this.props.pathname) {
-      this.props.pushState({}, `/${venue.slug}`)
+      this.props.pushState({}, `/${venue.slug}${window.location.search}`)
     }
   }
 

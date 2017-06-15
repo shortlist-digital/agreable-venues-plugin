@@ -71,7 +71,7 @@ class Venue extends Component {
   }
 
   handleClose(e){
-    this.props.pushState({}, '/')
+    this.props.pushState({}, `/${window.location.search}`)
   }
 
   handleFormSubmit(e) {
@@ -349,6 +349,10 @@ class Venue extends Component {
             <label className="visually-hidden" htmlFor="email">Email address (required)</label>
             <input id="email" name="email" placeholder="e.g. lisa@gmail.com" type="email" />
           </div>
+          <div className="form-row">
+            <label className="visually-hidden" htmlFor="postalcode">Post Code (required)</label>
+            <input id="postalcode" name="postalcode" placeholder="Post Code" type="text" />
+          </div>
           {promotion.promo_third_party === 1 ?
             <div className="form-row form-row--option">
               <input id="third-party-optin" name="third-party-optin" type="checkbox" />
@@ -444,7 +448,7 @@ class Venue extends Component {
             {...this.props.info.website}
             name={this.props.name}
             review={Object.keys(this.props.reviews).length
-              ? this.props.reviews[0].description : null } />
+            ? this.props.reviews[0].description : null } />
           <ClosestVenues venues={this.props.closestVenues} parentSlug={this.props.slug} displayLocation="overlay" pushState={this.props.pushState} />
         </div>
       </div>

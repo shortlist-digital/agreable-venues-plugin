@@ -61,9 +61,9 @@ class Search extends Component {
               <InlineSVG src={require(`!svg-inline-loader!../svgs/locate_me.svg`)} />
               <a disabled={isLocating} onClick={onGeolocate}>Find my location</a>
             </small>
-           </div>
-           {(value || isGeolocated) && !isSearching && !isLocating ?
-              <ClosestVenues venues={closestVenues} pushState={pushState} displayLocation="search" displayNumber={10} /> : null}
+          </div>
+          {(value || isGeolocated) && !isSearching && !isLocating ?
+            <ClosestVenues venues={closestVenues} pushState={pushState} displayLocation="search" displayNumber={10} /> : null}
         </div>
     );
   }
