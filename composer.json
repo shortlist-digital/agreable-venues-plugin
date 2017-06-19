@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "getherbert/framework": "~0.9",
+    "shortlist-digital/herbert-framework": "~1.0",
     "guzzlehttp/guzzle": "~6.0",
     "illuminate/container": "~5.1.0"
   },
