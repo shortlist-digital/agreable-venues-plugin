@@ -27,6 +27,7 @@ class Venue extends Component {
       firstName: null,
       lastName: null,
       emailAddress: null,
+      postCode: null,
       restaurantCode: this.makeId(),
       restaurantName: props.name,
       restaurantSlug: props.slug,
@@ -91,6 +92,7 @@ class Venue extends Component {
     this.validateEmail(form.querySelector('#email'));
     this.validateFirstName(form.querySelector('#firstname'));
     this.validateLastName(form.querySelector('#lastname'));
+    this.validatePostcode(form.querySelector('#postcode'));
 
     // if all fields are valid
     if (form.querySelectorAll('.is-error').length < 1) {
@@ -145,6 +147,21 @@ class Venue extends Component {
     }
   }
 
+  validatePostcode(input) {
+    let value = input.value;
+
+    if (value.length) {
+      // remove error class
+      input.classList.remove('is-error');
+
+      // set state
+      this.state.postCode = value;
+    } else {
+      // set error class
+      input.classList.add('is-error');
+    }
+  }
+
   checkOptIn(input) {
     // save state user opt in to third party
     this.state.thirdPartyOptIn = input.checked;
@@ -165,6 +182,7 @@ class Venue extends Component {
       emailAddress: this.state.emailAddress,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
+      postCode: this.state.postCode,
       restaurantName: this.state.restaurantName,
       restaurantId: this.state.restaurantId,
       restaurantSlug: this.state.restaurantSlug,
@@ -350,8 +368,8 @@ class Venue extends Component {
             <input id="email" name="email" placeholder="e.g. lisa@gmail.com" type="email" />
           </div>
           <div className="form-row">
-            <label className="visually-hidden" htmlFor="postalcode">Post Code (required)</label>
-            <input id="postalcode" name="postalcode" placeholder="Post Code" type="text" />
+            <label className="visually-hidden" htmlFor="postcode">Post Code (required)</label>
+            <input id="postcode" name="postcode" placeholder="Post code" type="text" />
           </div>
           {promotion.promo_third_party === 1 ?
             <div className="form-row form-row--option">
