@@ -1,9 +1,4 @@
-require('es6-object-assign').polyfill()
-require('./stylus/main.styl')
-
-import DOMReady from 'detect-dom-ready'
-import ReactDOM from 'react-dom'
-import React, { Component } from 'react'
+import React from 'react'
 import { Provider } from 'react-redux'
 import { ReduxRouter } from 'redux-router'
 
@@ -15,28 +10,18 @@ import { ReduxRouter } from 'redux-router'
 
 let store = null
 if (__PRODUCTION__) {
-  store = require('./store/configureStore.prod')();
+  store = require('./store/configureStore.prod').default();
 } else {
-  store = require('./store/configureStore.dev')();
+  store = require('./store/configureStore.dev').default();
   // Create seperate dev tool window rather than docked.
-  require('./createDevToolsWindow')(store);
+  require('./createDevToolsWindow').default(store);
 }
 
-class Root extends Component {
-  render() {
-    const rootStyle = {
-      height: '100%'
-    }
-    return (
-      <div style={rootStyle} >
-        <Provider store={store}>
-          <ReduxRouter />
-        </Provider>
-      </div>
-    )
-  }
-}
+const Root = () =>
+  <div style={{ height: '100%' }}>
+    <Provider store={store}>
+      <ReduxRouter />
+    </Provider>
+  </div>
 
-DOMReady(function() {
-  ReactDOM.render(<Root />, document.getElementById('agreable-venues'))
-})
+export default Root

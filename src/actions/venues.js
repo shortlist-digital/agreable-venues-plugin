@@ -3,6 +3,16 @@ import * as types from '../constants/ActionTypes';
 import { panToLocation } from '../actions/map';
 import 'es6-promise/auto';
 
+function getQuery(key) {
+   const query = window.location.search.substring(1)
+   return query
+     .split('&')
+     .reduce((prev, curr, i) => {
+       const query = curr.split('=')
+       if (query[0] === key) prev = query[1]
+       return prev
+     }, '')
+}
 
 function requestVenues() {
   return {
@@ -72,12 +82,14 @@ function fetchVenues(mapCenter, distance) {
 
     // convert distance from miles to metres
     // (miles * 1.6) * 1000 = m = miles * 1600
-    let distanceInMeters = Math.floor(distance * 1600);
-    
+    const distanceInMeters = Math.floor(distance * 1600);
+    const tagQuery = getQuery('tag');
+    const tags = tagQuery ? `&tags[]=${tagQuery}` : '';
+
     // inform we've started a new request
     dispatch(requestVenues);
 
-    fetch(kitchin.url + 'api/v1/brand/' + kitchin.brand + '/venues?lat=' + mapCenter.lat + '&lng=' + mapCenter.lng + '&radius=' + distanceInMeters)
+    fetch(`${kitchin.url}api/v1/brand/${kitchin.brand}/venues?lat=${mapCenter.lat}&lng=${mapCenter.lng}&radius=${distanceInMeters}${tags}`)
       .then(function(response) {
           if (response.status >= 400) {
               throw new Error("Bad response from server");
@@ -173,11 +185,13 @@ export function fetchClosestVenues(mapCenter, venues, type = 'search') {
     }
 
     const kitchin = window.__INITIAL_STATE__.app.kitchin;
+    const tagQuery = getQuery('tag')
+    const tags = tagQuery ? `&tags[]=${tagQuery}` : '';
 
     // 1 mile
     let distanceInMeters = 1600;
 
-    fetch(kitchin.url + 'api/v1/brand/' + kitchin.brand + '/venues?lat=' + mapCenter.lat + '&lng=' + mapCenter.lng + '&radius=' + distanceInMeters)
+    fetch(kitchin.url + 'api/v1/brand/' + kitchin.brand + '/venues?lat=' + mapCenter.lat + '&lng=' + mapCenter.lng + '&radius=' + distanceInMeters + tags)
       .then(function(response) {
           if (response.status >= 400) {
               throw new Error("Bad response from server");
