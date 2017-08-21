@@ -80,10 +80,12 @@ class Venue extends Component {
 
     let form = e.currentTarget;
     let promotion = this.props.promotions.length > 0 ? this.props.promotions[0] : null;
+    console.log('promotion: ', promotion)
 
     // if there is an opt in check box
-    if (promotion && promotion.promo_third_party === '1') {
+    if (promotion && promotion.promo_third_party === 1) {
       // set the opt in data
+      console.log('there is a promotion', this.checkOptIn)
       this.checkOptIn(form.querySelector('#third-party-optin'));
     }
 
@@ -146,8 +148,10 @@ class Venue extends Component {
   }
 
   checkOptIn(input) {
+    console.log('input: ', input)
+    console.log(input.checked)
     // save state user opt in to third party
-    this.state.thirdPartyOptIn = input.checked;
+    this.setState({thirdPartyOptIn: input.checked})
   }
 
   sendVoucher() {

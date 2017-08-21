@@ -22,6 +22,8 @@ if (__PRODUCTION__) {
   require('./createDevToolsWindow')(store);
 }
 
+console.log('running')
+
 class Root extends Component {
   render() {
     const rootStyle = {
