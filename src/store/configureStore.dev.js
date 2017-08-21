@@ -2,7 +2,6 @@ import thunkMiddleware from 'redux-thunk';
 import { createStore, compose, combineReducers, applyMiddleware } from 'redux'
 import { routerStateReducer, reduxReactRouter } from 'redux-router'
 import { createHistory, useBasename } from 'history'
-import { devTools } from 'redux-devtools'
 import createLogger from 'redux-logger';
 
 import routes from '../routes'
@@ -18,8 +17,7 @@ const history = useBasename(createHistory)({basename:`/${paths[1]}`})
 
 const finalCreateStore = compose(
   applyMiddleware(createLogger(), thunkMiddleware),
-  reduxReactRouter({ routes, history }),
-  devTools()
+  reduxReactRouter({ routes, history })
 )(createStore)
 
 export default function configureStore() {

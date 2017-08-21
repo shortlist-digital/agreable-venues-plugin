@@ -27,6 +27,7 @@ class Venue extends Component {
       firstName: null,
       lastName: null,
       emailAddress: null,
+      postCode: null,
       restaurantCode: this.makeId(),
       restaurantName: props.name,
       restaurantSlug: props.slug,
@@ -71,7 +72,7 @@ class Venue extends Component {
   }
 
   handleClose(e){
-    this.props.pushState({}, '/')
+    this.props.pushState({}, `/${window.location.search}`)
   }
 
   handleFormSubmit(e) {
@@ -93,6 +94,7 @@ class Venue extends Component {
     this.validateEmail(form.querySelector('#email'));
     this.validateFirstName(form.querySelector('#firstname'));
     this.validateLastName(form.querySelector('#lastname'));
+    this.validatePostcode(form.querySelector('#postcode'));
 
     // if all fields are valid
     if (form.querySelectorAll('.is-error').length < 1) {
@@ -147,6 +149,21 @@ class Venue extends Component {
     }
   }
 
+  validatePostcode(input) {
+    let value = input.value;
+
+    if (value.length) {
+      // remove error class
+      input.classList.remove('is-error');
+
+      // set state
+      this.state.postCode = value;
+    } else {
+      // set error class
+      input.classList.add('is-error');
+    }
+  }
+
   checkOptIn(input) {
     console.log('input: ', input)
     console.log(input.checked)
@@ -169,6 +186,7 @@ class Venue extends Component {
       emailAddress: this.state.emailAddress,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
+      postCode: this.state.postCode,
       restaurantName: this.state.restaurantName,
       restaurantId: this.state.restaurantId,
       restaurantSlug: this.state.restaurantSlug,
@@ -273,7 +291,7 @@ class Venue extends Component {
 
     return (
       <span className={socialClasses}>
-        <InlineSVG src={require(`!svg-inline!../svgs/${channel}.svg`)} />
+        <InlineSVG src={require(`!svg-inline-loader!../svgs/${channel}.svg`)} />
         {link}
       </span>
     )
@@ -281,6 +299,10 @@ class Venue extends Component {
 
   rawReview(){
     return { __html: this.props.reviews[0].description };
+  }
+  
+  rawOffers(){
+    return { __html: this.props.promotions[0].special_offers }
   }
 
   rawHTML(html) {
@@ -349,6 +371,10 @@ class Venue extends Component {
             <label className="visually-hidden" htmlFor="email">Email address (required)</label>
             <input id="email" name="email" placeholder="e.g. lisa@gmail.com" type="email" />
           </div>
+          <div className="form-row">
+            <label className="visually-hidden" htmlFor="postcode">Post Code (required)</label>
+            <input id="postcode" name="postcode" placeholder="Post code" type="text" />
+          </div>
           {promotion.promo_third_party === 1 ?
             <div className="form-row form-row--option">
               <input id="third-party-optin" name="third-party-optin" type="checkbox" />
@@ -409,7 +435,7 @@ class Venue extends Component {
 
   renderPhoneLink() {
     return (
-      <a className="venues-overlay__phone-number" href={`tel:${this.props.info.phone_number}`}><InlineSVG src={require(`!svg-inline!../svgs/phone.svg`)} /></a>
+      <a className="venues-overlay__phone-number" href={`tel:${this.props.info.phone_number}`}><InlineSVG src={require(`!svg-inline-loader!../svgs/phone.svg`)} /></a>
     )
   }
 
@@ -423,7 +449,7 @@ class Venue extends Component {
       <div className={venueClasses}>
         <a onClick={this.handleClose} className='venues-overlay-container__close'>
           <span className="venues-overlay-container__close__icon">
-            <InlineSVG src={require(`!svg-inline!../svgs/close.svg`)} />
+            <InlineSVG src={require(`!svg-inline-loader!../svgs/close.svg`)} />
           </span>
           <span className="venues-overlay-container__close__label">Back to map</span>
         </a>
@@ -435,6 +461,7 @@ class Venue extends Component {
           </header>
           {this.renderImage()}
           <p dangerouslySetInnerHTML={this.rawReview()} />
+          <p dangerouslySetInnerHTML={this.rawOffers()} />
           {this.renderVoucher()}
           {this.renderPrice()}
           {this.renderTags()}
@@ -443,7 +470,7 @@ class Venue extends Component {
             {...this.props.info.website}
             name={this.props.name}
             review={Object.keys(this.props.reviews).length
-              ? this.props.reviews[0].description : null } />
+            ? this.props.reviews[0].description : null } />
           <ClosestVenues venues={this.props.closestVenues} parentSlug={this.props.slug} displayLocation="overlay" pushState={this.props.pushState} />
         </div>
       </div>

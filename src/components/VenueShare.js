@@ -43,12 +43,12 @@ class VenueShare extends Component {
         <ul className="venues-share__network-wrapper">
           <li className="venues-share__network venues-share__network--facebook">
             <a onClick={this.handleFacebook} href={`https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`}>
-              <InlineSVG src={require('!svg-inline!../svgs/facebook.svg')} />
+              <InlineSVG src={require('!svg-inline-loader!../svgs/facebook.svg')} />
             </a>
           </li>
           <li className="venues-share__network venues-share__network--twitter">
             <a onClick={this.handleTwitter} href={`https://twitter.com/intent/tweet?url=${currentUrl}`}>
-              <InlineSVG src={require('!svg-inline!../svgs/twitter.svg')} />
+              <InlineSVG src={require('!svg-inline-loader!../svgs/twitter.svg')} />
             </a>
           </li>
         </ul>

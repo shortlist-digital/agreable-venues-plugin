@@ -67,3 +67,8 @@ composer.lock
 
 #Webpack
 webpack-current-port.tmp
+
+
+### CUSTOM
+
+resources/stats.json
