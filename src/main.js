@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ReduxRouter } from 'redux-router'
 
@@ -26,6 +25,7 @@ const Root = () =>
 
 if (!__PRODUCTION__) {
 const DOMReady = require('detect-dom-ready')
+const ReactDOM = require('react-dom')
   DOMReady(function() {
     ReactDOM.render(<Root />, document.getElementById('agreable-venues'))
   })
