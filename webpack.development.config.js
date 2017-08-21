@@ -1,6 +1,7 @@
 var webpack = require('webpack')
 var nib = require('nib')
 var path = require('path')
+var fs = require('fs')
 
 var buildPath = path.resolve(__dirname, 'resources', 'assets');
 var mainPath = path.resolve(__dirname, 'src', 'main.js');

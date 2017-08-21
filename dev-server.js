@@ -1,22 +1,16 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var configBuilder = require('./webpack.development.config');
-var getPort = require('get-port');
-var fs = require('fs');
+var fs = require('fs')
+var path = require('path')
+var open = require('open')
+ 
+const contentIndex = path.join(__dirname, 'static-dev-files')
 
-getPort(function (err, port) {
-  writePortNumberToFile(port)
-  startServer(port);
-});
-
-function writePortNumberToFile(port) {
-  fs.writeFile('webpack-current-port.tmp', port);
-}
-
-function startServer(port) {
+function startServer(port, cb) {
   var config = configBuilder(port)
   new WebpackDevServer(webpack(config), {
-    contentBase: 'http://localhost:' + port,
+    contentBase: contentIndex,
     publicPath: config.output.publicPath,
     stats: {colors: true},
     hot: true,
@@ -27,5 +21,10 @@ function startServer(port) {
       console.log(err);
     }
     console.log('Listening at localhost:' + port);
+    cb()
   });
 }
+
+startServer(9090, function() {
+  open('http://localhost:9090/map');
+});
