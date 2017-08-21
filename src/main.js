@@ -1,5 +1,4 @@
 import React from 'react'
-import DOMReady from 'detect-dom-ready'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ReduxRouter } from 'redux-router'
@@ -25,8 +24,11 @@ const Root = () =>
     </Provider>
   </div>
 
-DOMReady(function() {
-  ReactDOM.render(<Root />, document.getElementById('agreable-venues'))
-})
+if (!__PRODUCTION__) {
+const DOMReady = require('detect-dom-ready')
+  DOMReady(function() {
+    ReactDOM.render(<Root />, document.getElementById('agreable-venues'))
+  })
+}
 
 export default Root
