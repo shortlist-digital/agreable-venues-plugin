@@ -99,7 +99,6 @@ class Venue extends Component {
       this.sendVoucher();
       this.saveEmail();
     }
-    const currentState = this.state
 
   }
 
