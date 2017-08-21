@@ -1,5 +1,9 @@
 # Shortlist Media - Wordpress Venues Plugin
 
+## Development of React/Redux App
+
+`npm start` will install dependencies and open a browser window ready to go.
+
 Plugin for displaying venues on a map powered by a Parse database.
 
 ### Dependencies

@@ -1,4 +1,6 @@
 import React from 'react'
+import DOMReady from 'detect-dom-ready'
+import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ReduxRouter } from 'redux-router'
 
@@ -14,7 +16,6 @@ if (__PRODUCTION__) {
 } else {
   store = require('./store/configureStore.dev').default();
   // Create seperate dev tool window rather than docked.
-  require('./createDevToolsWindow').default(store);
 }
 
 const Root = () =>
@@ -23,5 +24,9 @@ const Root = () =>
       <ReduxRouter />
     </Provider>
   </div>
+
+DOMReady(function() {
+  ReactDOM.render(<Root />, document.getElementById('agreable-venues'))
+})
 
 export default Root
