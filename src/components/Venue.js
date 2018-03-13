@@ -32,7 +32,6 @@ class Venue extends Component {
       restaurantName: props.name,
       restaurantSlug: props.slug,
       restaurantId: props.id,
-      restaurantTerms: '',
       restaurantLink: window.location.href,
       restaurantWebsite: props.info.website,
       restaurantAddress: props.info.address,
