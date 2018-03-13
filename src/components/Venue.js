@@ -32,10 +32,10 @@ class Venue extends Component {
       restaurantName: props.name,
       restaurantSlug: props.slug,
       restaurantId: props.id,
-      restaurantTerms: '',
       restaurantLink: window.location.href,
       restaurantWebsite: props.info.website,
       restaurantAddress: props.info.address,
+      restaurantTerms: props.promotions[0].details,
       // thirdPartyOptInMessage: props.promotion.promo_third_party_message || null,
       thirdPartyOptIn: null,
       location: window.location.pathname
@@ -188,6 +188,7 @@ class Venue extends Component {
       restaurantName: this.state.restaurantName,
       restaurantId: this.state.restaurantId,
       restaurantSlug: this.state.restaurantSlug,
+      restaurantTerms: this.state.restaurantTerms,
       thirdPartyOptIn1Key: this.state.thirdPartyOptInMessage,
       thirdPartyOptIn1Value: this.state.thirdPartyOptIn,
       location: this.state.location
