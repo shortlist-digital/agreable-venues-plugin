@@ -9,8 +9,8 @@ const classNames = require('classnames')
 import VenueShare from './VenueShare'
 import ClosestVenues from './ClosestVenues'
 
-const PASSPORT_SECRET = "98ffcfb9435d732db12315f980718d4aee7179b3edb89e1acf904975dab6e7af";
-const PASSPORT_ID = "mrhyde_event_national-burger-day-2016";
+const PASSPORT_SECRET = "205795bd72f633fbd254b9821d20c68b6c4e89bb3cdc8560e1942f0749ce9722";
+const PASSPORT_ID = "mrhyde_event_national-burger-day-2018";
 
 class Venue extends Component {
 
@@ -37,7 +37,8 @@ class Venue extends Component {
       restaurantAddress: props.info.address,
       restaurantTerms: props.promotions[0].details,
       // thirdPartyOptInMessage: props.promotion.promo_third_party_message || null,
-      thirdPartyOptIn: null,
+      thirdPartyOptIn: false,
+      mrHydeOptin: false,
       location: window.location.pathname
     };
   }
@@ -89,6 +90,7 @@ class Venue extends Component {
     }
 
     // validate fields
+    this.checkOptIn(form.querySelector('#mr-hyde-optin'))
     this.validateEmail(form.querySelector('#email'));
     this.validateFirstName(form.querySelector('#firstname'));
     this.validateLastName(form.querySelector('#lastname'));
@@ -96,8 +98,10 @@ class Venue extends Component {
 
     // if all fields are valid
     if (form.querySelectorAll('.is-error').length < 1) {
-      this.sendVoucher();
-      this.saveEmail();
+      setTimeout(() => {
+        this.sendVoucher();
+        this.saveEmail();
+      }, 0)
     }
 
   }
@@ -165,8 +169,13 @@ class Venue extends Component {
 
   checkOptIn(input) {
     const inputStatus = input.checked
-    // save state user opt in to third party
-    this.setState({thirdPartyOptIn: inputStatus})
+    // save state user opt in to third party or mr hyde
+    if (input.id.includes('hyde')) {
+      this.setState({mrHydeOptin: inputStatus})
+    } else {
+      this.setState({thirdPartyOptIn: inputStatus})
+    }
+
   }
 
   sendVoucher() {
@@ -191,6 +200,7 @@ class Venue extends Component {
       restaurantTerms: this.state.restaurantTerms,
       thirdPartyOptIn1Key: this.state.thirdPartyOptInMessage,
       thirdPartyOptIn1Value: this.state.thirdPartyOptIn,
+      mrHydeOptin: this.state.mrHydeOptin,
       location: this.state.location
     }
 
@@ -380,6 +390,10 @@ class Venue extends Component {
               <label htmlFor="third-party-optin">{ promotion.promo_third_party_message }</label>
             </div>
           : null}
+          <div className="form-row form-row--option">
+              <input id="mr-hyde-optin" name="mr-hyde-optin" type="checkbox" />
+              <label htmlFor="mr-hyde-optin">I would like to sign up to the weekly food and drink email from Mr Hyde</label>
+            </div>
           <div className="form-row form-row--submit">
             <button type="submit">Get voucher</button>
           </div>
